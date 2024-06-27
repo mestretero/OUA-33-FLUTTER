@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "748628673778",
+    "project_id": "ouaflutter33",
+    "storage_bucket": "ouaflutter33.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:748628673778:android:85f80e3f65ad3e6c7abc6b",
+        "android_client_info": {
+          "package_name": "com.example.oua_flutter33"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_qwregVvjuomZxWpEx5qCC86lvLBZghE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

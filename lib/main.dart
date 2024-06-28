@@ -6,9 +6,9 @@ import 'package:oua_flutter33/firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  setupDI();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  setupDI();
   runApp(const MasterHandsApp());
 }

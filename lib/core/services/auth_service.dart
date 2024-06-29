@@ -2,7 +2,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:loader_overlay/loader_overlay.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class AuthServices {
@@ -40,7 +39,6 @@ class AuthServices {
   }
 
   login(BuildContext context, String email, String pass) async {
-    // context.loaderOverlay.show();
     try {
       await auth.signInWithEmailAndPassword(
         email: email,
@@ -53,7 +51,6 @@ class AuthServices {
         showMsg(context, e.message.toString());
       }
     }
-    // context.loaderOverlay.hide();
   }
 
   logOut() {

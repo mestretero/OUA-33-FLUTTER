@@ -64,7 +64,12 @@ class LoginView extends StatelessWidget {
                   Center(
                     child: TextButton(
                       onPressed: () {
-                        model.navigationService.navigateTo(Routes.registerView);
+                        model.navigationService
+                            .navigateTo(Routes.registerView)
+                            ?.then((_) {
+                          formKey.currentState?.reset();
+                          FocusScope.of(context).requestFocus(FocusNode());
+                        });
                       },
                       child: const Text("Register"),
                     ),

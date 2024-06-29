@@ -6,7 +6,7 @@ class OnboardingTwoViewModel extends AppBaseViewModel {
   init(BuildContext context) {}
 
   void nextPage() {
-    navigationService.navigateTo(Routes.mainView);
+    navigationService.navigateTo(Routes.loginView);
   }
 
   void backPage() {

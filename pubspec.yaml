@@ -23,6 +23,9 @@ dependencies:
   #STATE_MANAGEMENT
   stacked: ^3.0.1
   stacked_services: ^0.9.5
+
+  #Loader
+  loader_overlay: ^4.0.0
   
 dev_dependencies:
   flutter_test:

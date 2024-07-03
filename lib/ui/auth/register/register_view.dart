@@ -12,6 +12,7 @@ class RegisterView extends StatelessWidget {
 
   final formKey = GlobalKey<FormState>();
   final nameController = TextEditingController();
+  final surnameController = TextEditingController();
   final emailController = TextEditingController();
   final passController = TextEditingController();
 
@@ -41,6 +42,13 @@ class RegisterView extends StatelessWidget {
                     textCapitalization: TextCapitalization.words,
                   ),
                   CustomTextField(
+                    controller: surnameController,
+                    name: 'Surname',
+                    prefixIcon: Icons.person_outline,
+                    inputType: TextInputType.name,
+                    textCapitalization: TextCapitalization.words,
+                  ),
+                  CustomTextField(
                     controller: emailController,
                     name: 'Email',
                     prefixIcon: Icons.mail_outline,
@@ -59,6 +67,7 @@ class RegisterView extends StatelessWidget {
                         model.authServices.register(
                           context,
                           nameController.text,
+                          surnameController.text,
                           emailController.text,
                           passController.text,
                         );

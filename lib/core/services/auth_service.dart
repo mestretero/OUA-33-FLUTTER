@@ -2,11 +2,16 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:oua_flutter33/core/di/get_it.dart';
+import 'package:oua_flutter33/core/models/auth_model.dart';
+import 'package:oua_flutter33/core/services/user_service.dart';
 import 'package:stacked_services/stacked_services.dart';
 
 class AuthServices {
+  final UserService userService = getIt<UserService>();
+
   static final auth = FirebaseAuth.instance;
-  get user => auth.currentUser;
+  var user = auth.currentUser;
 
   getAuthStateChanges() {
     return FirebaseAuth.instance.authStateChanges();
@@ -15,6 +20,7 @@ class AuthServices {
   register(
     BuildContext context,
     String name,
+    String surname,
     String email,
     String pass,
   ) async {
@@ -25,6 +31,15 @@ class AuthServices {
         password: pass,
       );
       await userCredential.user?.updateDisplayName(name);
+
+      Auth authData = Auth(
+        name: name,
+        surname: surname,
+        email: email,
+      );
+
+      await userService.addUser(userCredential.user!.uid, authData);
+
       NavigationService().back();
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -40,10 +55,12 @@ class AuthServices {
 
   login(BuildContext context, String email, String pass) async {
     try {
-      await auth.signInWithEmailAndPassword(
-        email: email,
-        password: pass,
-      );
+      await auth
+          .signInWithEmailAndPassword(
+            email: email,
+            password: pass,
+          )
+          .then((_) => user = auth.currentUser);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         showMsg(context, 'Invalid Email & Password');

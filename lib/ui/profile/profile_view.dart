@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/common/widgets/app_button.dart';
+import 'package:oua_flutter33/common/widgets/profile_image.dart';
 import 'package:oua_flutter33/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
 
@@ -22,14 +23,15 @@ class ProfileView extends StatelessWidget {
               child: Column(
                 children: [
                   const Text("Profile Page"),
-                  Text(model.authServices.user!.uid.toString()),
-                  Text(model.authServices.user!.email.toString()),
+                  Text(model.user!.uid),
+                  Text(model.user!.name),
                   IconButton(
                     onPressed: () {
                       model.navigationService.navigateTo(Routes.settingsView);
                     },
                     icon: const Icon(Icons.settings),
                   ),
+                  ProfileImageWidget(user: model.user),
                   AppButton(
                     text: 'LogOut',
                     onTap: () {

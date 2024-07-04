@@ -1,10 +1,30 @@
+// ignore_for_file: prefer_typing_uninitialized_variables, avoid_print
+
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/auth_model.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
+import 'package:oua_flutter33/core/services/auth_service.dart';
 
 class UserService {
+  static final authService = getIt<AuthServices>();
   static final firestore = FirebaseFirestore.instance;
+  static final firestorage = FirebaseStorage.instance;
   static const String collectionName = "users";
+  User? user;
+
+  init() {
+    if (authService.user!.uid.isEmpty) {
+      return null;
+    }
+
+    getUserDetail(authService.user!.uid).then((value) {
+      user = value;
+    });
+  }
 
   addUser(String uid, Auth auth) {
     firestore.collection(collectionName).doc(uid).set({
@@ -12,6 +32,7 @@ class UserService {
       "surname": auth.surname.toLowerCase(),
       "email": auth.email,
       "phone_number": "",
+      "image_url": "",
       "birth_day": 0,
       "create_date": 0,
       "isActive": true,
@@ -70,9 +91,35 @@ class UserService {
     });
   }
 
-  getUserDetail(String uid) {
-    return firestore.collection(collectionName).doc(uid).get().then((data) {
-      return <String, dynamic>{uid: data.id, ...?data.data()};
-    });
+  Future<User?> getUserDetail(String uid) async {
+    try {
+      var item;
+      await firestore.collection(collectionName).doc(uid).get().then((value) {
+        item = User.fromMap(value.data() as Map<String, dynamic>, uid);
+      });
+      user = item;
+      return item;
+    } catch (e) {
+      print("Error getting document: $e");
+      return null;
+    }
+  }
+
+  Future uploadFile(String filePath) async {
+    final path = "images/user_profile/${authService.user!.displayName}";
+    final file = File(filePath);
+
+    final ref = firestorage.ref().child(path);
+
+    UploadTask uploadTask = ref.putFile(file);
+
+    final snapshot = await uploadTask.whenComplete(() {});
+
+    final url = await snapshot.ref.getDownloadURL();
+
+    firestore
+        .collection(collectionName)
+        .doc(authService.user!.uid)
+        .update({"image_url": url});
   }
 }

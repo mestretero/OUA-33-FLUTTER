@@ -57,10 +57,13 @@ class AuthServices {
     try {
       await auth
           .signInWithEmailAndPassword(
-            email: email,
-            password: pass,
-          )
-          .then((_) => user = auth.currentUser);
+        email: email,
+        password: pass,
+      )
+          .then((_) {
+        user = auth.currentUser;
+        userService.init();
+      });
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
         showMsg(context, 'Invalid Email & Password');

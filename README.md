@@ -18,20 +18,20 @@ Flutter - 33
 
 ## Ürün Açıklaması
 
-Bir zamanlar, el emeği ürünler üreten, fakat bunları satacak platform bulmakta zorlanan bir grup yetenekli zanaatkar vardı. Her biri, elleriyle ürettikleri eşsiz ve özel ürünleri sergileyebilecekleri, alıcılarla buluşabilecekleri bir yer arayışındaydı. Bu arayış, onları "Usta Eller" adını verdikleri harika bir platform yaratmaya yöneltti. Kullanıcılar, el emeği göz nuru ürünlerini sergileyerek ilgilenen alıcılarla buluşma fırsatı bulacaklar.
-Usta Eller, el işi ürünleri üreten kişilerin hem ürünlerini sergileyip hem de alıcılarla doğrudan iletişim kurabilecekleri bir platform olarak tasarlandı. Platformun ilk sprintinde, kullanıcıların hızlı ve kolay bir şekilde kayıt olabilmesi ve ürünlerini listeleyebilmesi hedeflendi. Bunun yanında, kullanıcıların kişisel bilgilerini düzenleyebilecekleri bir profil sayfası ve ürünlerini sergileyebilecekleri bir ürün yükleme sayfası oluşturulacaktı.
+- Bir zamanlar, el emeği ürünler üreten, fakat bunları satacak platform bulmakta zorlanan bir grup yetenekli zanaatkar vardı. Her biri, elleriyle ürettikleri eşsiz ve özel ürünleri sergileyebilecekleri, alıcılarla buluşabilecekleri bir yer arayışındaydı. Bu arayış, onları "Usta Eller" adını verdikleri harika bir platform yaratmaya yöneltti. Kullanıcılar, el emeği göz nuru ürünlerini sergileyerek ilgilenen alıcılarla buluşma fırsatı bulacaklar.
+- Usta Eller, el işi ürünleri üreten kişilerin hem ürünlerini sergileyip hem de alıcılarla doğrudan iletişim kurabilecekleri bir platform olarak tasarlandı. Platformun ilk sprintinde, kullanıcıların hızlı ve kolay bir şekilde kayıt olabilmesi ve ürünlerini listeleyebilmesi hedeflendi. Bunun yanında, kullanıcıların kişisel bilgilerini düzenleyebilecekleri bir profil sayfası ve ürünlerini sergileyebilecekleri bir ürün yükleme sayfası oluşturulacaktı.
 
 
 ## Ürün Özellikleri
 
-•  Email veya sosyal medya hesaplarıyla hızlı kayıt seçeneği.
-•  Kullanıcılara ve ilgi alanlarına özel kişiselleştirilmiş ürün önerileri.
-•  Kullanıcılar arasında direkt mesajlaşma.
-•  Ürün dosyalarını detaylı gönderme (fotoğraf, video).
-•  Ürün fotoğrafları ve videoları yükleme.
-•  Kullanıcıların paylaşım yapabileceği sosyal medya tarzında bir akış.
-•  Yaklaşan el işi etkinlikleri (Sergi vs.).
-•  Yeni mesajlar, takipçi istekleri, ürün yorumları gibi bildirimler.
+- Email veya sosyal medya hesaplarıyla hızlı kayıt seçeneği.
+- Kullanıcılara ve ilgi alanlarına özel kişiselleştirilmiş ürün önerileri.
+- Kullanıcılar arasında direkt mesajlaşma.
+- Ürün dosyalarını detaylı gönderme (fotoğraf, video).
+- Ürün fotoğrafları ve videoları yükleme.
+- Kullanıcıların paylaşım yapabileceği sosyal medya tarzında bir akış.
+- Yaklaşan el işi etkinlikleri (Sergi vs.).
+- Yeni mesajlar, takipçi istekleri, ürün yorumları gibi bildirimler.
 
 ## Hedef Kitle
 
@@ -49,13 +49,13 @@ Platformumuzun hedef kitlesi, 15-65 yaş arası kullanıcılar olmakla birlikte 
 - **Sprint içinde tamamlanması tahmin edilen puan**: 80 Puan
 
 - **Puan tamamlama mantığı**: Toplamda proje boyunca tamamlanması gereken 400 puanlık backlog bulunmaktadır. 4 sprint'e bölündüğünde ilk sprint'in en azından 80 ile başlaması gerektiğine karar verildi. 
-Puanlama t-shirt skalasına göre planlamaktayız.
+- Puanlama t-shirt skalasına göre planlamaktayız.
 Bu skalada görevler, t-shirt bedenleri (XS, S, M, L, XL) gibi sınıflandırılır. Bu yöntem, görevlerin göreceli büyüklüğünü belirlemek için kullanılır.
-XS: Çok küçük, hemen tamamlanabilir 🟩 - 1 Puan
-S: Küçük, birkaç saat içinde tamamlanabilir 🟦 - 3 Puan
-M: Orta büyüklükte, birkaç gün içinde tamamlanabilir 🟨 - 7 Puan
-L: Büyük, bir hafta veya daha uzun sürede tamamlanabilir 🟧 - 13 Puan
-XL: Çok büyük, aylar veya çeyrekler gerektirebilir 🟥 - 21 Puan
+- XS: Çok küçük, hemen tamamlanabilir 🟩 - 1 Puan
+- S: Küçük, birkaç saat içinde tamamlanabilir 🟦 - 3 Puan
+- M: Orta büyüklükte, birkaç gün içinde tamamlanabilir 🟨 - 7 Puan
+- L: Büyük, bir hafta veya daha uzun sürede tamamlanabilir 🟧 - 13 Puan
+- XL: Çok büyük, aylar veya çeyrekler gerektirebilir 🟥 - 21 Puan
 
 
 - **Backlog düzeni ve Story seçimleri**: Görev dağılımında her bir sprint için ilerleme gözden geçirilip yeniden yapılacaktır. Takımda bulunan kişilerin 1.Sprint için uygunluğu az olduğundan genel olarak temel görevlendirilmeler yapılmıştır. Takımda bulunan kişilerin özelliklerine göre trello üzerinden görevleri seçmişlerdir. 
@@ -78,11 +78,11 @@ Daily Scrum toplantısı örneği jpeg veya word olarak Readme'de tarafımızdan
 Alınan kararlar: İlk olarak takımda bulunan bireylerden bir proje fikri sunulması isteniştir. Proje fikri belirlendikten sonra görev dağılımları yapılmıştır. Görev dağılımları takımdaki kişilerin müsaitlik durumuna göre ayarlanmıştır. İlk spirint boyunca projenin kurulması, temelinin oluşturulması, veritabanı bağlantısının yapılması ve ui için tasarımın yapılması amaçlanmıştır. İki haftalık süreç içerisinde takım da  bulunan kişilerin okul, hastane ve benzeri durumlardan dolayı yoğun olduğundan ilk sprint için tamamlanması gereken görevler basit tutulmuştur.
 
  Sprint Review katılımcıları:
-•	Zeynep İrem Adıgüzel
-•	Zeynep Nefşioğulları
-•	Yunus Emre Tanrıverdi
-•	Abdullah Furkan Yeşil
-•	Abbas Boran Aktaş
+-	Zeynep İrem Adıgüzel
+-	Zeynep Nefşioğulları
+-	Yunus Emre Tanrıverdi
+-	Abdullah Furkan Yeşil
+-	Abbas Boran Aktaş
 
 - **Sprint Retrospective:**
   - Takım içindeki görev dağılımıyla ilgili düzenleme yapılması kararı alınmıştır

@@ -5,20 +5,16 @@ Flutter - 33
 
 ## Takım Elemanları
 
-•	Zeynep İrem Adıgüzel – Product Owner
-
-•	Zeynep Nefşioğulları – Scrum Master
-
-•	Yunus Emre Tanrıverdi – Developer
-
-•	Abdullah Furkan Yeşil – Developer
-
-•	Abbas Boran Aktaş – Designer
+- Zeynep İrem Adıgüzel – Product Owner
+- Zeynep Nefşioğulları – Scrum Master
+- Yunus Emre Tanrıverdi – Developer
+-	Abdullah Furkan Yeşil – Developer
+-	Abbas Boran Aktaş – Designer
 
 
 ## Ürün İsmi
-
---Usta Eller--
+<img width="1179" alt="Trello 1  Sprint" src="https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/USTAELLER-removebg-preview%201.png">
+***Usta Eller***
 
 ## Ürün Açıklaması
 

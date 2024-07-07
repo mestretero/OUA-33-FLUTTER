@@ -13,8 +13,8 @@ Flutter - 33
 
 
 ## Ürün İsmi
-<img width="1179" alt="Trello 1  Sprint" src="https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/USTAELLER-removebg-preview%201.png">
-***Usta Eller***
+<img width="400" src="https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/USTAELLER-removebg-preview%201.png">
+- **Usta Eller**
 
 ## Ürün Açıklaması
 

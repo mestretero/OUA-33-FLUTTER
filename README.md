@@ -49,13 +49,13 @@ Platformumuzun hedef kitlesi, 15-65 yaş arası kullanıcılar olmakla birlikte 
 - **Sprint içinde tamamlanması tahmin edilen puan**: 80 Puan
 
 - **Puan tamamlama mantığı**: Toplamda proje boyunca tamamlanması gereken 400 puanlık backlog bulunmaktadır. 4 sprint'e bölündüğünde ilk sprint'in en azından 80 ile başlaması gerektiğine karar verildi. 
-- Puanlama t-shirt skalasına göre planlamaktayız.
-Bu skalada görevler, t-shirt bedenleri (XS, S, M, L, XL) gibi sınıflandırılır. Bu yöntem, görevlerin göreceli büyüklüğünü belirlemek için kullanılır.
-- XS: Çok küçük, hemen tamamlanabilir 🟩 - 1 Puan
-- S: Küçük, birkaç saat içinde tamamlanabilir 🟦 - 3 Puan
-- M: Orta büyüklükte, birkaç gün içinde tamamlanabilir 🟨 - 7 Puan
-- L: Büyük, bir hafta veya daha uzun sürede tamamlanabilir 🟧 - 13 Puan
-- XL: Çok büyük, aylar veya çeyrekler gerektirebilir 🟥 - 21 Puan
+  - Puanlama t-shirt skalasına göre planlamaktayız.
+  Bu skalada görevler, t-shirt bedenleri (XS, S, M, L, XL) gibi sınıflandırılır. Bu yöntem, görevlerin göreceli büyüklüğünü belirlemek için kullanılır.
+  - XS: Çok küçük, hemen tamamlanabilir 🟩 - 1 Puan
+  - S: Küçük, birkaç saat içinde tamamlanabilir 🟦 - 3 Puan
+  - M: Orta büyüklükte, birkaç gün içinde tamamlanabilir 🟨 - 7 Puan
+  - L: Büyük, bir hafta veya daha uzun sürede tamamlanabilir 🟧 - 13 Puan
+  - XL: Çok büyük, aylar veya çeyrekler gerektirebilir 🟥 - 21 Puan
 
 
 - **Backlog düzeni ve Story seçimleri**: Görev dağılımında her bir sprint için ilerleme gözden geçirilip yeniden yapılacaktır. Takımda bulunan kişilerin 1.Sprint için uygunluğu az olduğundan genel olarak temel görevlendirilmeler yapılmıştır. Takımda bulunan kişilerin özelliklerine göre trello üzerinden görevleri seçmişlerdir. 
@@ -63,8 +63,8 @@ Bu skalada görevler, t-shirt bedenleri (XS, S, M, L, XL) gibi sınıflandırıl
 
 - **Daily Scrum**: Daily Scrum toplantılarının takım bireylerinin farklı zamanlarda yoğunluğu bulunduğundan discord ve whatsapp üzerinden iletişim sağlanmıştır. Özellikle sesli olarak buluşulması gereken toplantıları discord üzerinden yapılmıştır. Günlük olarak takım bireyleri müsaitlik durumunu ve tamamladıkları görevleri whatsapp üzerinden belirtmişlerdir. 
 Daily Scrum toplantısı örneği jpeg veya word olarak Readme'de tarafımızdan paylaşılmaktadır: 
-[Sprint 1 Daily Scrum Documents](https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/OUA-Flutter-33.docx)
-[Sprint 1 Daily Scrum Messages](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_1/whatsapp)
+- [Sprint 1 Daily Scrum Documents](https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/OUA-Flutter-33.docx)
+- [Sprint 1 Daily Scrum Messages](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_1/whatsapp)
 
 
 - **Sprint board update**: Sprint board screenshotları: 
@@ -72,7 +72,7 @@ Daily Scrum toplantısı örneği jpeg veya word olarak Readme'de tarafımızdan
 ![Backlog 2](https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/trello/Trello-2.png) 
 
 - **Ürün Durumu**: Ekran görüntüleri:
-  ![Screenshot Documents](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_1/scrren_shots)
+  ![Screenshot Images](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_1/scrren_shots)
 
 - **Sprint Review**: 
 Alınan kararlar: İlk olarak takımda bulunan bireylerden bir proje fikri sunulması isteniştir. Proje fikri belirlendikten sonra görev dağılımları yapılmıştır. Görev dağılımları takımdaki kişilerin müsaitlik durumuna göre ayarlanmıştır. İlk spirint boyunca projenin kurulması, temelinin oluşturulması, veritabanı bağlantısının yapılması ve ui için tasarımın yapılması amaçlanmıştır. İki haftalık süreç içerisinde takım da  bulunan kişilerin okul, hastane ve benzeri durumlardan dolayı yoğun olduğundan ilk sprint için tamamlanması gereken görevler basit tutulmuştur.

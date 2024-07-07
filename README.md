@@ -63,8 +63,8 @@ Platformumuzun hedef kitlesi, 15-65 yaş arası kullanıcılar olmakla birlikte 
 
 - **Daily Scrum**: Daily Scrum toplantılarının takım bireylerinin farklı zamanlarda yoğunluğu bulunduğundan discord ve whatsapp üzerinden iletişim sağlanmıştır. Özellikle sesli olarak buluşulması gereken toplantıları discord üzerinden yapılmıştır. Günlük olarak takım bireyleri müsaitlik durumunu ve tamamladıkları görevleri whatsapp üzerinden belirtmişlerdir. 
 Daily Scrum toplantısı örneği jpeg veya word olarak Readme'de tarafımızdan paylaşılmaktadır: 
-- [Sprint 1 Daily Scrum Documents](https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/OUA-Flutter-33.docx)
-- [Sprint 1 Daily Scrum Messages](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_1/whatsapp)
+  - [Sprint 1 Daily Scrum Documents](https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/OUA-Flutter-33.docx)
+  - [Sprint 1 Daily Scrum Messages](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_1/whatsapp)
 
 
 - **Sprint board update**: Sprint board screenshotları: 
@@ -78,11 +78,11 @@ Daily Scrum toplantısı örneği jpeg veya word olarak Readme'de tarafımızdan
 Alınan kararlar: İlk olarak takımda bulunan bireylerden bir proje fikri sunulması isteniştir. Proje fikri belirlendikten sonra görev dağılımları yapılmıştır. Görev dağılımları takımdaki kişilerin müsaitlik durumuna göre ayarlanmıştır. İlk spirint boyunca projenin kurulması, temelinin oluşturulması, veritabanı bağlantısının yapılması ve ui için tasarımın yapılması amaçlanmıştır. İki haftalık süreç içerisinde takım da  bulunan kişilerin okul, hastane ve benzeri durumlardan dolayı yoğun olduğundan ilk sprint için tamamlanması gereken görevler basit tutulmuştur.
 
  Sprint Review katılımcıları:
--	Zeynep İrem Adıgüzel
--	Zeynep Nefşioğulları
--	Yunus Emre Tanrıverdi
--	Abdullah Furkan Yeşil
--	Abbas Boran Aktaş
+  -	Zeynep İrem Adıgüzel
+  -	Zeynep Nefşioğulları
+  -	Yunus Emre Tanrıverdi
+  -	Abdullah Furkan Yeşil
+  -	Abbas Boran Aktaş
 
 - **Sprint Retrospective:**
   - Takım içindeki görev dağılımıyla ilgili düzenleme yapılması kararı alınmıştır

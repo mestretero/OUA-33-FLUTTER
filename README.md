@@ -6,9 +6,13 @@ Flutter - 33
 ## Takım Elemanları
 
 •	Zeynep İrem Adıgüzel – Product Owner
+
 •	Zeynep Nefşioğulları – Scrum Master
+
 •	Yunus Emre Tanrıverdi – Developer
+
 •	Abdullah Furkan Yeşil – Developer
+
 •	Abbas Boran Aktaş – Designer
 
 

@@ -12,10 +12,9 @@ Flutter - 33
 -	Abbas Boran Aktaş – Designer
 
 
-## Ürün İsmi
+## Ürün İsmi - **Usta Eller**
 <img width="400" src="https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/USTAELLER-removebg-preview%201.png">
 
-## **Usta Eller**
 
 ## Ürün Açıklaması
 

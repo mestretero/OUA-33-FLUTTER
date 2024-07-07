@@ -62,16 +62,17 @@ XL: Çok büyük, aylar veya çeyrekler gerektirebilir 🟥 - 21 Puan
 
 
 - **Daily Scrum**: Daily Scrum toplantılarının takım bireylerinin farklı zamanlarda yoğunluğu bulunduğundan discord ve whatsapp üzerinden iletişim sağlanmıştır. Özellikle sesli olarak buluşulması gereken toplantıları discord üzerinden yapılmıştır. Günlük olarak takım bireyleri müsaitlik durumunu ve tamamladıkları görevleri whatsapp üzerinden belirtmişlerdir. 
-Daily Scrum toplantısı örneği jpeg veya word olarak Readme'de tarafımızdan paylaşılmaktadır: [Sprint 1 Daily Scrum Documents](https://github.com/OyunveUygulamaAkademisi/BootcampScrumTemplate/blob/main/ProjectManagement/Sprint1Documents/DailyScrumMeetingNotesSprint1.docx?raw=true)
+Daily Scrum toplantısı örneği jpeg veya word olarak Readme'de tarafımızdan paylaşılmaktadır: 
+[Sprint 1 Daily Scrum Documents](https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/OUA-Flutter-33.docx)
+[Sprint 1 Daily Scrum Messages](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_1/whatsapp)
+
 
 - **Sprint board update**: Sprint board screenshotları: 
-![Backlog 1](https://raw.githubusercontent.com/OyunveUygulamaAkademisi/BootcampScrumTemplate/main/ProjectManagement/Sprint1Documents/backlog1.png) 
-![Backlog 2](https://raw.githubusercontent.com/OyunveUygulamaAkademisi/BootcampScrumTemplate/main/ProjectManagement/Sprint1Documents/backlog2.png) 
-![Backlog 3](https://raw.githubusercontent.com/OyunveUygulamaAkademisi/BootcampScrumTemplate/main/ProjectManagement/Sprint1Documents/backlog3.png)
+![Backlog 1](https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/trello/Trello-1.png) 
+![Backlog 2](https://github.com/mestretero/OUA-33-FLUTTER/blob/main/bootcamp-files/sprint_1/trello/Trello-2.png) 
 
 - **Ürün Durumu**: Ekran görüntüleri:
-  ![Screenshot 1](https://github.com/OyunveUygulamaAkademisi/BootcampScrumTemplate/blob/main/ProjectManagement/Sprint1Documents/productss1.png?raw=true)
-  ![Screenshot 2](https://github.com/OyunveUygulamaAkademisi/BootcampScrumTemplate/blob/main/ProjectManagement/Sprint1Documents/productss2.png?raw=true)
+  ![Screenshot Documents](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_1/scrren_shots)
 
 - **Sprint Review**: 
 Alınan kararlar: İlk olarak takımda bulunan bireylerden bir proje fikri sunulması isteniştir. Proje fikri belirlendikten sonra görev dağılımları yapılmıştır. Görev dağılımları takımdaki kişilerin müsaitlik durumuna göre ayarlanmıştır. İlk spirint boyunca projenin kurulması, temelinin oluşturulması, veritabanı bağlantısının yapılması ve ui için tasarımın yapılması amaçlanmıştır. İki haftalık süreç içerisinde takım da  bulunan kişilerin okul, hastane ve benzeri durumlardan dolayı yoğun olduğundan ilk sprint için tamamlanması gereken görevler basit tutulmuştur.

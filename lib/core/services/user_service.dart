@@ -105,6 +105,22 @@ class UserService {
     }
   }
 
+  Future<List<User>> getUsers() async {
+    try {
+      QuerySnapshot querySnapshot =
+          await firestore.collection(collectionName).get();
+
+      List<User> users = querySnapshot.docs
+          .map(
+              (doc) => User.fromMap(doc.data() as Map<String, dynamic>, doc.id))
+          .toList();
+      return users;
+    } catch (e) {
+      print("Error getting document: $e");
+      return [];
+    }
+  }
+
   Future uploadFile(String filePath) async {
     final path = "images/user_profile/${authService.user!.displayName}";
     final file = File(filePath);

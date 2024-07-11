@@ -26,7 +26,7 @@ class MainView extends StatelessWidget {
           items: [
             createNavItem(TabItem.Home),
             createNavItem(TabItem.Search),
-            createNavItem(TabItem.Orders),
+            createNavItem(TabItem.Chat),
             createNavItem(TabItem.Profile),
           ],
           onTap: (value) {

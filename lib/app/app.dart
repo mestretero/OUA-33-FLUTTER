@@ -1,6 +1,8 @@
 import 'package:oua_flutter33/example/example_view.dart';
 import 'package:oua_flutter33/ui/auth/login/login_view.dart';
 import 'package:oua_flutter33/ui/auth/register/register_view.dart';
+import 'package:oua_flutter33/ui/chat_list/chat/chat_view.dart';
+import 'package:oua_flutter33/ui/chat_list/chat_list_view.dart';
 import 'package:oua_flutter33/ui/home/home_view.dart';
 import 'package:oua_flutter33/ui/main/main_view.dart';
 import 'package:oua_flutter33/ui/notification/notification_view.dart';
@@ -28,6 +30,10 @@ import 'package:stacked/stacked_annotations.dart';
     MaterialRoute(page: ProfileView),
     MaterialRoute(page: SettingsView),
     MaterialRoute(page: SearchView),
+    MaterialRoute(page: ChatListView),
+    MaterialRoute(page: ChatView),
   ],
 )
 class App {}
+
+//If you create route, this code 'flutter pub run build_runner build' is run in terminal

@@ -3,11 +3,23 @@ import 'package:oua_flutter33/app/app_base_view_model.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
 
 class ProfileViewModel extends AppBaseViewModel {
-  User? user;
+  User? _user;
+  User? get user => _user;
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   init(BuildContext context) {
-    userService.getUserDetail(authServices.user!.uid).then((value) {
-      user = value;
-      notifyListeners();
-    });
+    fetchUser();
+  }
+
+  Future<void> fetchUser() async {
+    _isLoading = true;
+    notifyListeners();
+
+    _user = await userService.getUserDetail(authServices.user!.uid);
+
+    _isLoading = false;
+    notifyListeners();
   }
 }

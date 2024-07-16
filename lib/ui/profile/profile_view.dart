@@ -16,33 +16,36 @@ class ProfileView extends StatelessWidget {
       viewModelBuilder: () => ProfileViewModel(),
       onModelReady: (model) => model.init(context),
       builder: (context, model, widget) => Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(20),
-            child: Center(
-              child: Column(
-                children: [
-                  const Text("Profile Page"),
-                  Text(model.user!.uid),
-                  Text(model.user!.name),
-                  IconButton(
-                    onPressed: () {
-                      model.navigationService.navigateTo(Routes.settingsView);
-                    },
-                    icon: const Icon(Icons.settings),
+        body: model.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SafeArea(
+                child: SingleChildScrollView(
+                  padding: const EdgeInsets.all(20),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        const Text("Profile Page"),
+                        Text(model.user!.uid),
+                        Text(model.user!.name),
+                        IconButton(
+                          onPressed: () {
+                            model.navigationService
+                                .navigateTo(Routes.settingsView);
+                          },
+                          icon: const Icon(Icons.settings),
+                        ),
+                        ProfileImageWidget(user: model.user),
+                        AppButton(
+                          text: 'LogOut',
+                          onTap: () {
+                            model.authServices.logOut();
+                          },
+                        ),
+                      ],
+                    ),
                   ),
-                  ProfileImageWidget(user: model.user),
-                  AppButton(
-                    text: 'LogOut',
-                    onTap: () {
-                      model.authServices.logOut();
-                    },
-                  ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }

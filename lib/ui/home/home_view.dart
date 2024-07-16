@@ -28,6 +28,17 @@ class HomeView extends StatelessWidget {
                     icon: const Icon(Icons.notifications),
                   ),
                   const Text("Home Screen"),
+                  IconButton(
+                    onPressed: () {
+                      model.navigationService.navigateTo(
+                        Routes.productDetailView,
+                        arguments: const ProductDetailViewArguments(
+                          productId: "1",
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.pool_rounded),
+                  ),
                 ],
               ),
             ),

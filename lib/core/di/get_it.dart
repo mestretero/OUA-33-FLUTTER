@@ -3,6 +3,7 @@ import 'package:oua_flutter33/app/app_base_view_model.dart';
 import 'package:oua_flutter33/core/services/auth_service.dart';
 import 'package:oua_flutter33/core/services/chat_service.dart';
 import 'package:oua_flutter33/core/services/firebase_service.dart';
+import 'package:oua_flutter33/core/services/product_service.dart';
 import 'package:oua_flutter33/core/services/user_service.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -17,4 +18,5 @@ void setupDI() {
   getIt.registerLazySingleton(() => AuthServices());
   getIt.registerLazySingleton(() => UserService());
   getIt.registerLazySingleton(() => ChatService());
+  getIt.registerLazySingleton(() => ProductService());
 }

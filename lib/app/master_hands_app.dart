@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/app/app_base_view_model.dart';
+import 'package:oua_flutter33/common/theme/theme.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/ui/main/main_view.dart';
 import 'package:oua_flutter33/ui/splash/splash_view.dart';
@@ -27,6 +28,7 @@ class MasterHandsApp extends StatelessWidget {
         onGenerateRoute: StackedRouter().onGenerateRoute,
         navigatorObservers: [StackedService.routeObserver],
         title: "Master Hands",
+        theme: lightMode,
         debugShowCheckedModeBanner: false,
         home: StreamBuilder(
           stream: viewModel.authServices.getAuthStateChanges(),

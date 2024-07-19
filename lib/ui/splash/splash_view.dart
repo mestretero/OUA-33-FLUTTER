@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:oua_flutter33/ui/splash/splash_view_model.dart';
 import 'package:stacked/stacked.dart';
 

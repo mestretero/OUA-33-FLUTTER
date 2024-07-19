@@ -56,7 +56,7 @@ class LoginView extends StatelessWidget {
                 const SizedBox(height: 16),
                   MyTextField(
                     controller: emailController,
-                    name: "Email Adresiniz",
+                    name: "",
                     hintText: "Email Adresiniz",
                     inputType: TextInputType.emailAddress,
                     prefixIcon: Icons.mail_outline,
@@ -64,7 +64,7 @@ class LoginView extends StatelessWidget {
                   ),
                   MyTextField(
                     controller: passController,
-                    name: "Password",
+                    name: "",
                     hintText: "Password",
                     inputType: TextInputType.text,
                     prefixIcon: Icons.lock_outline,

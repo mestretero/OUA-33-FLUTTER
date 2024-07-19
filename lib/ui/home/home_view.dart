@@ -18,20 +18,21 @@ class HomeView extends StatelessWidget {
       builder: (context, model, child) => Scaffold(
         body: SafeArea(
           child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-              child: model.userData == null
-                  ? const Center(child: CircularProgressIndicator())
-                  : Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //Top Bar
-                        _buildTopBar(context, model, model.userData),
-                        const SizedBox(height: 24),
-                        _buildInfoBox(context),
-                        const SizedBox(height: 24),
-                        _buildPost(context, model)
-                      ],
-                    )),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+            child: model.userData == null
+                ? const Center(child: CircularProgressIndicator())
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      //Top Bar
+                      _buildTopBar(context, model, model.userData),
+                      const SizedBox(height: 24),
+                      _buildInfoBox(context),
+                      const SizedBox(height: 24),
+                      _buildPost(context, model)
+                    ],
+                  ),
+          ),
         ),
       ),
     );

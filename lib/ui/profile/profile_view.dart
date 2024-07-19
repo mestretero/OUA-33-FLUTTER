@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/common/helpers/string_functions.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
 import 'package:oua_flutter33/ui/profile/profile_view_model.dart';
@@ -226,7 +227,7 @@ class ProfileView extends StatelessWidget {
                   elevation: 0,
                 ),
                 onPressed: () {
-                  // model.navigationService.navigateTo(Routes.editProfileView);
+                  model.navigationService.navigateTo(Routes.editedProfileView);
                 },
                 child: Text(
                   "Profili Düzenle",

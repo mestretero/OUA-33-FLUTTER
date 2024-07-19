@@ -173,7 +173,7 @@ Widget getViewForIndex(int index) {
     case 1:
       return const CartListView();
     case 2:
-      return const ProductAddView();
+      return  const ProductAddView();
     case 3:
       return const ChatListView();
     case 4:

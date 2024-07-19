@@ -17,9 +17,12 @@ class ProfileViewModel extends AppBaseViewModel {
     _isLoading = true;
     notifyListeners();
 
-    _user = await userService.getUserDetail(authServices.user!.uid);
+    _user = await userService.getUserData();
 
     _isLoading = false;
     notifyListeners();
+  }
+
+  void shareLink(BuildContext context){
   }
 }

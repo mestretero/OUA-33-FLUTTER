@@ -3,6 +3,7 @@
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart' as auth;
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/auth_model.dart';
@@ -13,6 +14,7 @@ class UserService {
   static final authService = getIt<AuthServices>();
   static final firestore = FirebaseFirestore.instance;
   static final firestorage = FirebaseStorage.instance;
+  final auth.FirebaseAuth _auth = auth.FirebaseAuth.instance;
   static const String collectionName = "users";
   User? user;
 
@@ -21,9 +23,7 @@ class UserService {
       return null;
     }
 
-    getUserDetail(authService.user!.uid).then((value) {
-      user = value;
-    });
+    getUserData().then((onValue) => user = onValue);
   }
 
   addUser(String uid, Auth auth) {
@@ -137,5 +137,22 @@ class UserService {
         .collection(collectionName)
         .doc(authService.user!.uid)
         .update({"image_url": url});
+  }
+
+  Future<User?> getUserData() async {
+    try {
+      auth.User? firebaseUser = authService.user;
+      if (firebaseUser != null) {
+        DocumentSnapshot userDoc =
+            await firestore.collection('users').doc(firebaseUser.uid).get();
+        if (userDoc.exists) {
+          return User.fromMap(
+              userDoc.data() as Map<String, dynamic>, userDoc.id);
+        }
+      }
+    } catch (e) {
+      print('Error getting user data: $e');
+    }
+    return null;
   }
 }

@@ -10,8 +10,10 @@ import 'package:oua_flutter33/ui/notification/notification_view.dart';
 import 'package:oua_flutter33/ui/onboarding/onboarding_one/onboarding_one_view.dart';
 import 'package:oua_flutter33/ui/onboarding/onboarding_two/onboarding_two_view.dart';
 import 'package:oua_flutter33/ui/onboarding/onboarding_view.dart';
+import 'package:oua_flutter33/ui/post/send_post/send_post_view.dart';
 import 'package:oua_flutter33/ui/product/product-detail/product_view.dart';
 import 'package:oua_flutter33/ui/product/product_add/product_add_view.dart';
+import 'package:oua_flutter33/ui/profile/edited_profile/edited_profile_view.dart';
 import 'package:oua_flutter33/ui/profile/profile_view.dart';
 import 'package:oua_flutter33/ui/profile/settings/settings_view.dart';
 import 'package:oua_flutter33/ui/search/search_view.dart';
@@ -38,6 +40,8 @@ import 'package:stacked/stacked_annotations.dart';
     MaterialRoute(page: ProductDetailView),
     MaterialRoute(page: ProductAddView),
     MaterialRoute(page: CartListView),
+    MaterialRoute(page: SendPostView),
+    MaterialRoute(page: EditedProfileView),
   ],
 )
 class App {}

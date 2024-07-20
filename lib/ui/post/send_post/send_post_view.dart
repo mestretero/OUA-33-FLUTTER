@@ -1,4 +1,4 @@
-// ignore_for_file: deprecated_member_use
+// ignore_for_file: deprecated_member_use, prefer_is_empty
 
 import 'dart:io';
 import 'dart:typed_data';
@@ -147,7 +147,7 @@ class SendPostView extends StatelessWidget {
                         model.updateSelectedImage(image);
                       },
                       child: Container(
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           border: null,
                         ),
                         child: ColorFiltered(

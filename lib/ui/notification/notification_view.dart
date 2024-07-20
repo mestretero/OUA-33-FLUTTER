@@ -130,8 +130,9 @@ class NotificationView extends StatelessWidget {
     if (filter == 'all') return true;
     if (filter == 'follows' && notification.type == 'follow') return true;
     if (filter == 'likes_comments' &&
-        (notification.type == 'like' || notification.type == 'comment'))
+        (notification.type == 'like' || notification.type == 'comment')) {
       return true;
+    }
     return false;
   }
 

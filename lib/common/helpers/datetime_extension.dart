@@ -7,7 +7,7 @@ extension DateTimeExtensions on DateTime {
   bool isThisWeek() {
     final now = DateTime.now();
     final firstDayOfWeek = now.subtract(Duration(days: now.weekday - 1));
-    final lastDayOfWeek = firstDayOfWeek.add(Duration(days: 6));
+    final lastDayOfWeek = firstDayOfWeek.add(const Duration(days: 6));
     return isAfter(firstDayOfWeek) && isBefore(lastDayOfWeek);
   }
 

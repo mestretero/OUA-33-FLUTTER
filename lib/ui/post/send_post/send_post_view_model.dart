@@ -1,4 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers, unnecessary_nullable_for_final_variable_declarations, unused_field
+// ignore_for_file: no_leading_underscores_for_local_identifiers, unnecessary_nullable_for_final_variable_declarations, unused_field, prefer_final_fields
 
 import 'dart:io';
 
@@ -51,7 +51,6 @@ class SendPostViewModel extends AppBaseViewModel {
       notifyListeners();
     } else {
       // If permissions are not granted, open the settings
-      print("Giremedi");
       PhotoManager.openSetting();
     }
   }

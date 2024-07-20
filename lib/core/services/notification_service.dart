@@ -14,10 +14,10 @@ class NotificationService {
         .snapshots()
         .map((QuerySnapshot query) {
       List<NotificationModel> retVal = [];
-      query.docs.forEach((element) {
+      for (var element in query.docs) {
         retVal.add(NotificationModel.fromMap(
             element.data() as Map<String, dynamic>, element.id));
-      });
+      }
       return retVal;
     });
   }

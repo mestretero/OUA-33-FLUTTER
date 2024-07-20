@@ -20,7 +20,7 @@ class OnboardingView extends StatelessWidget {
             decoration: const BoxDecoration(
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: AssetImage("assets/images/bg.png"),
+                image: AssetImage("assets/images/bg-2.png"),
               ),
             ),
             child: Column(

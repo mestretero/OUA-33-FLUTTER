@@ -1,7 +1,6 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/common/helpers/string_functions.dart';
 import 'package:oua_flutter33/common/widgets/my_appbar.dart';
 import 'package:oua_flutter33/common/widgets/my_button.dart';
@@ -30,7 +29,7 @@ class EditedProfileView extends StatelessWidget {
                         MyAppBarWidget(
                           isBackButton: true,
                           title: "Profil Düzenleme",
-                          routeName: Routes.profileView,
+                          routeName: "",
                         ),
                         _buildEditForm(context, model, model.user),
                       ],

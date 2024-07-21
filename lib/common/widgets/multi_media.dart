@@ -5,8 +5,15 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:async';
 
+import 'package:oua_flutter33/common/helpers/scaler.dart';
+
 class PhotoPickerScreen extends StatefulWidget {
-  const PhotoPickerScreen({super.key});
+  final Function(List<File?> images) onChanged;
+
+  const PhotoPickerScreen({
+    super.key,
+    required this.onChanged,
+  });
 
   @override
   _PhotoPickerScreenState createState() => _PhotoPickerScreenState();
@@ -24,8 +31,25 @@ class _PhotoPickerScreenState extends State<PhotoPickerScreen> {
       setState(() {
         _images[_imageCount] = File(pickedFile.path);
         _imageCount++;
+        widget.onChanged(_images);
       });
     }
+  }
+
+  void _removeImage(index) {
+    setState(() {
+      if (index == _imageCount) {
+        _images[index] = null;
+        _imageCount--;
+      } else {
+        for (var i = index; i < _imageCount; i++) {
+          _images[index] = _images[index + 1];
+          _images[index + 1] = null;
+          _imageCount--;
+        }
+      }
+      widget.onChanged(_images);
+    });
   }
 
   void _showPicker(context) {
@@ -36,14 +60,22 @@ class _PhotoPickerScreenState extends State<PhotoPickerScreen> {
           child: Wrap(
             children: <Widget>[
               ListTile(
-                  leading: const Icon(Icons.photo_library),
-                  title: const Text('Galeriden Seç'),
+                  leading: Icon(
+                    Icons.photo_library,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                  title: const Text(
+                    'Galeriden Seç',
+                  ),
                   onTap: () {
                     _pickImage(ImageSource.gallery);
                     Navigator.of(context).pop();
                   }),
               ListTile(
-                leading: const Icon(Icons.photo_camera),
+                leading: Icon(
+                  Icons.photo_camera,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
                 title: const Text('Kameradan Çek'),
                 onTap: () {
                   _pickImage(ImageSource.camera);
@@ -63,27 +95,94 @@ class _PhotoPickerScreenState extends State<PhotoPickerScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          ElevatedButton(
-            onPressed: _imageCount < 4
-                ? () {
-                    _showPicker(context);
-                  }
-                : null,
-            child: const Text('Fotoğraf Ekle'),
-          ),
-          const SizedBox(height: 20),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                children: [
+                  Text(
+                    "El Emeğinizin Fotoğrafları",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    "$_imageCount/4",
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+              Container(
+                width: 32,
+                height: 32,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.onPrimary,
+                    width: 1,
+                  ),
+                  borderRadius: BorderRadius.circular(32),
+                ),
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    padding: const EdgeInsets.all(0),
+                    elevation: 0,
+                    backgroundColor: Colors.transparent,
+                  ),
+                  onPressed: _imageCount < 4
+                      ? () {
+                          _showPicker(context);
+                        }
+                      : null,
+                  child: Icon(
+                    Icons.add_rounded,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: List.generate(4, (index) {
               return Container(
-                margin: const EdgeInsets.all(5),
-                width: 80,
-                height: 80,
+                width: Scaler.width(0.19, context),
+                height: Scaler.width(0.19, context),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.green),
+                  border: Border.all(
+                    color: Theme.of(context).colorScheme.secondary,
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
                 ),
                 child: _images[index] != null
-                    ? Image.file(_images[index]!, fit: BoxFit.cover)
+                    ? Container(
+                        decoration: BoxDecoration(
+                          image: DecorationImage(
+                            image: FileImage(_images[index]!),
+                            fit: BoxFit.cover,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: IconButton(
+                          iconSize: 32,
+                          onPressed: () => _removeImage(index),
+                          icon: const Icon(
+                            Icons.cancel,
+                            color: Colors.red,
+                          ),
+                        ),
+                      )
+                    // Image.file(, fit: BoxFit.cover)
                     : Center(child: Text('${index + 1}')),
               );
             }),

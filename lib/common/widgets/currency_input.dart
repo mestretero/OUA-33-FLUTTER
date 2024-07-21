@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:oua_flutter33/common/helpers/scaler.dart';
 
 class CurrencyInputWidget extends StatefulWidget {
   final String title;
@@ -34,37 +35,59 @@ class _CurrencyInputWidget extends State<CurrencyInputWidget> {
       children: [
         Text(
           widget.title,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.w500,
+            fontSize: 16,
+          ),
         ),
         const SizedBox(height: 8),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            DropdownButton<String>(
-              value: dropdownValue,
-              onChanged: (String? newValue) {
-                if (newValue != null) {
-                  setState(() {
-                    dropdownValue = newValue; // dropdown değerini güncelliyoruz
-                  });
-                  widget.onChanged(newValue, widget.priceController.text);
-                }
-              },
-              items: <String>[
-                'USD',
-                'EUR',
-                'GBP',
-                'JPY',
-                'TL'
-              ] // Örnek para birimleri
-                  .map<DropdownMenuItem<String>>((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: Theme.of(context).colorScheme.secondary,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: DropdownButton<String>(
+                elevation: 0,
+                underline: const SizedBox(),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  fontSize: 14,
+                ),
+                icon: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: Theme.of(context).colorScheme.secondary,
+                  size: 32,
+                ),
+                value: dropdownValue,
+                onChanged: (String? newValue) {
+                  if (newValue != null) {
+                    setState(() {
+                      dropdownValue =
+                          newValue; // dropdown değerini güncelliyoruz
+                    });
+                    widget.onChanged(newValue, widget.priceController.text);
+                  }
+                },
+                items: <String>['USD', 'EUR', 'GBP', 'JPY', 'TL']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
             ),
-            const SizedBox(width: 16),
-            Expanded(
+            SizedBox(
+              width: Scaler.width(0.6, context),
               child: TextFormField(
                 controller: widget.priceController,
                 decoration: InputDecoration(

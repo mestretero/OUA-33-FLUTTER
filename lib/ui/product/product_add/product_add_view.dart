@@ -1,11 +1,11 @@
 // ignore_for_file: deprecated_member_use, avoid_print
 
 import 'package:flutter/material.dart';
-import 'package:oua_flutter33/common/widgets/app_button.dart';
 import 'package:oua_flutter33/common/widgets/category_selectors/category_selector_view.dart';
 import 'package:oua_flutter33/common/widgets/currency_input.dart';
 import 'package:oua_flutter33/common/widgets/multi_media.dart';
 import 'package:oua_flutter33/common/widgets/my_appbar.dart';
+import 'package:oua_flutter33/common/widgets/my_button.dart';
 import 'package:oua_flutter33/common/widgets/my_texfield.dart';
 import 'package:oua_flutter33/ui/product/product_add/product_add_view_model.dart';
 import 'package:stacked/stacked.dart';
@@ -22,7 +22,7 @@ class ProductAddView extends StatelessWidget {
         body: SafeArea(
           child: SingleChildScrollView(
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(24.0),
               child: Column(
                 children: [
                   MyAppBarWidget(
@@ -33,10 +33,17 @@ class ProductAddView extends StatelessWidget {
                   Form(
                     key: model.formKey,
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Çoklu Resim yükleme
-                        const PhotoPickerScreen(),
-
+                        PhotoPickerScreen(
+                          onChanged: (images) {
+                            // Burada view model ile iletişim sağlanabilir
+                            // Resimler alınacak her değiştirdiğinde.
+                            print(images.where((i) => i != null).length);
+                          },
+                        ),
+                        const SizedBox(height: 24),
                         //Title
                         MyTextField(
                           controller: model.titleController,
@@ -68,7 +75,7 @@ class ProductAddView extends StatelessWidget {
                         ),
 
                         //Kategori
-                        const CategorySelector(),
+                        const CategorySelector(), //add change noti
 
                         //Fiyat & Para Birimi
                         CurrencyInputWidget(
@@ -76,9 +83,6 @@ class ProductAddView extends StatelessWidget {
                           selectedCurrency: model.selectedCurrency,
                           priceController: model.priceController,
                           onChanged: (currency, price) {
-                            // Burada view model ile iletişim sağlanabilir
-                            // model.setAmount(1);
-                            // model.setPrice(price as double);
                             print(
                                 'Selected currency: $currency, Price: $price');
                           },
@@ -89,17 +93,14 @@ class ProductAddView extends StatelessWidget {
                         ),
 
                         //Ekleme Butonu
-                        AppButton(
+                        MyButton(
                           text: "Ürünümü Ekle",
+                          buttonStyle: 1,
+                          isExpanded: true,
                           onTap: () {
                             model.addProduct();
                           },
                         ),
-
-                        //Bottom Space
-                        const SizedBox(
-                          height: 64,
-                        )
                       ],
                     ),
                   ),

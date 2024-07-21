@@ -43,7 +43,7 @@ class SubCategory {
           ? []
           : List<SubSubCategory>.from(
               (map['subsubcategories'] as List<dynamic>).map(
-                (subSubCategory) => SubSubCategory.fromMap(subSubCategory),
+                (subSubCategory) => SubSubCategory.fromMap(subSubCategory, id),
               ),
             ),
     );
@@ -53,16 +53,19 @@ class SubCategory {
 class SubSubCategory {
   final String id;
   final String name;
+  final String icon;
 
   SubSubCategory({
     required this.id,
     required this.name,
+    required this.icon,
   });
 
-  factory SubSubCategory.fromMap(Map<String, dynamic> map) {
+  factory SubSubCategory.fromMap(Map<String, dynamic> map, String id) {
     return SubSubCategory(
-      id: map['id'] ?? '', // Eğer id null ise boş string olarak atanacak
+      id: id, // Eğer id null ise boş string olarak atanacak
       name: map['name'] ?? '', // Eğer name null ise boş string olarak atanacak
+      icon: map['icon'] ?? '',
     );
   }
 }

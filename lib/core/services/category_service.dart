@@ -35,7 +35,7 @@ class CategoryService {
         .get();
     return snapshot.docs.map((doc) {
       var data = doc.data() as Map<String, dynamic>;
-      return SubSubCategory.fromMap(data);
+      return SubSubCategory.fromMap(data, doc.id);
     }).toList();
   }
 }

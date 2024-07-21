@@ -94,7 +94,59 @@ Alınan kararlar: İlk olarak takımda bulunan bireylerden bir proje fikri sunul
 ---
 
 # Sprint 2
+- **Sprint Hedefleri**:
+  - •	İlk sprintte tespit edilen hataların düzeltilmesi ve iyileştirmeler yapılması.
+  - • Kullanıcı arayüzü ve Figma tasarımı uygulamaya giydirilecek.
+  - • Ürün ekleme, mesajlaşma, görsel yükleme ve çoklu resim seçeneği fonksiyonlarının bitirilmesi.
 
+- **Sprint Notları**: User Story ve Görevler Trello üzerinden tanımlanmıştır. Gerekli olan bilgilendirmeler product backlog item'lara tıklandığında hikayelerin detayları okunabilir.
+
+- **Sprint içinde tamamlanması tahmin edilen puan**: 160 Puan
+
+- **Backlog düzeni ve Story seçimleri**: Görev durumunda her bir sprint için ilerlemenin gözden geçirilip yeniden yapılması planlanıyor. Takımda bulunan kişilerin 2. Sprint için temel görevlendirilmeleri yapılmıştır. Takımda bulunan kişilerin özelliklerine göre Trello üzerinden yapılan işlemler seçilmektedir. 
+
+
+- **Daily Scrum**:Günlük Scrum toplantıları, ekiplerin farklı zamanlarda yoğunlukları bulunduğundan, Discord ve WhatsApp üzerinden iletişim sağlanır. Özellikle sesli olarak yapılması gereken toplantılar Discord üzerinden gerçekleştirilmiştir. Günlük olarak grupların bireyleri uyumluluklarını ve tamamladıkları hizmetleri WhatsApp üzerinden belirtmişlerdir. 
+Günlük Scrum toplantısı örneği JPEG veya Word formatında Readme'de paylaşılmaktadır: 
+  - [Sprint 2 Daily Scrum Messages](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_2/whatsapp)
+
+
+- **Sprint board update**: Sprint board screenshotları: 
+![Backlog 1](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_2/trello) 
+
+
+- **Ürün Durumu**: Ekran görüntüleri:
+  ![Screenshot Images](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_2/screen_shoots)
+
+- **Sprint Review**: 
+Alınan kararlar: 
+  -Sprint için projenin hızla ilerlemesi gerektiğine ve projeye yoğunlaşmamız gerektiğine karar verdik.
+  -Sprint için takım üyelerinin haftalık müsaitlik durumlarını konuştuk ve yeniden görev dağılımı yaptık.
+  -Trello üzerinden görev kutucuklarını oluşturma ve zamanlama işini Yunus Emre ve Zeynep üstlenecek.
+  -Yazılım kısmına Furkan, Yunus Emre ve Zeynep odaklanacak.
+  -Boran, projenin UI kısmı için Figma üzerinden tasarımları tamamlamaya devam edecek.
+  -Zeynep İrem, Figma üzerinden tamamlanan tasarımlara projenin içeriğine uygun olarak geri bildirimler verecek.
+  -UI kısmının kodlanmasında Boran ve Zeynep İrem'den destek alınacak.
+  -Kullanıcılar arasında mesajlaşma özelliği entegre edilmiştir.
+  -Ürün öneri sistemi geliştirilmiştir.
+  -İlk sprintte tespit edilen hatalar düzeltilmiş ve iyileştirmeler yapılmıştır.
+
+
+ Sprint Review katılımcıları:
+  -	Zeynep İrem Adıgüzel
+  -	Zeynep Nefşioğulları
+  -	Yunus Emre Tanrıverdi
+  -	Abdullah Furkan Yeşil
+  -	Abbas Boran Aktaş
+
+- **Sprint Retrospective:**
+  - •	Takımdaki görev koşullarıyla ilgili düzenleme yapılması kararı alınmıştır.
+  - •	Tahmin puanları gözden geçirilmeli ve sprint planlama bölümlerinde gerekli düzenlemeler geliştiriciler tarafından verilmelidir.
+  - •	Ekip içi iletişimin güçlendirilmesi için günlük Scrum toplantılarının daha verimli hale getirilmesi kararlaştırılmıştır.
+
+
+-**Diğer Notlar**:
+- N/A
 
 ---
 

@@ -127,7 +127,7 @@ Alınan kararlar:
   - İlk sprintte tespit edilen hatalar düzeltilmiş ve iyileştirmeler yapılmıştır.
 
 
- Sprint Review katılımcıları:
+ - Sprint Review katılımcıları:
   -	Zeynep İrem Adıgüzel
   -	Zeynep Nefşioğulları
   -	Yunus Emre Tanrıverdi

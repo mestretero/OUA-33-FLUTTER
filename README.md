@@ -128,11 +128,11 @@ Alınan kararlar:
 
 
  - Sprint Review katılımcıları:
-  -	Zeynep İrem Adıgüzel
-  -	Zeynep Nefşioğulları
-  -	Yunus Emre Tanrıverdi
-  -	Abdullah Furkan Yeşil
-  -	Abbas Boran Aktaş
+    -	Zeynep İrem Adıgüzel
+    -	Zeynep Nefşioğulları
+    -	Yunus Emre Tanrıverdi
+    -	Abdullah Furkan Yeşil
+    -	Abbas Boran Aktaş
 
 - **Sprint Retrospective:**
   - •	Takımdaki görev koşullarıyla ilgili düzenleme yapılması kararı alınmıştır.

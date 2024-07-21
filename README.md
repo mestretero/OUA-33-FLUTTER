@@ -94,11 +94,6 @@ Alınan kararlar: İlk olarak takımda bulunan bireylerden bir proje fikri sunul
 ---
 
 # Sprint 2
-- **Sprint Hedefleri**:
-  - •	İlk sprintte tespit edilen hataların düzeltilmesi ve iyileştirmeler yapılması.
-  - • Kullanıcı arayüzü ve Figma tasarımı uygulamaya giydirilecek.
-  - • Ürün ekleme, mesajlaşma, görsel yükleme ve çoklu resim seçeneği fonksiyonlarının bitirilmesi.
-
 - **Sprint Notları**: User Story ve Görevler Trello üzerinden tanımlanmıştır. Gerekli olan bilgilendirmeler product backlog item'lara tıklandığında hikayelerin detayları okunabilir.
 
 - **Sprint içinde tamamlanması tahmin edilen puan**: 160 Puan
@@ -120,16 +115,16 @@ Günlük Scrum toplantısı örneği JPEG veya Word formatında Readme'de payla�
 
 - **Sprint Review**: 
 Alınan kararlar: 
-  -Sprint için projenin hızla ilerlemesi gerektiğine ve projeye yoğunlaşmamız gerektiğine karar verdik.
-  -Sprint için takım üyelerinin haftalık müsaitlik durumlarını konuştuk ve yeniden görev dağılımı yaptık.
-  -Trello üzerinden görev kutucuklarını oluşturma ve zamanlama işini Yunus Emre ve Zeynep üstlenecek.
-  -Yazılım kısmına Furkan, Yunus Emre ve Zeynep odaklanacak.
-  -Boran, projenin UI kısmı için Figma üzerinden tasarımları tamamlamaya devam edecek.
-  -Zeynep İrem, Figma üzerinden tamamlanan tasarımlara projenin içeriğine uygun olarak geri bildirimler verecek.
-  -UI kısmının kodlanmasında Boran ve Zeynep İrem'den destek alınacak.
-  -Kullanıcılar arasında mesajlaşma özelliği entegre edilmiştir.
-  -Ürün öneri sistemi geliştirilmiştir.
-  -İlk sprintte tespit edilen hatalar düzeltilmiş ve iyileştirmeler yapılmıştır.
+  - Sprint için projenin hızla ilerlemesi gerektiğine ve projeye yoğunlaşmamız gerektiğine karar verdik.
+  - Sprint için takım üyelerinin haftalık müsaitlik durumlarını konuştuk ve yeniden görev dağılımı yaptık.
+  - Trello üzerinden görev kutucuklarını oluşturma ve zamanlama işini Yunus Emre ve Zeynep üstlenecek.
+  - Yazılım kısmına Furkan, Yunus Emre ve Zeynep odaklanacak.
+  - Boran, projenin UI kısmı için Figma üzerinden tasarımları tamamlamaya devam edecek.
+  - Zeynep İrem, Figma üzerinden tamamlanan tasarımlara projenin içeriğine uygun olarak geri bildirimler verecek.
+  - UI kısmının kodlanmasında Boran ve Zeynep İrem'den destek alınacak.
+  - Kullanıcılar arasında mesajlaşma özelliği entegre edilmiştir.
+  - Ürün öneri sistemi geliştirilmiştir.
+  - İlk sprintte tespit edilen hatalar düzeltilmiş ve iyileştirmeler yapılmıştır.
 
 
  Sprint Review katılımcıları:

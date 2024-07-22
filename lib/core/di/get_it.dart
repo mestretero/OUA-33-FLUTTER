@@ -4,6 +4,7 @@ import 'package:oua_flutter33/core/services/auth_service.dart';
 import 'package:oua_flutter33/core/services/category_service.dart';
 import 'package:oua_flutter33/core/services/chat_service.dart';
 import 'package:oua_flutter33/core/services/firebase_service.dart';
+import 'package:oua_flutter33/core/services/media_service.dart';
 import 'package:oua_flutter33/core/services/notification_service.dart';
 import 'package:oua_flutter33/core/services/post_service.dart';
 import 'package:oua_flutter33/core/services/product_service.dart';
@@ -25,5 +26,7 @@ void setupDI() {
   getIt.registerLazySingleton(() => PostService());
   getIt.registerLazySingleton(() => NotificationService());
   getIt.registerLazySingleton(() => CategoryService());
+  getIt.registerLazySingleton(() => MediaService());
+
 
 }

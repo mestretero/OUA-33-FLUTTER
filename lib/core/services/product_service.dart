@@ -4,15 +4,18 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
 import 'package:oua_flutter33/core/services/auth_service.dart';
+import 'package:oua_flutter33/core/services/user_service.dart';
 
 class ProductService {
   static final authService = getIt<AuthServices>();
+  static final userService = getIt<UserService>();
   static final _firestore = FirebaseFirestore.instance;
   static const _collectionName = "products";
 
   Future<void> addProduct(Product product) async {
     try {
       await _firestore.collection(_collectionName).add(product.toMap());
+      await userService.increaseCountOfProduct();
     } catch (e) {
       print("Error adding product: $e");
     }

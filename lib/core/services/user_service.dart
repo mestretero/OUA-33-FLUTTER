@@ -155,4 +155,13 @@ class UserService {
     }
     return null;
   }
+
+  increaseCountOfProduct() async {
+    User? user = await getUserData();
+    await firestore
+        .collection(collectionName)
+        .doc(user?.uid)
+        .update({"product_counts": (user!.productCount + 1)});
+  }
+
 }

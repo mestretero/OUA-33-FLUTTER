@@ -98,7 +98,7 @@ Alınan kararlar: İlk olarak takımda bulunan bireylerden bir proje fikri sunul
 
 - **Sprint içinde tamamlanması tahmin edilen puan**: 160 Puan
 
-- **Puan tamamlama mantığı**: Toplamda proje boyunca tamamlanması gereken 400 puanlık backlog bulunmaktadır. 4 sprint'e bölündüğünde ilk sprint'in en azından 80 ile başlaması gerektiğine karar verildi. 
+- **Puan tamamlama mantığı**: Toplamda proje boyunca tamamlanması gereken 400 puanlık backlog bulunmaktadır. Burada ilk sprintte 80 puan topladık. Bu sprintte hedefimiz 160 puan toplamak. Burada ilk spritten daha çok görev tamamlama planımız olduğu için 2.sprint ile birlikte projemiz daha da ilerlemiş olacak. 
   - Puanlama t-shirt skalasına göre planlamaktayız.
   Bu skalada görevler, t-shirt bedenleri (XS, S, M, L, XL) gibi sınıflandırılır. Bu yöntem, görevlerin göreceli büyüklüğünü belirlemek için kullanılır.
   - XS: Çok küçük, hemen tamamlanabilir 🟩 - 1 Puan

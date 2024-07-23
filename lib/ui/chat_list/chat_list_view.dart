@@ -2,8 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:oua_flutter33/app/app.router.dart';
-import 'package:oua_flutter33/common/widgets/custom_textfield.dart';
-import 'package:oua_flutter33/common/widgets/my_texfield.dart';
 import 'package:oua_flutter33/ui/chat_list/chat_list_view_model.dart';
 import 'package:stacked/stacked.dart';
 
@@ -37,7 +35,7 @@ class ChatListView extends StatelessWidget {
                     label: Text("New Chat"),
                     icon: Icon(Icons.edit),
                     onPressed: () {
-                      
+                      model.navigationService.navigateTo(Routes.newChatView);
                     },
                   ),
                 ],

@@ -40,6 +40,7 @@ dependencies:
   image_cropper: ^7.1.0
   photo_manager: ^3.0.0
   timeago: ^3.7.0
+  dotted_border: ^2.1.0
 
   
 dev_dependencies:

@@ -101,4 +101,27 @@ class PostService {
     }
     return null;
   }
+
+  Future<List<PostViewModel>> getAllPosts() async {
+    QuerySnapshot querySnapshot =
+        await _firestore.collection(_collectionName).get();
+        
+    List<PostViewModel> postViewModels = [];
+
+    for (var doc in querySnapshot.docs) {
+      Post post = Post.fromDocumentSnapshot(doc);
+
+      List<Comment> comments = await getCommentsByPostId(post.id!);
+      List<PepoleWhoLike> peopleWhoLike =
+          await getPeopleWhoLikeByPostId(post.id!);
+
+      postViewModels.add(PostViewModel(
+        post: post,
+        comments: comments,
+        peopleWhoLike: peopleWhoLike,
+      ));
+    }
+
+    return postViewModels;
+  }
 }

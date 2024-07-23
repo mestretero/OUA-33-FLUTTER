@@ -60,25 +60,7 @@ class ProfileView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
-            Container(
-              height: 36,
-              width: 36,
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: Theme.of(context).colorScheme.primary,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(8.0),
-              ),
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  Icons.add,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 18,
-                ),
-              ),
-            ),
+            _popupMenuButton(context, model),
             PopupMenuButton<String>(
               onSelected: (String result) {
                 if (result == 'Ayarlar') {
@@ -278,6 +260,81 @@ class ProfileView extends StatelessWidget {
               ),
             ),
           ],
+        ),
+      ],
+    );
+  }
+
+  Widget _popupMenuButton(BuildContext context, ProfileViewModel model) {
+    return MenuAnchor(
+      alignmentOffset: Offset.fromDirection(0, -100),
+      style: const MenuStyle(
+          elevation: WidgetStatePropertyAll(0.7),
+          padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 8))),
+      builder:
+          (BuildContext context, MenuController controller, Widget? child) {
+        return IconButton(
+          onPressed: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+          icon: Container(
+            height: 36,
+            width: 36,
+            decoration: BoxDecoration(
+              border: Border.all(
+                color: Theme.of(context).colorScheme.primary,
+                width: 1,
+              ),
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+            child: Icon(
+              Icons.add,
+              color: Theme.of(context).colorScheme.primary,
+              size: 18,
+            ),
+          ),
+        );
+      },
+      menuChildren: [
+        PopupMenuItem(
+          onTap: () {
+            model.navigationService.navigateTo(Routes.sendPostView);
+          },
+          child: ListTile(
+            leading: Icon(
+              Icons.grid_on_rounded,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            title: Text(
+              'Gönderi Ekle',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ),
+        PopupMenuItem(
+          onTap: () {
+            model.navigationService.navigateTo(Routes.productAddView);
+          },
+          child: ListTile(
+            leading: Icon(
+              Icons.add_circle_outline_rounded,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            title: Text(
+              'Ürün Ekleme',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 14,
+              ),
+            ),
+          ),
         ),
       ],
     );

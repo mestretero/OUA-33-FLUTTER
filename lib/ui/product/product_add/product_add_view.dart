@@ -38,9 +38,8 @@ class ProductAddView extends StatelessWidget {
                         // Çoklu Resim yükleme
                         PhotoPickerScreen(
                           onChanged: (images) {
-                            // Burada view model ile iletişim sağlanabilir
-                            // Resimler alınacak her değiştirdiğinde.
-                            print(images.where((i) => i != null).length);
+                            model.setImageList(
+                                images.where((i) => i != null).toList());
                           },
                         ),
                         const SizedBox(height: 24),
@@ -75,7 +74,12 @@ class ProductAddView extends StatelessWidget {
                         ),
 
                         //Kategori
-                        const CategorySelector(), //add change noti
+                        CategorySelector(
+                          onChanged: (category, subCategory, subSubCategory) {
+                            model.setCategories(
+                                category, subCategory, subSubCategory);
+                          },
+                        ), //add change noti
 
                         //Fiyat & Para Birimi
                         CurrencyInputWidget(
@@ -83,8 +87,8 @@ class ProductAddView extends StatelessWidget {
                           selectedCurrency: model.selectedCurrency,
                           priceController: model.priceController,
                           onChanged: (currency, price) {
-                            print(
-                                'Selected currency: $currency, Price: $price');
+                            model.setPrice(double.parse(price));
+                            model.setPriceUnit(currency);
                           },
                         ),
 
@@ -98,7 +102,7 @@ class ProductAddView extends StatelessWidget {
                           buttonStyle: 1,
                           isExpanded: true,
                           onTap: () {
-                            model.addProduct();
+                            model.addProduct(context);
                           },
                         ),
                       ],

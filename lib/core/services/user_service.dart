@@ -141,7 +141,7 @@ class UserService {
 
   Future<User?> getUserData() async {
     try {
-      auth.User? firebaseUser = authService.user;
+      auth.User? firebaseUser = _auth.currentUser;
       if (firebaseUser != null) {
         DocumentSnapshot userDoc =
             await firestore.collection('users').doc(firebaseUser.uid).get();
@@ -155,4 +155,13 @@ class UserService {
     }
     return null;
   }
+
+  increaseCountOfProduct() async {
+    User? user = await getUserData();
+    await firestore
+        .collection(collectionName)
+        .doc(user?.uid)
+        .update({"product_counts": (user!.productCount + 1)});
+  }
+
 }

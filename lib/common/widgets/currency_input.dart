@@ -90,6 +90,7 @@ class _CurrencyInputWidget extends State<CurrencyInputWidget> {
               width: Scaler.width(0.6, context),
               child: TextFormField(
                 controller: widget.priceController,
+                keyboardType: TextInputType.number,
                 decoration: InputDecoration(
                   isDense: true,
                   focusedBorder: OutlineInputBorder(

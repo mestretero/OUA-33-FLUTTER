@@ -31,11 +31,11 @@ class ProductDetailView extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Image.network(model.product!.imageUrl,
+                        Image.network(model.product!.mainImageUrl,
                             fit: BoxFit.cover),
                         const SizedBox(height: 16),
                         Text(
-                          model.product!.title,
+                          model.product!.name,
                           style: const TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),

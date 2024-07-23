@@ -5,9 +5,11 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i22;
+import 'package:flutter/material.dart' as _i23;
 import 'package:flutter/material.dart';
-import 'package:oua_flutter33/core/models/user_model.dart' as _i23;
+import 'package:image_picker/image_picker.dart' as _i25;
+import 'package:oua_flutter33/core/models/product_model.dart' as _i26;
+import 'package:oua_flutter33/core/models/user_model.dart' as _i24;
 import 'package:oua_flutter33/example/example_view.dart' as _i10;
 import 'package:oua_flutter33/ui/auth/login/login_view.dart' as _i8;
 import 'package:oua_flutter33/ui/auth/register/register_view.dart' as _i9;
@@ -22,6 +24,8 @@ import 'package:oua_flutter33/ui/onboarding/onboarding_one/onboarding_one_view.d
 import 'package:oua_flutter33/ui/onboarding/onboarding_two/onboarding_two_view.dart'
     as _i7;
 import 'package:oua_flutter33/ui/onboarding/onboarding_view.dart' as _i5;
+import 'package:oua_flutter33/ui/post/last_edit_post/last_edit_post_view.dart'
+    as _i22;
 import 'package:oua_flutter33/ui/post/send_post/send_post_view.dart' as _i20;
 import 'package:oua_flutter33/ui/product/product-detail/product_view.dart'
     as _i17;
@@ -34,7 +38,7 @@ import 'package:oua_flutter33/ui/profile/settings/settings_view.dart' as _i13;
 import 'package:oua_flutter33/ui/search/search_view.dart' as _i14;
 import 'package:oua_flutter33/ui/splash/splash_view.dart' as _i2;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i24;
+import 'package:stacked_services/stacked_services.dart' as _i27;
 
 class Routes {
   static const splashView = '/';
@@ -77,6 +81,8 @@ class Routes {
 
   static const editedProfileView = '/edited-profile-view';
 
+  static const lastEditPostView = '/last-edit-post-view';
+
   static const all = <String>{
     splashView,
     mainView,
@@ -98,6 +104,7 @@ class Routes {
     cartListView,
     sendPostView,
     editedProfileView,
+    lastEditPostView,
   };
 }
 
@@ -183,41 +190,45 @@ class StackedRouter extends _i1.RouterBase {
       Routes.editedProfileView,
       page: _i21.EditedProfileView,
     ),
+    _i1.RouteDef(
+      Routes.lastEditPostView,
+      page: _i22.LastEditPostView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.SplashView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.SplashView(),
         settings: data,
       );
     },
     _i3.MainView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.MainView(),
         settings: data,
       );
     },
     _i4.HomeView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.HomeView(),
         settings: data,
       );
     },
     _i5.OnboardingView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.OnboardingView(),
         settings: data,
       );
     },
     _i6.OnboardingOneView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.OnboardingOneView(),
         settings: data,
       );
     },
     _i7.OnboardingTwoView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.OnboardingTwoView(),
         settings: data,
       );
@@ -226,7 +237,7 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<LoginViewArguments>(
         orElse: () => const LoginViewArguments(),
       );
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i8.LoginView(key: args.key),
         settings: data,
       );
@@ -235,50 +246,50 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<RegisterViewArguments>(
         orElse: () => const RegisterViewArguments(),
       );
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => _i9.RegisterView(key: args.key),
         settings: data,
       );
     },
     _i10.ExampleView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i10.ExampleView(),
         settings: data,
       );
     },
     _i11.NotificationView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i11.NotificationView(),
         settings: data,
       );
     },
     _i12.ProfileView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i12.ProfileView(),
         settings: data,
       );
     },
     _i13.SettingsView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i13.SettingsView(),
         settings: data,
       );
     },
     _i14.SearchView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i14.SearchView(),
         settings: data,
       );
     },
     _i15.ChatListView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i15.ChatListView(),
         settings: data,
       );
     },
     _i16.ChatView: (data) {
       final args = data.getArgs<ChatViewArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i16.ChatView(key: args.key, receiverUser: args.receiverUser),
         settings: data,
@@ -286,33 +297,41 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i17.ProductDetailView: (data) {
       final args = data.getArgs<ProductDetailViewArguments>(nullOk: false);
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i17.ProductDetailView(key: args.key, productId: args.productId),
         settings: data,
       );
     },
     _i18.ProductAddView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i18.ProductAddView(),
         settings: data,
       );
     },
     _i19.CartListView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i19.CartListView(),
         settings: data,
       );
     },
     _i20.SendPostView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i20.SendPostView(),
         settings: data,
       );
     },
     _i21.EditedProfileView: (data) {
-      return _i22.MaterialPageRoute<dynamic>(
+      return _i23.MaterialPageRoute<dynamic>(
         builder: (context) => const _i21.EditedProfileView(),
+        settings: data,
+      );
+    },
+    _i22.LastEditPostView: (data) {
+      final args = data.getArgs<LastEditPostViewArguments>(nullOk: false);
+      return _i23.MaterialPageRoute<dynamic>(
+        builder: (context) => _i22.LastEditPostView(
+            key: args.key, images: args.images, products: args.products),
         settings: data,
       );
     },
@@ -328,7 +347,7 @@ class StackedRouter extends _i1.RouterBase {
 class LoginViewArguments {
   const LoginViewArguments({this.key});
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   @override
   String toString() {
@@ -350,7 +369,7 @@ class LoginViewArguments {
 class RegisterViewArguments {
   const RegisterViewArguments({this.key});
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   @override
   String toString() {
@@ -375,9 +394,9 @@ class ChatViewArguments {
     required this.receiverUser,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
-  final _i23.User receiverUser;
+  final _i24.User receiverUser;
 
   @override
   String toString() {
@@ -402,7 +421,7 @@ class ProductDetailViewArguments {
     required this.productId,
   });
 
-  final _i22.Key? key;
+  final _i23.Key? key;
 
   final String productId;
 
@@ -423,7 +442,39 @@ class ProductDetailViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i24.NavigationService {
+class LastEditPostViewArguments {
+  const LastEditPostViewArguments({
+    this.key,
+    required this.images,
+    required this.products,
+  });
+
+  final _i23.Key? key;
+
+  final List<_i25.XFile> images;
+
+  final List<_i26.Product> products;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "images": "$images", "products": "$products"}';
+  }
+
+  @override
+  bool operator ==(covariant LastEditPostViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key &&
+        other.images == images &&
+        other.products == products;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ images.hashCode ^ products.hashCode;
+  }
+}
+
+extension NavigatorStateExtension on _i27.NavigationService {
   Future<dynamic> navigateToSplashView([
     int? routerId,
     bool preventDuplicates = true,
@@ -509,7 +560,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToLoginView({
-    _i22.Key? key,
+    _i23.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -525,7 +576,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToRegisterView({
-    _i22.Key? key,
+    _i23.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -625,8 +676,8 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToChatView({
-    _i22.Key? key,
-    required _i23.User receiverUser,
+    _i23.Key? key,
+    required _i24.User receiverUser,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -642,7 +693,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> navigateToProductDetailView({
-    _i22.Key? key,
+    _i23.Key? key,
     required String productId,
     int? routerId,
     bool preventDuplicates = true,
@@ -708,6 +759,25 @@ extension NavigatorStateExtension on _i24.NavigationService {
         transition,
   ]) async {
     return navigateTo<dynamic>(Routes.editedProfileView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToLastEditPostView({
+    _i23.Key? key,
+    required List<_i25.XFile> images,
+    required List<_i26.Product> products,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return navigateTo<dynamic>(Routes.lastEditPostView,
+        arguments: LastEditPostViewArguments(
+            key: key, images: images, products: products),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -799,7 +869,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> replaceWithLoginView({
-    _i22.Key? key,
+    _i23.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -815,7 +885,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> replaceWithRegisterView({
-    _i22.Key? key,
+    _i23.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -915,8 +985,8 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> replaceWithChatView({
-    _i22.Key? key,
-    required _i23.User receiverUser,
+    _i23.Key? key,
+    required _i24.User receiverUser,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -932,7 +1002,7 @@ extension NavigatorStateExtension on _i24.NavigationService {
   }
 
   Future<dynamic> replaceWithProductDetailView({
-    _i22.Key? key,
+    _i23.Key? key,
     required String productId,
     int? routerId,
     bool preventDuplicates = true,
@@ -998,6 +1068,25 @@ extension NavigatorStateExtension on _i24.NavigationService {
         transition,
   ]) async {
     return replaceWith<dynamic>(Routes.editedProfileView,
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithLastEditPostView({
+    _i23.Key? key,
+    required List<_i25.XFile> images,
+    required List<_i26.Product> products,
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  }) async {
+    return replaceWith<dynamic>(Routes.lastEditPostView,
+        arguments: LastEditPostViewArguments(
+            key: key, images: images, products: products),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

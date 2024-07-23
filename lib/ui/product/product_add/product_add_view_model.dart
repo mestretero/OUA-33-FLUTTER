@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unused_import, unused_field, use_build_context_synchronously, unnecessary_null_comparison
+// ignore_for_file: avoid_print, unused_import, unused_field, use_build_context_synchronously, unnecessary_null_comparison, depend_on_referenced_packages
 
 import 'dart:io';
 import 'package:path/path.dart' as p;
@@ -130,12 +130,15 @@ class ProductAddViewModel extends AppBaseViewModel {
   }
 
   bool _isInputValid() {
-    if (titleController.text == null || titleController.text.isEmpty)
+    if (titleController.text == null || titleController.text.isEmpty) {
       return false;
-    if (descController.text == null || descController.text.isEmpty)
+    }
+    if (descController.text == null || descController.text.isEmpty) {
       return false;
-    if (shortDescController.text == null || shortDescController.text.isEmpty)
+    }
+    if (shortDescController.text == null || shortDescController.text.isEmpty) {
       return false;
+    }
     if (_price == null) return false;
     if (_priceUnit == null || _priceUnit.isEmpty) return false;
     if (_selectedCategory == null || _selectedCategory == "") return false;

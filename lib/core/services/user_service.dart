@@ -141,7 +141,7 @@ class UserService {
 
   Future<User?> getUserData() async {
     try {
-      auth.User? firebaseUser = authService.user;
+      auth.User? firebaseUser = _auth.currentUser;
       if (firebaseUser != null) {
         DocumentSnapshot userDoc =
             await firestore.collection('users').doc(firebaseUser.uid).get();

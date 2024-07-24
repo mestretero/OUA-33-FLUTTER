@@ -44,11 +44,16 @@ class _ChatViewState extends State<ChatView> {
                 children: [
                   Text(
                     receiverUser.name,
-                    style: const TextStyle(color: Colors.black),
+                    style: const TextStyle(color: Colors.black,
+                    fontSize: 16,
+                    
+                    ),
                   ),
                   Text(
                     '@${'${receiverUser.name}_${receiverUser.surname}'}',
-                    style: const TextStyle(color: Colors.green),
+                    style: const TextStyle(color: Color(0xFF7DBE48),
+                    fontSize: 16,
+                    ),
                   ),
                 ],
               ),
@@ -89,7 +94,7 @@ class _ChatViewState extends State<ChatView> {
                                 vertical: 5, horizontal: 10),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: isMe ? Colors.black : Colors.greenAccent,
+                              color: isMe ? Color(0xFF142924) : Color(0xFFD3F4BF),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
@@ -124,11 +129,14 @@ class _ChatViewState extends State<ChatView> {
       child: Row(
         children: [
           Container(
+            margin: EdgeInsets.all(5),
             decoration: const BoxDecoration(
-              color: Colors.lightGreenAccent,
+              color: Color(0xFFD3F4BF),
               shape: BoxShape.circle,
+              
             ),
             child: IconButton(
+           
               icon: const Icon(Icons.image, color: Colors.black),
               onPressed: () {
                 // Handle image selection

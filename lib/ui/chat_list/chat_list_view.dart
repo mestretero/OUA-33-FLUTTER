@@ -10,6 +10,7 @@ class ChatListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    TextEditingController _searchController=TextEditingController();
     return ViewModelBuilder<ChatListViewModel>.reactive(
         viewModelBuilder: () => ChatListViewModel(),
         onModelReady: (model) => model.init(context),
@@ -19,13 +20,24 @@ class ChatListView extends StatelessWidget {
               automaticallyImplyLeading: false,
               title: Row(
                 children: [
-                  const Text('Mesajlar'),
-                  const Spacer(),
-                  IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.green),
-                    onPressed: () {},
+                  Column(
+                    children: [
+                      const Text('Mesajlar',style: TextStyle(fontSize: 20,),),
+                      Text("@james_norm",style: TextStyle(color: Color(0xFF7DBE48),
+                      fontSize: 10,),),
+                    ],
                   ),
-                  const Text('New Chat', style: TextStyle(color: Colors.green)),
+                  const Spacer(),
+                  ElevatedButton.icon(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor:Theme.of(context).colorScheme.secondary,
+                    ),
+                    label: Text("New Chat"),
+                    icon: Icon(Icons.edit),
+                    onPressed: () {
+                      model.navigationService.navigateTo(Routes.newChatView);
+                    },
+                  ),
                 ],
               ),
               backgroundColor: Colors.white,
@@ -34,18 +46,25 @@ class ChatListView extends StatelessWidget {
             body: model.isLoading
                 ? const Center(child: CircularProgressIndicator())
                 : Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+          
                     children: [
                       Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(15.0),
                         child: TextField(
-                          decoration: InputDecoration(
-                            prefixIcon: const Icon(Icons.search),
-                            hintText: 'Ara...',
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(25.0),
-                            ),
+                        controller: _searchController,
+                        decoration: InputDecoration(
+                          isDense: true,
+                          prefixIcon: Icon(Icons.search),
+                          hintText: "Ara...",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(40),
                           ),
                         ),
+                   
+                         
+                  ),
                       ),
                       Expanded(
                         child: ListView.builder(

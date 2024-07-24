@@ -5,17 +5,18 @@
 // **************************************************************************
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
-import 'package:flutter/material.dart' as _i23;
+import 'package:flutter/material.dart' as _i24;
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart' as _i25;
-import 'package:oua_flutter33/core/models/product_model.dart' as _i26;
-import 'package:oua_flutter33/core/models/user_model.dart' as _i24;
+import 'package:image_picker/image_picker.dart' as _i26;
+import 'package:oua_flutter33/core/models/product_model.dart' as _i27;
+import 'package:oua_flutter33/core/models/user_model.dart' as _i25;
 import 'package:oua_flutter33/example/example_view.dart' as _i10;
 import 'package:oua_flutter33/ui/auth/login/login_view.dart' as _i8;
 import 'package:oua_flutter33/ui/auth/register/register_view.dart' as _i9;
 import 'package:oua_flutter33/ui/cart/cart_list_view.dart' as _i19;
 import 'package:oua_flutter33/ui/chat_list/chat/chat_view.dart' as _i16;
 import 'package:oua_flutter33/ui/chat_list/chat_list_view.dart' as _i15;
+import 'package:oua_flutter33/ui/chat_list/new_chat_view.dart' as _i23;
 import 'package:oua_flutter33/ui/home/home_view.dart' as _i4;
 import 'package:oua_flutter33/ui/main/main_view.dart' as _i3;
 import 'package:oua_flutter33/ui/notification/notification_view.dart' as _i11;
@@ -38,7 +39,7 @@ import 'package:oua_flutter33/ui/profile/settings/settings_view.dart' as _i13;
 import 'package:oua_flutter33/ui/search/search_view.dart' as _i14;
 import 'package:oua_flutter33/ui/splash/splash_view.dart' as _i2;
 import 'package:stacked/stacked.dart' as _i1;
-import 'package:stacked_services/stacked_services.dart' as _i27;
+import 'package:stacked_services/stacked_services.dart' as _i28;
 
 class Routes {
   static const splashView = '/';
@@ -83,6 +84,8 @@ class Routes {
 
   static const lastEditPostView = '/last-edit-post-view';
 
+  static const newChatView = '/new-chat-view';
+
   static const all = <String>{
     splashView,
     mainView,
@@ -105,6 +108,7 @@ class Routes {
     sendPostView,
     editedProfileView,
     lastEditPostView,
+    newChatView,
   };
 }
 
@@ -194,41 +198,45 @@ class StackedRouter extends _i1.RouterBase {
       Routes.lastEditPostView,
       page: _i22.LastEditPostView,
     ),
+    _i1.RouteDef(
+      Routes.newChatView,
+      page: _i23.NewChatView,
+    ),
   ];
 
   final _pagesMap = <Type, _i1.StackedRouteFactory>{
     _i2.SplashView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i2.SplashView(),
         settings: data,
       );
     },
     _i3.MainView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i3.MainView(),
         settings: data,
       );
     },
     _i4.HomeView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i4.HomeView(),
         settings: data,
       );
     },
     _i5.OnboardingView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i5.OnboardingView(),
         settings: data,
       );
     },
     _i6.OnboardingOneView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i6.OnboardingOneView(),
         settings: data,
       );
     },
     _i7.OnboardingTwoView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i7.OnboardingTwoView(),
         settings: data,
       );
@@ -237,7 +245,7 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<LoginViewArguments>(
         orElse: () => const LoginViewArguments(),
       );
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => _i8.LoginView(key: args.key),
         settings: data,
       );
@@ -246,50 +254,50 @@ class StackedRouter extends _i1.RouterBase {
       final args = data.getArgs<RegisterViewArguments>(
         orElse: () => const RegisterViewArguments(),
       );
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => _i9.RegisterView(key: args.key),
         settings: data,
       );
     },
     _i10.ExampleView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i10.ExampleView(),
         settings: data,
       );
     },
     _i11.NotificationView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i11.NotificationView(),
         settings: data,
       );
     },
     _i12.ProfileView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i12.ProfileView(),
         settings: data,
       );
     },
     _i13.SettingsView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i13.SettingsView(),
         settings: data,
       );
     },
     _i14.SearchView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i14.SearchView(),
         settings: data,
       );
     },
     _i15.ChatListView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i15.ChatListView(),
         settings: data,
       );
     },
     _i16.ChatView: (data) {
       final args = data.getArgs<ChatViewArguments>(nullOk: false);
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i16.ChatView(key: args.key, receiverUser: args.receiverUser),
         settings: data,
@@ -297,41 +305,47 @@ class StackedRouter extends _i1.RouterBase {
     },
     _i17.ProductDetailView: (data) {
       final args = data.getArgs<ProductDetailViewArguments>(nullOk: false);
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) =>
             _i17.ProductDetailView(key: args.key, productId: args.productId),
         settings: data,
       );
     },
     _i18.ProductAddView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i18.ProductAddView(),
         settings: data,
       );
     },
     _i19.CartListView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i19.CartListView(),
         settings: data,
       );
     },
     _i20.SendPostView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i20.SendPostView(),
         settings: data,
       );
     },
     _i21.EditedProfileView: (data) {
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => const _i21.EditedProfileView(),
         settings: data,
       );
     },
     _i22.LastEditPostView: (data) {
       final args = data.getArgs<LastEditPostViewArguments>(nullOk: false);
-      return _i23.MaterialPageRoute<dynamic>(
+      return _i24.MaterialPageRoute<dynamic>(
         builder: (context) => _i22.LastEditPostView(
             key: args.key, images: args.images, products: args.products),
+        settings: data,
+      );
+    },
+    _i23.NewChatView: (data) {
+      return _i24.MaterialPageRoute<dynamic>(
+        builder: (context) => const _i23.NewChatView(),
         settings: data,
       );
     },
@@ -347,7 +361,7 @@ class StackedRouter extends _i1.RouterBase {
 class LoginViewArguments {
   const LoginViewArguments({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   @override
   String toString() {
@@ -369,7 +383,7 @@ class LoginViewArguments {
 class RegisterViewArguments {
   const RegisterViewArguments({this.key});
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   @override
   String toString() {
@@ -394,9 +408,9 @@ class ChatViewArguments {
     required this.receiverUser,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final _i24.User receiverUser;
+  final _i25.User receiverUser;
 
   @override
   String toString() {
@@ -421,7 +435,7 @@ class ProductDetailViewArguments {
     required this.productId,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
   final String productId;
 
@@ -449,11 +463,11 @@ class LastEditPostViewArguments {
     required this.products,
   });
 
-  final _i23.Key? key;
+  final _i24.Key? key;
 
-  final List<_i25.XFile> images;
+  final List<_i26.XFile> images;
 
-  final List<_i26.Product> products;
+  final List<_i27.Product> products;
 
   @override
   String toString() {
@@ -474,7 +488,7 @@ class LastEditPostViewArguments {
   }
 }
 
-extension NavigatorStateExtension on _i27.NavigationService {
+extension NavigatorStateExtension on _i28.NavigationService {
   Future<dynamic> navigateToSplashView([
     int? routerId,
     bool preventDuplicates = true,
@@ -560,7 +574,7 @@ extension NavigatorStateExtension on _i27.NavigationService {
   }
 
   Future<dynamic> navigateToLoginView({
-    _i23.Key? key,
+    _i24.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -576,7 +590,7 @@ extension NavigatorStateExtension on _i27.NavigationService {
   }
 
   Future<dynamic> navigateToRegisterView({
-    _i23.Key? key,
+    _i24.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -676,8 +690,8 @@ extension NavigatorStateExtension on _i27.NavigationService {
   }
 
   Future<dynamic> navigateToChatView({
-    _i23.Key? key,
-    required _i24.User receiverUser,
+    _i24.Key? key,
+    required _i25.User receiverUser,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -693,7 +707,7 @@ extension NavigatorStateExtension on _i27.NavigationService {
   }
 
   Future<dynamic> navigateToProductDetailView({
-    _i23.Key? key,
+    _i24.Key? key,
     required String productId,
     int? routerId,
     bool preventDuplicates = true,
@@ -766,9 +780,9 @@ extension NavigatorStateExtension on _i27.NavigationService {
   }
 
   Future<dynamic> navigateToLastEditPostView({
-    _i23.Key? key,
-    required List<_i25.XFile> images,
-    required List<_i26.Product> products,
+    _i24.Key? key,
+    required List<_i26.XFile> images,
+    required List<_i27.Product> products,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -778,6 +792,20 @@ extension NavigatorStateExtension on _i27.NavigationService {
     return navigateTo<dynamic>(Routes.lastEditPostView,
         arguments: LastEditPostViewArguments(
             key: key, images: images, products: products),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> navigateToNewChatView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return navigateTo<dynamic>(Routes.newChatView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -869,7 +897,7 @@ extension NavigatorStateExtension on _i27.NavigationService {
   }
 
   Future<dynamic> replaceWithLoginView({
-    _i23.Key? key,
+    _i24.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -885,7 +913,7 @@ extension NavigatorStateExtension on _i27.NavigationService {
   }
 
   Future<dynamic> replaceWithRegisterView({
-    _i23.Key? key,
+    _i24.Key? key,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -985,8 +1013,8 @@ extension NavigatorStateExtension on _i27.NavigationService {
   }
 
   Future<dynamic> replaceWithChatView({
-    _i23.Key? key,
-    required _i24.User receiverUser,
+    _i24.Key? key,
+    required _i25.User receiverUser,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1002,7 +1030,7 @@ extension NavigatorStateExtension on _i27.NavigationService {
   }
 
   Future<dynamic> replaceWithProductDetailView({
-    _i23.Key? key,
+    _i24.Key? key,
     required String productId,
     int? routerId,
     bool preventDuplicates = true,
@@ -1075,9 +1103,9 @@ extension NavigatorStateExtension on _i27.NavigationService {
   }
 
   Future<dynamic> replaceWithLastEditPostView({
-    _i23.Key? key,
-    required List<_i25.XFile> images,
-    required List<_i26.Product> products,
+    _i24.Key? key,
+    required List<_i26.XFile> images,
+    required List<_i27.Product> products,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
@@ -1087,6 +1115,20 @@ extension NavigatorStateExtension on _i27.NavigationService {
     return replaceWith<dynamic>(Routes.lastEditPostView,
         arguments: LastEditPostViewArguments(
             key: key, images: images, products: products),
+        id: routerId,
+        preventDuplicates: preventDuplicates,
+        parameters: parameters,
+        transition: transition);
+  }
+
+  Future<dynamic> replaceWithNewChatView([
+    int? routerId,
+    bool preventDuplicates = true,
+    Map<String, String>? parameters,
+    Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
+        transition,
+  ]) async {
+    return replaceWith<dynamic>(Routes.newChatView,
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

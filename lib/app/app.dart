@@ -4,7 +4,7 @@ import 'package:oua_flutter33/ui/auth/register/register_view.dart';
 import 'package:oua_flutter33/ui/cart/cart_list_view.dart';
 import 'package:oua_flutter33/ui/chat_list/chat/chat_view.dart';
 import 'package:oua_flutter33/ui/chat_list/chat_list_view.dart';
-import 'package:oua_flutter33/ui/chat_list/new_chat_view.dart';
+import 'package:oua_flutter33/ui/chat_list/new_chat/new_chat_view.dart';
 import 'package:oua_flutter33/ui/home/home_view.dart';
 import 'package:oua_flutter33/ui/main/main_view.dart';
 import 'package:oua_flutter33/ui/notification/notification_view.dart';

@@ -163,25 +163,5 @@ class UserService {
         .doc(user?.uid)
         .update({"product_counts": (user!.productCount + 1)});
   }
-  
-  Future<List<User>> searchUsers(String query) async {
-  try {
-    QuerySnapshot querySnapshot = await firestore
-        .collection(collectionName)
-        .where('name', isGreaterThanOrEqualTo: query.toLowerCase())
-        .where('name', isLessThanOrEqualTo: '${query.toLowerCase()}\uf8ff')
-        .get();
-
-    List<User> users = querySnapshot.docs
-        .map((doc) => User.fromMap(doc.data() as Map<String, dynamic>, doc.id))
-        .toList();
-    return users;
-  } catch (e) {
-    print("Error searching users: $e");
-    return [];
-  }
-}
 
 }
-
-

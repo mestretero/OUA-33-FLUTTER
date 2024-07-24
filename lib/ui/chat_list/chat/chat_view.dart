@@ -94,7 +94,7 @@ class _ChatViewState extends State<ChatView> {
                                 vertical: 5, horizontal: 10),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: isMe ? Color(0xFF142924) : Color(0xFFD3F4BF),
+                              color: isMe ? const Color(0xFF142924) : const Color(0xFFD3F4BF),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
@@ -129,7 +129,7 @@ class _ChatViewState extends State<ChatView> {
       child: Row(
         children: [
           Container(
-            margin: EdgeInsets.all(5),
+            margin: const EdgeInsets.all(5),
             decoration: const BoxDecoration(
               color: Color(0xFFD3F4BF),
               shape: BoxShape.circle,

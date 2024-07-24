@@ -69,6 +69,7 @@ class EditedProfileView extends StatelessWidget {
               borderRadius: BorderRadius.circular(999.0),
               image: DecorationImage(
                 image: NetworkImage(user.imageUrl),
+                fit: BoxFit.cover,
               ),
             ),
           ),
@@ -106,7 +107,7 @@ class EditedProfileView extends StatelessWidget {
                 //User update fonksiyonu
               }
             },
-            text: "Kayıt Ol",
+            text: "Tamamla",
             buttonStyle: 1,
             isExpanded: true,
           ),

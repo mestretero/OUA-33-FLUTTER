@@ -46,7 +46,7 @@ class MyTextField extends StatelessWidget {
               enabled: true,
               controller: controller,
               textCapitalization: textCapitalization,
-              maxLength: isTextArea ? 512 : 32,
+              maxLength: isTextArea ? 512 : 128,
               maxLines: isTextArea ? 6 : 1,
               obscureText: obscureText,
               keyboardType: inputType,

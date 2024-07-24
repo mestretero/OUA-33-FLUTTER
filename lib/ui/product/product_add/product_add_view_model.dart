@@ -33,6 +33,9 @@ class ProductAddViewModel extends AppBaseViewModel {
   String _priceUnit = "";
   List<File?> _images = [];
 
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
   void init(BuildContext context) {
     // Initialize if needed
   }
@@ -103,6 +106,8 @@ class ProductAddViewModel extends AppBaseViewModel {
       return showErrorMessage(context);
     }
 
+    _isLoading = true;
+
     //Upload Files return List<Media>
     List<Media> medias = await uploadMedia(_images);
 
@@ -124,9 +129,10 @@ class ProductAddViewModel extends AppBaseViewModel {
       createDate: Timestamp.now(),
     );
 
-    await _productService
-        .addProduct(product)
-        .then((_) => navigationService.navigateTo(Routes.sendPostView));
+    await _productService.addProduct(product).then((_) {
+      navigationService.navigateTo(Routes.sendPostView);
+      _isLoading = false;
+    });
   }
 
   bool _isInputValid() {

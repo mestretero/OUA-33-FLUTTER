@@ -1,4 +1,5 @@
 // ignore_for_file: deprecated_member_use
+import 'package:oua_flutter33/common/widgets/post_carosel.dart';
 import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:dotted_border/dotted_border.dart';
@@ -215,7 +216,8 @@ class HomeView extends StatelessWidget {
                               Text(
                                 '@${'${model.userData?.name}_${model.userData?.surname}'}',
                                 style: TextStyle(
-                                  color: Theme.of(context).colorScheme.onPrimary,
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
                                   fontSize: 12,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -224,7 +226,7 @@ class HomeView extends StatelessWidget {
                           ),
                         ],
                       ),
-            
+
                       const SizedBox(height: 16),
                       item.post.medias.length == 1
                           ? Container(
@@ -244,8 +246,11 @@ class HomeView extends StatelessWidget {
                                 item.post.relatedProducts,
                               ),
                             )
-                          : Container(), //Carousel eklenecek,
-            
+                          : PostCarousel(
+                              post: item.post,
+                              model: model,
+                            ), //Carousel eklenecek,
+
                       const SizedBox(height: 8),
                       Text(
                         item.post.explanation,

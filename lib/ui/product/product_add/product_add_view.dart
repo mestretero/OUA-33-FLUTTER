@@ -19,100 +19,103 @@ class ProductAddView extends StatelessWidget {
       viewModelBuilder: () => ProductAddViewModel(),
       onModelReady: (model) => model.init(context),
       builder: (context, model, widget) => Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                children: [
-                  MyAppBarWidget(
-                    isBackButton: false,
-                    title: "Ürün Bilgileri",
-                    routeName: "",
-                  ),
-                  Form(
-                    key: model.formKey,
+        body: model.isLoading
+            ? const CircularProgressIndicator()
+            : SafeArea(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: const EdgeInsets.all(24.0),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Çoklu Resim yükleme
-                        PhotoPickerScreen(
-                          onChanged: (images) {
-                            model.setImageList(
-                                images.where((i) => i != null).toList());
-                          },
+                        MyAppBarWidget(
+                          isBackButton: false,
+                          title: "Ürün Bilgileri",
+                          routeName: "",
                         ),
-                        const SizedBox(height: 24),
-                        //Title
-                        MyTextField(
-                          controller: model.titleController,
-                          name: "El Emeğinizin İsmi",
-                          hintText:
-                              "Ürün başlığını ayrıntılı olarak giriniz. Örn: Kupa Kıyafeti",
-                          inputType: TextInputType.text,
-                          isTextArea: false,
-                        ),
+                        Form(
+                          key: model.formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // Çoklu Resim yükleme
+                              PhotoPickerScreen(
+                                onChanged: (images) {
+                                  model.setImageList(
+                                      images.where((i) => i != null).toList());
+                                },
+                              ),
+                              const SizedBox(height: 24),
+                              //Title
+                              MyTextField(
+                                controller: model.titleController,
+                                name: "El Emeğinizin İsmi",
+                                hintText:
+                                    "Ürün başlığını ayrıntılı olarak giriniz. Örn: Kupa Kıyafeti",
+                                inputType: TextInputType.text,
+                                isTextArea: false,
+                              ),
 
-                        //Short Description
-                        MyTextField(
-                          controller: model.shortDescController,
-                          name: "El Emeğinizin Kısa Ürün Açıklaması",
-                          hintText:
-                              "Ürünü bir cümle ile açıkla. Örn: Doğal iple örülmüş Kupa kıyafeti",
-                          inputType: TextInputType.text,
-                          isTextArea: false,
-                        ),
+                              //Short Description
+                              MyTextField(
+                                controller: model.shortDescController,
+                                name: "El Emeğinizin Kısa Ürün Açıklaması",
+                                hintText:
+                                    "Ürünü bir cümle ile açıkla. Örn: Doğal iple örülmüş Kupa kıyafeti",
+                                inputType: TextInputType.text,
+                                isTextArea: false,
+                              ),
 
-                        //Description
-                        MyTextField(
-                          controller: model.descController,
-                          name: "El Emeğinizin Ürün Açıklaması",
-                          hintText:
-                              "Ürünü bir kaç cümle ile açıkla. Örn: Doğal iple kullanılmıştır. 330ml’lik kupalar için idealdir.",
-                          inputType: TextInputType.text,
-                          isTextArea: true,
-                        ),
+                              //Description
+                              MyTextField(
+                                controller: model.descController,
+                                name: "El Emeğinizin Ürün Açıklaması",
+                                hintText:
+                                    "Ürünü bir kaç cümle ile açıkla. Örn: Doğal iple kullanılmıştır. 330ml’lik kupalar için idealdir.",
+                                inputType: TextInputType.text,
+                                isTextArea: true,
+                              ),
 
-                        //Kategori
-                        CategorySelector(
-                          onChanged: (category, subCategory, subSubCategory) {
-                            model.setCategories(
-                                category, subCategory, subSubCategory);
-                          },
-                        ), //add change noti
+                              //Kategori
+                              CategorySelector(
+                                onChanged:
+                                    (category, subCategory, subSubCategory) {
+                                  model.setCategories(
+                                      category, subCategory, subSubCategory);
+                                },
+                              ), //add change noti
 
-                        //Fiyat & Para Birimi
-                        CurrencyInputWidget(
-                          title: 'Enter Price',
-                          selectedCurrency: model.selectedCurrency,
-                          priceController: model.priceController,
-                          onChanged: (currency, price) {
-                            model.setPrice(double.parse(price));
-                            model.setPriceUnit(currency);
-                          },
-                        ),
+                              //Fiyat & Para Birimi
+                              CurrencyInputWidget(
+                                title: 'Enter Price',
+                                selectedCurrency: model.selectedCurrency,
+                                priceController: model.priceController,
+                                onChanged: (currency, price) {
+                                  model.setPrice(double.parse(price));
+                                  model.setPriceUnit(currency);
+                                },
+                              ),
 
-                        const SizedBox(
-                          height: 24,
-                        ),
+                              const SizedBox(
+                                height: 24,
+                              ),
 
-                        //Ekleme Butonu
-                        MyButton(
-                          text: "Ürünümü Ekle",
-                          buttonStyle: 1,
-                          isExpanded: true,
-                          onTap: () {
-                            model.addProduct(context);
-                          },
+                              //Ekleme Butonu
+                              MyButton(
+                                text: "Ürünümü Ekle",
+                                buttonStyle: 1,
+                                isExpanded: true,
+                                onTap: () {
+                                  model.addProduct(context);
+                                },
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
                   ),
-                ],
+                ),
               ),
-            ),
-          ),
-        ),
       ),
     );
   }

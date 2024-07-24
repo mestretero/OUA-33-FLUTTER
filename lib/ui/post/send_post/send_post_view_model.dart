@@ -164,6 +164,7 @@ class SendPostViewModel extends AppBaseViewModel {
                       notifyListeners();
                     },
                     child: Container(
+                      margin: const EdgeInsets.only(bottom: 8),
                       padding: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         border: Border.all(
@@ -238,9 +239,11 @@ class SendPostViewModel extends AppBaseViewModel {
   }
 
   bool _isInvalid() {
-    if (selectedGalleryImages.isEmpty || selectedImage == null) return false;
-    if (selectedProducts.isEmpty) return false;
-    return true;
+    if (selectedProducts.isEmpty) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   void showErrorMessage(BuildContext context) {

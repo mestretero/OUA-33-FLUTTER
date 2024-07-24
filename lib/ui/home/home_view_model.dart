@@ -12,7 +12,7 @@ class HomeViewModel extends AppBaseViewModel {
   User? userData;
   bool isShowProducts = false;
   List<PostViewModel> posts = [];
-
+  
   @override
   void initialise() {
     _loadUserData();

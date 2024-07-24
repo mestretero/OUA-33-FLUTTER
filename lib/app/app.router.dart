@@ -272,8 +272,12 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i12.ProfileView: (data) {
+      final args = data.getArgs<ProfileViewArguments>(
+        orElse: () => const ProfileViewArguments(),
+      );
       return _i24.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i12.ProfileView(),
+        builder: (context) =>
+            _i12.ProfileView(key: args.key, profileUid: args.profileUid),
         settings: data,
       );
     },
@@ -399,6 +403,33 @@ class RegisterViewArguments {
   @override
   int get hashCode {
     return key.hashCode;
+  }
+}
+
+class ProfileViewArguments {
+  const ProfileViewArguments({
+    this.key,
+    this.profileUid,
+  });
+
+  final _i24.Key? key;
+
+  final String? profileUid;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "profileUid": "$profileUid"}';
+  }
+
+  @override
+  bool operator ==(covariant ProfileViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.profileUid == profileUid;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ profileUid.hashCode;
   }
 }
 
@@ -633,14 +664,17 @@ extension NavigatorStateExtension on _i28.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToProfileView([
+  Future<dynamic> navigateToProfileView({
+    _i24.Key? key,
+    String? profileUid,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.profileView,
+        arguments: ProfileViewArguments(key: key, profileUid: profileUid),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -956,14 +990,17 @@ extension NavigatorStateExtension on _i28.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithProfileView([
+  Future<dynamic> replaceWithProfileView({
+    _i24.Key? key,
+    String? profileUid,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.profileView,
+        arguments: ProfileViewArguments(key: key, profileUid: profileUid),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

@@ -2,6 +2,7 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
 import 'package:oua_flutter33/ui/chat_list/chat/chat_view_model.dart';
 import 'package:stacked/stacked.dart';
@@ -31,33 +32,40 @@ class _ChatViewState extends State<ChatView> {
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => model.navigationService.navigateTo(Routes.mainView),
           ),
-          title: Row(
-            children: [
-              CircleAvatar(
-                backgroundImage: NetworkImage(receiverUser.imageUrl),
-              ),
-              const SizedBox(width: 8),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    receiverUser.name,
-                    style: const TextStyle(color: Colors.black,
-                    fontSize: 16,
-                    
+          title: GestureDetector(
+            onTap: () => model.navigationService.navigateTo(
+              Routes.profileView,
+              arguments: ProfileViewArguments(profileUid: receiverUser.uid),
+            ),
+            child: Row(
+              children: [
+                CircleAvatar(
+                  backgroundImage: NetworkImage(receiverUser.imageUrl),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      receiverUser.name,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '@${'${receiverUser.name}_${receiverUser.surname}'}',
-                    style: const TextStyle(color: Color(0xFF7DBE48),
-                    fontSize: 16,
+                    Text(
+                      '@${'${receiverUser.name}_${receiverUser.surname}'}',
+                      style: const TextStyle(
+                        color: Color(0xFF7DBE48),
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
           backgroundColor: Colors.white,
           elevation: 0,
@@ -82,8 +90,8 @@ class _ChatViewState extends State<ChatView> {
                       itemCount: snapshot.data!.docs.length,
                       itemBuilder: (context, index) {
                         var message = snapshot.data!.docs[index];
-                        var isMe =
-                            message['sender_user_id'] == model.authServices.user!.uid;
+                        var isMe = message['sender_user_id'] ==
+                            model.authServices.user!.uid;
 
                         return Align(
                           alignment: isMe
@@ -94,7 +102,9 @@ class _ChatViewState extends State<ChatView> {
                                 vertical: 5, horizontal: 10),
                             padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: isMe ? const Color(0xFF142924) : const Color(0xFFD3F4BF),
+                              color: isMe
+                                  ? const Color(0xFF142924)
+                                  : const Color(0xFFD3F4BF),
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
@@ -133,10 +143,8 @@ class _ChatViewState extends State<ChatView> {
             decoration: const BoxDecoration(
               color: Color(0xFFD3F4BF),
               shape: BoxShape.circle,
-              
             ),
             child: IconButton(
-           
               icon: const Icon(Icons.image, color: Colors.black),
               onPressed: () {
                 // Handle image selection

@@ -39,58 +39,42 @@ class SearchView extends StatelessWidget {
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
-                          SizedBox(
-                            width: Scaler.width(0.72, context),
-                            child: TextField(
-                              onChanged: (value) => model.searchChange(value),
-                              controller: model.searchController,
-                              decoration: InputDecoration(
-                                isDense: true,
-                                suffixIcon: GestureDetector(
-                                  onTap: () => model.showFilterDialog(context),
-                                  child: Icon(
-                                    Icons.more_horiz,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    size: 24,
-                                  ),
+                          GestureDetector(
+                            onTap: () => model.showFilterDialog(context),
+                            child: Container(
+                              alignment: Alignment.centerLeft,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              width: Scaler.width(0.72, context),
+                              height: 44,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
-                                prefixIcon: GestureDetector(
-                                  onTap: () => model.searchChange(
-                                      model.searchController.text),
-                                  child: Icon(
+                                borderRadius: BorderRadius.circular(40),
+                              ),
+                              child: Row(
+                                children: [
+                                  Icon(
                                     Icons.search,
                                     color:
                                         Theme.of(context).colorScheme.primary,
+                                    size: 20,
                                   ),
-                                ),
-                                hintText: "Ara...",
-                                hintStyle: TextStyle(
-                                  color: Theme.of(context)
-                                      .colorScheme
-                                      .primary
-                                      .withOpacity(0.5),
-                                ),
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.secondary,
-                                    width: 1,
-                                  ),
-                                ),
-                                enabled: true,
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(40),
-                                  borderSide: BorderSide(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    width: 1,
-                                  ),
-                                ),
+                                  const SizedBox(width: 8),
+                                  Text(
+                                    "Ara...",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .primary
+                                          .withOpacity(0.5),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.normal,
+                                    ),
+                                  )
+                                ],
                               ),
                             ),
                           ),
@@ -114,8 +98,74 @@ class SearchView extends StatelessWidget {
         //Grid
         SizedBox(
           child: model.filteredGrid == "favored"
-              ? const Column(
-                  children: [],
+              ? Column(
+                  children: [
+                    const SizedBox(height: 8),
+                    ...model.user!.favoredProductIds.map((item) {
+                      return Container(
+                        width: Scaler.width(1, context),
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Container(
+                                  height: 48,
+                                  width: 48,
+                                  margin: const EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    image: DecorationImage(
+                                      image: NetworkImage(item.imageUrl),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Scaler.width(0.5, context),
+                                  child: Text(
+                                    item.title,
+                                    style: TextStyle(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+
+                            //
+                            IconButton(
+                              style: IconButton.styleFrom(
+                                backgroundColor:
+                                    Colors.red.shade100.withOpacity(0.5),
+                              ),
+                              onPressed: () => model.unfavored(item.id),
+                              icon: Transform.rotate(
+                                angle: 27.5,
+                                child: const Icon(
+                                  Icons.add_rounded,
+                                  color: Colors.red,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                  ],
                 )
               : Wrap(
                   spacing: 10,
@@ -123,86 +173,116 @@ class SearchView extends StatelessWidget {
                   crossAxisAlignment: WrapCrossAlignment.start,
                   children: [
                     ...model.products.map(
-                      (item) => GestureDetector(
-                        onTap: () => model.goToProductDetail(item.product),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          width: Scaler.width(0.4, context),
-                          height: Scaler.width(0.6, context),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context).colorScheme.secondary,
+                      (item) {
+                        bool isFavorited = model.user!.favoredProductIds
+                                .where((e) => e.id == item.product.id)
+                                .toList()
+                                .isEmpty
+                            ? false
+                            : true;
+
+                        return GestureDetector(
+                          onTap: () => model.goToProductDetail(item.product),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            width: Scaler.width(0.4, context),
+                            height: Scaler.width(0.6, context),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.secondary,
+                              ),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: Scaler.width(1, context),
-                                height: Scaler.width(0.32, context),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  image: DecorationImage(
-                                    image:
-                                        NetworkImage(item.product.mainImageUrl),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                                child: IconButton(
-                                  onPressed: () => model.favored(item.product),
-                                  icon: const Icon(
-                                    Icons.favorite_rounded,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                item.product.name,
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    "${item.product.price} ${item.product.priceUnit}",
-                                    style: TextStyle(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimary,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  width: Scaler.width(1, context),
+                                  height: Scaler.width(0.32, context),
+                                  alignment: Alignment.topRight,
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(4),
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                          item.product.mainImageUrl),
+                                      fit: BoxFit.cover,
                                     ),
                                   ),
-                                  Container(
+                                  child: SizedBox(
                                     width: 32,
                                     height: 32,
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(4),
-                                      border: Border.all(
+                                    child: IconButton(
+                                      style: IconButton.styleFrom(
+                                        padding: const EdgeInsets.all(0),
+                                        backgroundColor: Theme.of(context)
+                                            .colorScheme
+                                            .secondary,
+                                      ),
+                                      onPressed: () => isFavorited
+                                          ? model.unfavored(item.product.id)
+                                          : model.favored(item.product),
+                                      icon: Icon(
+                                        isFavorited
+                                            ? Icons.favorite_rounded
+                                            : Icons.favorite_border_rounded,
+                                        color: isFavorited
+                                            ? Colors.red
+                                            : Colors.white,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  item.product.name,
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "${item.product.price} ${item.product.priceUnit}",
+                                      style: TextStyle(
                                         color: Theme.of(context)
                                             .colorScheme
                                             .onPrimary,
-                                        width: 1.5,
-                                      ),
-                                      image: DecorationImage(
-                                        image: NetworkImage(item.user.imageUrl),
-                                        fit: BoxFit.cover,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                                    Container(
+                                      width: 32,
+                                      height: 32,
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(4),
+                                        border: Border.all(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          width: 1.5,
+                                        ),
+                                        image: DecorationImage(
+                                          image:
+                                              NetworkImage(item.user.imageUrl),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
                   ],
                 ),

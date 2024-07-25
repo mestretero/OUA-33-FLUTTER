@@ -8,6 +8,7 @@ import 'package:oua_flutter33/core/services/media_service.dart';
 import 'package:oua_flutter33/core/services/notification_service.dart';
 import 'package:oua_flutter33/core/services/post_service.dart';
 import 'package:oua_flutter33/core/services/product_service.dart';
+import 'package:oua_flutter33/core/services/search_service.dart';
 import 'package:oua_flutter33/core/services/user_service.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -27,6 +28,5 @@ void setupDI() {
   getIt.registerLazySingleton(() => NotificationService());
   getIt.registerLazySingleton(() => CategoryService());
   getIt.registerLazySingleton(() => MediaService());
-
-
+  getIt.registerLazySingleton(() => SearchService());
 }

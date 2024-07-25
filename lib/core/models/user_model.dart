@@ -35,21 +35,19 @@ class User {
   final int followerCount;
   final int productCount;
   final int postCount;
-  final List<_ListObjectOfIds> followerIds;
-  final List<_ListObjectOfIds> favoredProductIds;
-  final List<_ListObjectOfIds> favoredPostIds;
-  final List<_ListObjectOfIds> recordedProductIds;
-  final List<_ListObjectOfIds> recordedPostIds;
+  final List<ListObjectOfIds> followerIds;
+  final List<ListObjectOfIds> favoredProductIds;
+  final List<ListObjectOfIds> favoredPostIds;
+  final List<ListObjectOfIds> recordedProductIds;
+  final List<ListObjectOfIds> recordedPostIds;
 
   factory User.fromMap(Map<String, dynamic> data, String documentId) {
-    List<_ListObjectOfIds> convertToListObjectOfIds(List<dynamic>? dataList) {
+    List<ListObjectOfIds> convertToListObjectOfIds(List<dynamic>? dataList) {
       if (dataList == null) {
         return [];
       }
-      return dataList.map((item) => _ListObjectOfIds.fromMap(item)).toList();
+      return dataList.map((item) => ListObjectOfIds.fromMap(item)).toList();
     }
-    
-    
 
     return User(
       uid: documentId,
@@ -60,7 +58,7 @@ class User {
       phoneNumber: data['phone_number'] ?? '',
       birthDay: data['birth_day'] ?? 0,
       createDate: data['create_date'] ?? 0,
-      isActive: data['isActive'] ?? false,
+      isActive: data['is_active'] ?? false,
       followerCount: data['follower_count'] ?? 0,
       productCount: data['product_count'] ?? 0,
       postCount: data['post_count'] ?? 0,
@@ -75,7 +73,6 @@ class User {
     );
   }
 
-
   factory User.fromDocumentSnapshot(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return User(
@@ -87,31 +84,31 @@ class User {
       phoneNumber: data['phone_number'] as String,
       birthDay: data['birth_day'] as int,
       createDate: data['create_date'] as int,
-      isActive: data['isActive'] as bool,
+      isActive: data['is_active'] as bool,
       followerCount: data['follower_count'] as int,
       productCount: data['product_count'] as int,
       postCount: data['post_count'] as int,
       followerIds: (data['follower_ids'] as List)
-          .map((item) => _ListObjectOfIds.fromMap(item))
+          .map((item) => ListObjectOfIds.fromMap(item))
           .toList(),
       favoredProductIds: (data['favored_product_ids'] as List)
-          .map((item) => _ListObjectOfIds.fromMap(item))
+          .map((item) => ListObjectOfIds.fromMap(item))
           .toList(),
       favoredPostIds: (data['favored_post_ids'] as List)
-          .map((item) => _ListObjectOfIds.fromMap(item))
+          .map((item) => ListObjectOfIds.fromMap(item))
           .toList(),
       recordedProductIds: (data['recorded_product_ids'] as List)
-          .map((item) => _ListObjectOfIds.fromMap(item))
+          .map((item) => ListObjectOfIds.fromMap(item))
           .toList(),
       recordedPostIds: (data['recorded_post_ids'] as List)
-          .map((item) => _ListObjectOfIds.fromMap(item))
+          .map((item) => ListObjectOfIds.fromMap(item))
           .toList(),
     );
+  }
 }
 
-
-class _ListObjectOfIds {
-  _ListObjectOfIds({
+class ListObjectOfIds {
+  ListObjectOfIds({
     required this.id,
     required this.title,
     required this.imageUrl,
@@ -121,8 +118,8 @@ class _ListObjectOfIds {
   final String title;
   final String imageUrl;
 
-  factory _ListObjectOfIds.fromMap(Map<String, dynamic> data) {
-    return _ListObjectOfIds(
+  factory ListObjectOfIds.fromMap(Map<String, dynamic> data) {
+    return ListObjectOfIds(
       id: data['id'] ?? '',
       title: data['title'] ?? '',
       imageUrl: data['image_url'] ?? '',

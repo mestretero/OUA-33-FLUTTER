@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:oua_flutter33/app/app_base_view_model.dart';
@@ -50,9 +52,7 @@ class ProductViewModel extends AppBaseViewModel {
   }
 
 void sendMessage(BuildContext context, String productId) {
-  final productService = getIt<ProductService>();
-
-  productService.getUserByProductId(productId).then((user) {
+  userService.getUserByProductId(productId).then((user) {
     if (user != null) {
       Navigator.push(
         context,
@@ -62,7 +62,7 @@ void sendMessage(BuildContext context, String productId) {
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Kullanıcı Bulunamadı")),
+        const SnackBar(content: Text("Kullanıcı Bulunamadı")),
       );
     }
   }).catchError((error) {

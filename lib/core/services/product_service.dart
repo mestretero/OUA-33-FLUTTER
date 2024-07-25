@@ -14,7 +14,6 @@ class ProductService {
   static final _firestore = FirebaseFirestore.instance;
   static const _collectionName = "products";
 
-
   Future<void> addProduct(Product product) async {
     try {
       await _firestore.collection(_collectionName).add(product.toMap());
@@ -24,7 +23,7 @@ class ProductService {
     }
   }
 
- /*  Future<void> deleteProduct(String productId) async {
+  Future<void> deleteProduct(String productId) async {
     try {
       await _firestore.collection(_collectionName).doc(productId).delete();
     } catch (e) {
@@ -42,7 +41,7 @@ class ProductService {
       print("Error updating product: $e");
     }
   }
- */
+
   Future<Product?> getProductById(String productId) async {
     try {
       DocumentSnapshot doc =
@@ -99,12 +98,90 @@ class ProductService {
 
       DocumentSnapshot userDoc =
           await _firestore.collection("users").doc(product.uid).get();
-          
+
       User user = User.fromDocumentSnapshot(userDoc);
 
       productViews.add(ProductView(product: product, user: user));
     }
 
     return productViews;
+  }
+
+  Future<void> addProductToFavorites(String? productId) async {
+    String currentUserId = authService.user!.uid;
+    DocumentReference userRef =
+        _firestore.collection("users").doc(currentUserId);
+    DocumentReference productRef =
+        _firestore.collection(_collectionName).doc(productId);
+
+    await _firestore.runTransaction((transaction) async {
+      // Kullanıcı belgesini getir
+      DocumentSnapshot userSnapshot = await transaction.get(userRef);
+      if (!userSnapshot.exists) {
+        throw Exception("User does not exist!");
+      }
+
+      // Ürün belgesini getir
+      DocumentSnapshot productSnapshot = await transaction.get(productRef);
+      if (!productSnapshot.exists) {
+        throw Exception("Product does not exist!");
+      }
+
+      Product product = Product.fromDocumentSnapshot(productSnapshot);
+
+      // Ürün verisini kullanıcı favorilerine ekle
+      transaction.update(userRef, {
+        'favored_product_ids': FieldValue.arrayUnion([
+          {
+            'id': product.id,
+            'title': product.name,
+            'image_url': product.mainImageUrl,
+          }
+        ])
+      });
+
+      // Ürünün favori sayısını arttır
+      transaction
+          .update(productRef, {'count_of_favored': FieldValue.increment(1)});
+    });
+  }
+
+  Future<void> removeProductFromFavorites(String? productId) async {
+    String currentUserId = authService.user!.uid;
+    DocumentReference userRef =
+        _firestore.collection("users").doc(currentUserId);
+    DocumentReference productRef =
+        _firestore.collection(_collectionName).doc(productId);
+
+    await _firestore.runTransaction((transaction) async {
+      // Kullanıcı belgesini getir
+      DocumentSnapshot userSnapshot = await transaction.get(userRef);
+      if (!userSnapshot.exists) {
+        throw Exception("User does not exist!");
+      }
+
+      // Ürün belgesini getir
+      DocumentSnapshot productSnapshot = await transaction.get(productRef);
+      if (!productSnapshot.exists) {
+        throw Exception("Product does not exist!");
+      }
+
+      Product product = Product.fromDocumentSnapshot(productSnapshot);
+
+      // Ürün verisini kullanıcı favorilerinden çıkar
+      transaction.update(userRef, {
+        'favored_product_ids': FieldValue.arrayRemove([
+          {
+            'id': product.id,
+            'title': product.name,
+            'image_url': product.mainImageUrl,
+          }
+        ])
+      });
+
+      // Ürünün favori sayısını azalt
+      transaction
+          .update(productRef, {'count_of_favored': FieldValue.increment(-1)});
+    });
   }
 }

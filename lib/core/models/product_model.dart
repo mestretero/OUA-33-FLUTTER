@@ -58,6 +58,29 @@ class Product {
     };
   }
 
+  factory Product.fromMap(Map<String, dynamic> data, String documentId) {
+    return Product(
+      id: documentId,
+      uid: data['uid'],
+      name: data['name'],
+      description: data['description'],
+      shortDescription: data['short_description'],
+      mainImageUrl: data['main_image_url'],
+      price: data['price'],
+      priceUnit: data['price_unit'],
+      categoryId: data['category_id'],
+      subCategoryId: data['sub_category_id'],
+      subSubCategoryId: data['sub_sub_category_id'],
+      countOfFavored: data['count_of_favored'],
+      medias: (data['medias'] as List)
+          .map((media) => Media.fromMap(media))
+          .toList(),
+      isActive: data['is_active'],
+      isArchive: data['is_archive'],
+      createDate: data['create_date'],
+    );
+  }
+
   factory Product.fromDocumentSnapshot(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return Product(

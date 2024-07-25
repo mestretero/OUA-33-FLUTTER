@@ -3,6 +3,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
+import 'package:oua_flutter33/core/models/user_model.dart';
+import 'package:oua_flutter33/core/models/view_model/product_view_model.dart';
 import 'package:oua_flutter33/core/services/auth_service.dart';
 import 'package:oua_flutter33/core/services/user_service.dart';
 
@@ -65,5 +67,43 @@ class ProductService {
       print("Error getting products by uid: $e");
       return [];
     }
+  }
+
+  Future<List<Product>> getAllProducts() async {
+    QuerySnapshot querySnapshot = await _firestore
+        .collection(_collectionName)
+        .where('uid', isNotEqualTo: authService.user?.uid)
+        .get();
+
+    List<Product> products = querySnapshot.docs.map((doc) {
+      return Product.fromMap(doc.data() as Map<String, dynamic>, doc.id);
+    }).toList();
+
+    return products;
+  }
+
+  Future<List<ProductView>> getAllProductViews() async {
+    String currentUserId = authService.user!.uid;
+
+    QuerySnapshot productQuerySnapshot = await _firestore
+        .collection(_collectionName)
+        .where('uid', isNotEqualTo: currentUserId)
+        .get();
+
+    List<ProductView> productViews = [];
+
+    for (var productDoc in productQuerySnapshot.docs) {
+      Product product = Product.fromMap(
+          productDoc.data() as Map<String, dynamic>, productDoc.id);
+
+      DocumentSnapshot userDoc =
+          await _firestore.collection("users").doc(product.uid).get();
+          
+      User user = User.fromDocumentSnapshot(userDoc);
+
+      productViews.add(ProductView(product: product, user: user));
+    }
+
+    return productViews;
   }
 }

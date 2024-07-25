@@ -14,6 +14,7 @@ class ProductService {
   static final _firestore = FirebaseFirestore.instance;
   static const _collectionName = "products";
 
+
   Future<void> addProduct(Product product) async {
     try {
       await _firestore.collection(_collectionName).add(product.toMap());
@@ -23,7 +24,7 @@ class ProductService {
     }
   }
 
-  Future<void> deleteProduct(String productId) async {
+ /*  Future<void> deleteProduct(String productId) async {
     try {
       await _firestore.collection(_collectionName).doc(productId).delete();
     } catch (e) {
@@ -41,7 +42,7 @@ class ProductService {
       print("Error updating product: $e");
     }
   }
-
+ */
   Future<Product?> getProductById(String productId) async {
     try {
       DocumentSnapshot doc =

@@ -156,34 +156,61 @@ class UserService {
     return null;
   }
 
-  increaseCountOfProduct() async {
+  Future<void> increaseCountOfProduct() async {
     User? user = await getUserData();
     await firestore
         .collection(collectionName)
         .doc(user?.uid)
-        .update({"product_counts": (user!.productCount + 1)});
+        .update({"product_count": (user!.productCount + 1)});
   }
-  
-  Future<List<User>> searchUsers(String query) async {
-  try {
-    QuerySnapshot querySnapshot = await firestore
-        .collection(collectionName)
-        .where('name', isGreaterThanOrEqualTo: query.toLowerCase())
-        .where('name', isLessThanOrEqualTo: '${query.toLowerCase()}\uf8ff')
-        .get();
 
-    List<User> users = querySnapshot.docs
-        .map((doc) => User.fromMap(doc.data() as Map<String, dynamic>, doc.id))
-        .toList();
-    return users;
-  } catch (e) {
-    print("Error searching users: $e");
-    return [];
+  Future<void> followUser(User? targetUser) async {
+    final auth.User? currentUser = _auth.currentUser;
+
+    if (currentUser == null || targetUser == null) {
+      throw Exception("Current user is not logged in.");
+    }
+
+    final String currentUserId = currentUser.uid;
+
+    // Get current user document
+    DocumentReference currentUserDocRef =
+        firestore.collection(collectionName).doc(currentUserId);
+
+    // Get target user document
+    DocumentReference targetUserDocRef =
+        firestore.collection(collectionName).doc(targetUser.uid);
+
+    await firestore.runTransaction((transaction) async {
+      DocumentSnapshot currentUserSnapshot =
+          await transaction.get(currentUserDocRef);
+      DocumentSnapshot targetUserSnapshot =
+          await transaction.get(targetUserDocRef);
+
+      if (!currentUserSnapshot.exists || !targetUserSnapshot.exists) {
+        throw Exception("User does not exist.");
+      }
+
+      // Update current user's follower list
+      List<dynamic> currentUserFollowerIds =
+          currentUserSnapshot['follower_ids'];
+      currentUserFollowerIds.add({
+        'id': targetUser.uid,
+        'title': "${targetUser.name} ${targetUser.surname}",
+        'image_url': targetUser.imageUrl,
+      });
+      transaction
+          .update(currentUserDocRef, {'follower_ids': currentUserFollowerIds});
+
+      // Update target user's follower count
+      int targetUserFollowerCount = targetUserSnapshot['follower_count'];
+      targetUserFollowerCount += 1;
+      transaction.update(
+          targetUserDocRef, {'follower_count': targetUserFollowerCount});
+    });
   }
-}
 
-
-Future<User?> getUserByProductId(String productId) async {
+  Future<User?> getUserByProductId(String productId) async {
     try {
       // Ürünü ID'si ile alın
       DocumentSnapshot productDoc =
@@ -205,14 +232,63 @@ Future<User?> getUserByProductId(String productId) async {
     }
   }
 
-  
+  Future<void> unfollowUser(String targetUserId) async {
+    final auth.User? currentUser = _auth.currentUser;
+    if (currentUser == null) {
+      throw Exception("Current user is not logged in.");
+    }
 
+    final String currentUserId = currentUser.uid;
 
+    // Get current user document
+    DocumentReference currentUserDocRef =
+        firestore.collection(collectionName).doc(currentUserId);
+
+    // Get target user document
+    DocumentReference targetUserDocRef =
+        firestore.collection(collectionName).doc(targetUserId);
+
+    await firestore.runTransaction((transaction) async {
+      DocumentSnapshot currentUserSnapshot =
+          await transaction.get(currentUserDocRef);
+      DocumentSnapshot targetUserSnapshot =
+          await transaction.get(targetUserDocRef);
+
+      if (!currentUserSnapshot.exists || !targetUserSnapshot.exists) {
+        throw Exception("User does not exist.");
+      }
+
+      // Update current user's follower list
+      List<dynamic> currentUserFollowerIds =
+          currentUserSnapshot['follower_ids'];
+      currentUserFollowerIds.removeWhere((item) => item['id'] == targetUserId);
+      transaction
+          .update(currentUserDocRef, {'follower_ids': currentUserFollowerIds});
+
+      // Update target user's follower count
+      int targetUserFollowerCount = targetUserSnapshot['follower_count'];
+      targetUserFollowerCount -= 1;
+      transaction.update(
+          targetUserDocRef, {'follower_count': targetUserFollowerCount});
+    });
   }
 
+  Future<bool> isFollowing(String targetUserId) async {
+    final auth.User? currentUser = _auth.currentUser;
+    if (currentUser == null) {
+      throw Exception("Current user is not logged in.");
+    }
 
+    final String currentUserId = currentUser.uid;
 
+    DocumentSnapshot currentUserSnapshot =
+        await firestore.collection('users').doc(currentUserId).get();
 
+    if (!currentUserSnapshot.exists) {
+      throw Exception("Current user does not exist.");
+    }
 
-
-
+    List<dynamic> currentUserFollowerIds = currentUserSnapshot['follower_ids'];
+    return currentUserFollowerIds.any((item) => item['id'] == targetUserId);
+  }
+}

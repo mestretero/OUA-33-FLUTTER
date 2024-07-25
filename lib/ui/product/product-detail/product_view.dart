@@ -42,7 +42,7 @@ class ProductDetailView extends StatelessWidget {
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                         Row(
+                         const Row(
                           children: [
                             Text('Ürün Açıklaması',
                                 style: TextStyle(color: Color(0xFF6EDB2A),),),
@@ -128,7 +128,7 @@ class ProductDetailView extends StatelessWidget {
                               ),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:  Color(0xFF6EDB2A),
+                                  backgroundColor:  const Color(0xFF6EDB2A),
                                 ),
                                 onPressed: () => model.sendMessage(context, productId),
                                 child: const Text('Mesaj Gönder'),

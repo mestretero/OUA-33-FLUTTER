@@ -1,3 +1,5 @@
+// ignore_for_file: library_private_types_in_public_api, deprecated_member_use
+
 import 'package:flutter/material.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
 import 'package:oua_flutter33/ui/product/product-detail/product_view_model.dart';
@@ -41,8 +43,7 @@ class _EditProductViewState extends State<EditProductView> {
               fontWeight: FontWeight.w600,
             ),
           ),
-          actions: [],
-          
+          actions: const [],
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -56,10 +57,16 @@ class _EditProductViewState extends State<EditProductView> {
                     initialValue: _name,
                     decoration: const InputDecoration(
                       labelText: 'Ürün İsim',
-                      contentPadding: const EdgeInsets.only(bottom: 16.0,top: 16),
-                      labelStyle: TextStyle(color: Color(0xFF6EDB2A),fontSize: 16,fontWeight: FontWeight.w500,),
-                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide (color:Color(0xFF6EDB2A),),
+                      contentPadding: EdgeInsets.only(bottom: 16.0, top: 16),
+                      labelStyle: TextStyle(
+                        color: Color(0xFF6EDB2A),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFF6EDB2A),
+                        ),
                       ),
                     ),
                     onSaved: (value) => _name = value!,
@@ -74,10 +81,16 @@ class _EditProductViewState extends State<EditProductView> {
                     initialValue: _description,
                     decoration: const InputDecoration(
                       labelText: 'Ürün Açıklaması',
-                      contentPadding: const EdgeInsets.only(bottom: 16.0,top: 16),
-                      labelStyle: TextStyle(color: Color(0xFF6EDB2A),fontSize: 16,fontWeight: FontWeight.w500,),
-                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide (color:Color(0xFF6EDB2A),),
+                      contentPadding: EdgeInsets.only(bottom: 16.0, top: 16),
+                      labelStyle: TextStyle(
+                        color: Color(0xFF6EDB2A),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                          color: Color(0xFF6EDB2A),
+                        ),
                       ),
                     ),
                     maxLines: 15,
@@ -90,16 +103,23 @@ class _EditProductViewState extends State<EditProductView> {
                     },
                   ),
                   TextFormField(
-                    initialValue: _price.toString(), 
+                    initialValue: _price.toString(),
                     decoration: const InputDecoration(
-                      contentPadding: const EdgeInsets.only(bottom: 16.0,top: 16),
+                      contentPadding: EdgeInsets.only(bottom: 16.0, top: 16),
                       labelText: 'Fiyat',
-                      labelStyle: TextStyle(color: Color(0xFF6EDB2A),fontSize: 16,fontWeight: FontWeight.w500,),
+                      labelStyle: TextStyle(
+                        color: Color(0xFF6EDB2A),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
                       enabledBorder: UnderlineInputBorder(
-                        borderSide: BorderSide (color:Color(0xFF6EDB2A),),
+                        borderSide: BorderSide(
+                          color: Color(0xFF6EDB2A),
+                        ),
                       ),
                     ),
-                    keyboardType: TextInputType.numberWithOptions(decimal: true),
+                    keyboardType:
+                        const TextInputType.numberWithOptions(decimal: true),
                     onSaved: (value) => _price = double.tryParse(value!) ?? 0.0,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -114,19 +134,20 @@ class _EditProductViewState extends State<EditProductView> {
                   const SizedBox(height: 20),
                   ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color(0xFF6EDB2A),
+                      backgroundColor: const Color(0xFF6EDB2A),
                     ),
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        model.updateProduct(Product(
+                        model
+                            .updateProduct(Product(
                           id: widget.product.id,
                           uid: widget.product.uid,
                           name: _name,
                           description: _description,
                           shortDescription: widget.product.shortDescription,
                           mainImageUrl: widget.product.mainImageUrl,
-                          price: _price, 
+                          price: _price,
                           priceUnit: widget.product.priceUnit,
                           categoryId: widget.product.categoryId,
                           subCategoryId: widget.product.subCategoryId,
@@ -136,9 +157,10 @@ class _EditProductViewState extends State<EditProductView> {
                           isActive: widget.product.isActive,
                           isArchive: widget.product.isArchive,
                           createDate: widget.product.createDate,
-                        )).then((_) {
+                        ))
+                            .then((_) {
                           model.fetchProductDetails(widget.product.id!);
-                          Navigator.pop(context, true); 
+                          Navigator.pop(context, true);
                         });
                       }
                     },

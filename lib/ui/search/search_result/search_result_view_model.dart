@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field, avoid_print
+// ignore_for_file: unused_field
 
 import 'package:flutter/material.dart';
 import 'package:oua_flutter33/app/app.router.dart';
@@ -6,43 +6,70 @@ import 'package:oua_flutter33/app/app_base_view_model.dart';
 import 'package:oua_flutter33/common/helpers/scaler.dart';
 import 'package:oua_flutter33/common/widgets/category_selectors/category_selector_view.dart';
 import 'package:oua_flutter33/common/widgets/my_button.dart';
+import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
-import 'package:oua_flutter33/core/models/user_model.dart';
-import 'package:oua_flutter33/core/models/view_model/product_view_model.dart';
-import 'package:oua_flutter33/core/services/product_service.dart';
+import 'package:oua_flutter33/core/models/view_model/search_result_view.dart';
+import 'package:oua_flutter33/core/services/search_service.dart';
 
-class SearchViewModel extends AppBaseViewModel {
-  final ProductService _productService = ProductService();
+class SearchResultViewModel extends AppBaseViewModel {
+  final SearchService _searchService = getIt<SearchService>();
 
   TextEditingController searchController = TextEditingController();
-
-  List<ProductView> _products = [];
-  List<ProductView> get products => _products;
-
-  User? _user;
-  User? get user => _user;
 
   bool _isLoading = false;
   bool get isLoading => _isLoading;
 
-  String _filterGrid = "specialforme";
-  String get filteredGrid => _filterGrid;
+  SearchResultView? _allData;
+  SearchResultView? get data => _allData;
 
   String _filter = "all";
+  String get searchType => _filter;
+
   String _location = "Lütfen Seçiniz";
   String _selectedCategory = "";
   String _selectedSubCategory = "";
   String _selectedSubSubCategory = "";
 
-  init(BuildContext context) {
-    _loadData();
+  init(
+    String? searchText,
+    String searchType,
+    String? location,
+    String? category,
+    String? subcategory,
+    String? subSubCategory,
+  ) {
+    _loadData(
+      searchText,
+      searchType,
+      location,
+      category,
+      subcategory,
+      subSubCategory,
+    );
   }
 
-  Future<void> _loadData() async {
+  Future<void> _loadData(
+    String? searchText,
+    String searchType,
+    String? location,
+    String? category,
+    String? subcategory,
+    String? subSubCategory,
+  ) async {
     _isLoading = true;
 
-    _products = await _productService.getAllProductViews();
-    _user = await userService.getUserData();
+    searchController.text = searchText!;
+    _filter = searchType;
+    notifyListeners();
+
+    _allData = await _searchService.search(
+      searchText: searchText,
+      searchType: searchType,
+      location: location,
+      category: category,
+      subCategory: subcategory,
+      subSubCategory: subSubCategory,
+    );
 
     _isLoading = false;
     notifyListeners();
@@ -50,11 +77,6 @@ class SearchViewModel extends AppBaseViewModel {
 
   void setFilter(String filter, BuildContext context) {
     _filter = filter;
-    notifyListeners();
-  }
-
-  void setFilterGrid(String filter) {
-    _filterGrid = filter;
     notifyListeners();
   }
 
@@ -74,6 +96,13 @@ class SearchViewModel extends AppBaseViewModel {
     notifyListeners();
   }
 
+  void goToProfile(String uid) {
+    navigationService.navigateTo(
+      Routes.profileView,
+      arguments: ProfileViewArguments(profileUid: uid),
+    );
+  }
+
   void goToProductDetail(Product product) {
     // navigationService.navigateTo(
     //   Routes.produtDetailView,
@@ -83,50 +112,20 @@ class SearchViewModel extends AppBaseViewModel {
     // );
   }
 
-  Future<void> favored(Product product) async {
-    try {
-      await _productService.addProductToFavorites(product.id);
-      user!.favoredProductIds.add(
-        ListObjectOfIds(
-          id: product.id ?? "",
-          title: product.name,
-          imageUrl: product.mainImageUrl,
-        ),
-      );
-      notifyListeners();
-    } on Exception catch (e) {
-      print("Failed to add product from favorites: $e");
-    }
-  }
-
-  Future<void> unfavored(String? productId) async {
-    try {
-      if (productId != "" || productId != null) {
-        await _productService.removeProductFromFavorites(productId);
-        user!.favoredProductIds.removeWhere((e) => e.id == productId);
-        notifyListeners();
-      }
-    } on Exception catch (e) {
-      print("Failed to remove product from favorites: $e");
-    }
-  }
-
   void search() {
-    navigationService.navigateTo(
-      Routes.searchResultView,
-      arguments: SearchResultViewArguments(
-        searchText: searchController.text,
-        searchType: _filter,
-        location: _location == "Lütfen Seçiniz" ? " " : _location,
-        category: _selectedCategory,
-        subcategory: _selectedSubCategory,
-        subSubCategory: _selectedSubSubCategory,
-      ),
+    _loadData(
+      searchController.text,
+      _filter,
+      _location == "Lütfen Seçiniz" ? "" : _location,
+      _selectedCategory,
+      _selectedSubCategory,
+      _selectedSubSubCategory,
     );
   }
 
   void showFilterDialog(BuildContext context) {
-    String filter = "all";
+    String filter = _filter;
+
     showModalBottomSheet(
       context: context,
       useSafeArea: true,
@@ -198,8 +197,7 @@ class SearchViewModel extends AppBaseViewModel {
                               ),
                             ),
                             child: ElevatedButton(
-                              onPressed: () =>
-                                  setState(() => filter = "post"),
+                              onPressed: () => setState(() => filter = "post"),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 elevation: 0,
@@ -285,9 +283,9 @@ class SearchViewModel extends AppBaseViewModel {
                       ),
                     ),
                   ),
-                  //
+
                   const SizedBox(height: 8),
-                  //
+
                   SizedBox(
                     width: Scaler.width(1, context),
                     child: TextField(
@@ -394,6 +392,7 @@ class SearchViewModel extends AppBaseViewModel {
                       setFilter(filter, context);
                       notifyListeners();
                       search();
+                      Navigator.pop(bc);
                     },
                     isExpanded: true,
                     buttonStyle: 1,

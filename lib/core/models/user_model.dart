@@ -1,5 +1,7 @@
 // ignore_for_file: non_constant_identifier_names, library_private_types_in_public_api
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class User {
   User({
     required this.uid,
@@ -46,6 +48,8 @@ class User {
       }
       return dataList.map((item) => _ListObjectOfIds.fromMap(item)).toList();
     }
+    
+    
 
     return User(
       uid: documentId,
@@ -70,7 +74,13 @@ class User {
           convertToListObjectOfIds(data['recorded_post_ids'] ?? []),
     );
   }
+
+   factory User.fromDocumentSnapshot(DocumentSnapshot doc) {
+    final data = doc.data() as Map<String, dynamic>;
+    return User.fromMap(data, doc.id);
+  }
 }
+
 
 class _ListObjectOfIds {
   _ListObjectOfIds({

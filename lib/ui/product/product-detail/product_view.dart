@@ -1,6 +1,7 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/ui/product/product-detail/product_view_model.dart';
 import 'package:stacked/stacked.dart';
 
@@ -11,9 +12,10 @@ class ProductDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return ViewModelBuilder<ProductViewModel>.reactive(
       viewModelBuilder: () => ProductViewModel(),
-      onModelReady: (model) => model.fetchProductDetails(productId),
+      onModelReady: (model) async => await model.fetchProductDetails(productId),
       builder: (context, model, widget) => Scaffold(
         appBar: AppBar(
           leading: IconButton(
@@ -40,13 +42,41 @@ class ProductDetailView extends StatelessWidget {
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                        const Row(
+                         Row(
                           children: [
                             Text('Ürün Açıklaması',
-                                style: TextStyle(color: Colors.green)),
+                                style: TextStyle(color: Color(0xFF6EDB2A),),),
                             SizedBox(width: 16),
-                            Text('İletişim',
-                                style: TextStyle(color: Colors.green)),
+                        /*  FutureBuilder<User?>(
+                              future: getIt<ProductService>()
+                                  .getUserByProductId(productId),
+                              builder: (context, snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return CircularProgressIndicator();
+                                } else if (snapshot.hasError) {
+                                  return Text("Hata: ${snapshot.error}");
+                                } else if (!snapshot.hasData) {
+                                  return Text("Kullanıcı Bulunamadı");
+                                } else {
+                                  final user = snapshot.data!;
+                                  return InkWell(
+                                    onTap: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ChatView(
+                                            receiverUser: user,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    child: Text('İletişim',
+                                        style: TextStyle(color: Color(0xFF6EDB2A))),
+                                  );
+                                }
+                              },
+                            ), */
                           ],
                         ),
                         const SizedBox(height: 16),
@@ -68,11 +98,23 @@ class ProductDetailView extends StatelessWidget {
                               ),
                               IconButton(
                                 icon: const Icon(Icons.edit),
-                                onPressed: model.editProduct,
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    Routes.editProductView,
+                                    arguments: EditProductViewArguments(
+                                      product: model.product!,
+                                    ),
+                                  ).then((_) {
+                                    Future.delayed(const Duration(milliseconds: 500), () {
+                                      model.fetchProductDetails(productId);
+                                    });
+                                  });
+                                },
                               ),
                               IconButton(
                                 icon: const Icon(Icons.delete),
-                                onPressed: model.deleteProduct,
+                                onPressed:() {model.deleteProduct(productId);}
                               ),
                             ],
                           )
@@ -85,8 +127,11 @@ class ProductDetailView extends StatelessWidget {
                                 child: const Text('Sepete Ekle'),
                               ),
                               ElevatedButton(
-                                onPressed: model.sendMessage,
-                                child: const Text('Mesaj'),
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor:  Color(0xFF6EDB2A),
+                                ),
+                                onPressed: () => model.sendMessage(context, productId),
+                                child: const Text('Mesaj Gönder'),
                               ),
                             ],
                           ),

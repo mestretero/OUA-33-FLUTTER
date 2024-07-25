@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/common/helpers/scaler.dart';
 import 'package:oua_flutter33/core/models/post_model.dart';
 import 'package:oua_flutter33/ui/home/home_view_model.dart';
@@ -111,52 +112,51 @@ class _PostCaroseulState extends State<PostCarousel> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
-              children: [
-                ...products
-                    .asMap()
-                    .map(
-                      (i, element) => MapEntry(
-                        i,
+              children: List.generate(products.length, (i) {
+                final element = products[i];
+                return InkWell(
+                  onTap: () {
+                    model.navigationService.navigateTo(
+                      Routes.productDetailView,
+                      arguments: ProductDetailViewArguments(productId: element.produtId),
+                    );
+                  },
+                  child: Container(
+                    margin: (products.length - 1) == i
+                        ? null
+                        : const EdgeInsets.only(bottom: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
                         Container(
-                          margin: (products.length - 1) == i
-                              ? null
-                              : const EdgeInsets.only(bottom: 8),
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: 40,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: NetworkImage(element.imageUrl),
-                                    fit: BoxFit.cover,
-                                  ),
-                                  borderRadius: BorderRadius.circular(8),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              SizedBox(
-                                width: Scaler.width(0.4, context),
-                                child: Text(
-                                  element.name,
-                                  style: TextStyle(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              )
-                            ],
+                          width: 40,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(element.imageUrl),
+                              fit: BoxFit.cover,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
                           ),
                         ),
-                      ),
-                    )
-                    .values
-                    .toList(),
-              ],
+                        const SizedBox(width: 8),
+                        SizedBox(
+                          width: Scaler.width(0.4, context),
+                          child: Text(
+                            element.name,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }),
             ),
           ),
         IconButton(
@@ -182,4 +182,4 @@ class _PostCaroseulState extends State<PostCarousel> {
       ],
     );
   }
-}
+  }

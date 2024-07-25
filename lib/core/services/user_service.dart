@@ -210,6 +210,28 @@ class UserService {
     });
   }
 
+Future<User?> getUserByProductId(String productId) async {
+    try {
+      // Ürünü ID'si ile alın
+      DocumentSnapshot productDoc =
+          await firestore.collection(collectionName).doc(productId).get();
+      if (productDoc.exists) {
+        // Kullanıcı ID'sini (uid) alın
+        String uid = productDoc['uid'];
+        // Kullanıcı detaylarını alın
+        DocumentSnapshot userDoc =
+            await firestore.collection('users').doc(uid).get();
+        return User.fromDocumentSnapshot(userDoc);
+      } else {
+        print("Ürün bulunamadı");
+        return null;
+      }
+    } catch (e) {
+      print("Error getting user by product ID: $e");
+      return null;
+    }
+  }
+  
   Future<void> unfollowUser(String targetUserId) async {
     final auth.User? currentUser = _auth.currentUser;
     if (currentUser == null) {

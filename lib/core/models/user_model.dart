@@ -48,6 +48,8 @@ class User {
       }
       return dataList.map((item) => _ListObjectOfIds.fromMap(item)).toList();
     }
+    
+    
 
     return User(
       uid: documentId,
@@ -72,6 +74,7 @@ class User {
           convertToListObjectOfIds(data['recorded_post_ids'] ?? []),
     );
   }
+
 
   factory User.fromDocumentSnapshot(DocumentSnapshot doc) {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
@@ -104,8 +107,8 @@ class User {
           .map((item) => _ListObjectOfIds.fromMap(item))
           .toList(),
     );
-  }
 }
+
 
 class _ListObjectOfIds {
   _ListObjectOfIds({

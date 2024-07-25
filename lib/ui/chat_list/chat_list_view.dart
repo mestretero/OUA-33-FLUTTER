@@ -1,7 +1,9 @@
 // ignore_for_file: deprecated_member_use
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:flutter/material.dart';
 import 'package:oua_flutter33/app/app.router.dart';
+import 'package:oua_flutter33/common/helpers/string_functions.dart';
 import 'package:oua_flutter33/ui/chat_list/chat_list_view_model.dart';
 import 'package:stacked/stacked.dart';
 
@@ -10,89 +12,173 @@ class ChatListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextEditingController _searchController=TextEditingController();
     return ViewModelBuilder<ChatListViewModel>.reactive(
-        viewModelBuilder: () => ChatListViewModel(),
-        onModelReady: (model) => model.init(context),
-        builder: (context, model, widget) {
-          return Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: false,
-              title: Row(
-                children: [
-                  Column(
+      viewModelBuilder: () => ChatListViewModel(),
+      onModelReady: (model) => model.init(context),
+      builder: (context, model, widget) => Scaffold(
+        body: model.isLoading
+            ? const Center(child: CircularProgressIndicator())
+            : SafeArea(
+                child: Container(
+                  padding: const EdgeInsets.all(24),
+                  child: Column(
                     children: [
-                      const Text('Mesajlar',style: TextStyle(fontSize: 20,),),
-                      Text("@james_norm",style: TextStyle(color: Color(0xFF7DBE48),
-                      fontSize: 10,),),
-                    ],
-                  ),
-                  const Spacer(),
-                  ElevatedButton.icon(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor:Theme.of(context).colorScheme.secondary,
-                    ),
-                    label: Text("New Chat"),
-                    icon: Icon(Icons.edit),
-                    onPressed: () {
-                      model.navigationService.navigateTo(Routes.newChatView);
-                    },
-                  ),
-                ],
-              ),
-              backgroundColor: Colors.white,
-              elevation: 0,
-            ),
-            body: model.isLoading
-                ? const Center(child: CircularProgressIndicator())
-                : Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-          
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: TextField(
-                        controller: _searchController,
+                      Row(
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Mesajlar',
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                "${model.user!.name}_${model.user!.surname}",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const Spacer(),
+                          ElevatedButton(
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              elevation: 0,
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  "New Chat",
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Icon(
+                                  Icons.edit,
+                                  color: Theme.of(context).colorScheme.primary,
+                                  size: 16,
+                                ),
+                              ],
+                            ),
+                            onPressed: () => model.navigationService
+                                .navigateTo(Routes.newChatView),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      TextField(
+                        onChanged: (value) => model.searchChange(value),
+                        controller: model.searchController,
                         decoration: InputDecoration(
                           isDense: true,
-                          prefixIcon: Icon(Icons.search),
+                          prefixIcon: const Icon(Icons.search),
                           hintText: "Ara...",
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(40),
                           ),
                         ),
-                   
-                         
-                  ),
                       ),
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: model.users.length,
-                          itemBuilder: (context, index) {
-                            final user = model.users[index];
-                            return ListTile(
-                              leading: CircleAvatar(
-                                backgroundImage: NetworkImage(user.imageUrl),
+                      const SizedBox(height: 16),
+                      ...model.filterHistory.map(
+                        (item) => GestureDetector(
+                          onTap: () => model.goToChat(item),
+                          child: Container(
+                            margin: const EdgeInsets.only(bottom: 8),
+                            padding: const EdgeInsets.all(8),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.secondary,
+                                width: 1,
                               ),
-                              onTap: () {
-                                model.navigationService.navigateTo(
-                                  Routes.chatView,
-                                  arguments: ChatViewArguments(
-                                    receiverUser: user,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
+                                  children: [
+                                    Container(
+                                      width: 56,
+                                      height: 56,
+                                      decoration: BoxDecoration(
+                                        image: DecorationImage(
+                                          image: NetworkImage(
+                                              item.receiverUser.imageUrl),
+                                          fit: BoxFit.cover,
+                                        ),
+                                        borderRadius: BorderRadius.circular(8),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${item.receiverUser.name.capitalize()} ${item.receiverUser.surname.capitalize()}",
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ),
+                                        Text(
+                                          item.lastMessage.message.substring(
+                                              0,
+                                              item.lastMessage.message.length <
+                                                      32
+                                                  ? null
+                                                  : 32),
+                                          style: TextStyle(
+                                            color: Theme.of(context)
+                                                .colorScheme
+                                                .primary,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                                Text(
+                                  timeago
+                                      .format(
+                                          item.lastMessage.timestamp.toDate())
+                                      .toString()
+                                      .capitalize(),
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontSize: 12,
                                   ),
-                                );
-                              },
-                              title: Text('${user.name} ${user.surname}'),
-                              subtitle: const Text('Thank you :)'),
-                              trailing: const Text('2m ago'),
-                            );
-                          },
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
-          );
-        });
+                ),
+              ),
+      ),
+    );
   }
 }

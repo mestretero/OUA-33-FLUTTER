@@ -2,26 +2,30 @@
 
 import 'package:flutter/material.dart';
 import 'package:oua_flutter33/app/app.router.dart';
+import 'package:oua_flutter33/common/helpers/scaler.dart';
 import 'package:oua_flutter33/common/helpers/string_functions.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
 import 'package:oua_flutter33/ui/profile/profile_view_model.dart';
 import 'package:stacked/stacked.dart';
 
 class ProfileView extends StatelessWidget {
-  const ProfileView({super.key});
+  final String? profileUid;
+  const ProfileView({super.key, this.profileUid});
 
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProfileViewModel>.reactive(
       viewModelBuilder: () => ProfileViewModel(),
-      onModelReady: (model) => model.init(context),
+      onModelReady: (model) => model.init(
+        context,
+        profileUid,
+      ),
       builder: (context, model, widget) => Scaffold(
         body: model.isLoading
             ? const Center(child: CircularProgressIndicator())
             : SafeArea(
                 child: SingleChildScrollView(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+                  padding: const EdgeInsets.all(24),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -30,7 +34,7 @@ class ProfileView extends StatelessWidget {
                       const SizedBox(height: 24),
                       _buildUserProfilInfo(context, model, model.user),
                       const SizedBox(height: 24),
-                      // _buildPostAndProduct(context, model)
+                      _buildPostAndProduct(context, model),
                     ],
                   ),
                 ),
@@ -43,11 +47,30 @@ class ProfileView extends StatelessWidget {
       BuildContext context, ProfileViewModel model, User? user) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: profileUid != null
+          ? MainAxisAlignment.start
+          : MainAxisAlignment.spaceBetween,
       children: [
+        if (profileUid != null)
+          IconButton(
+            style: IconButton.styleFrom(
+              padding: const EdgeInsets.all(0),
+              elevation: 0,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(999),
+              ),
+            ),
+            onPressed: () => model.navigationService.back(),
+            icon: Icon(
+              Icons.keyboard_arrow_left_rounded,
+              color: Theme.of(context).colorScheme.primary,
+              size: 40,
+            ),
+          ),
         //User Info
         Text(
-          "@${user?.name}_${user?.surname}",
+          "@${user?.name.toLowerCase()}_${user?.surname.toLowerCase()}",
           style: TextStyle(
             color: Theme.of(context).colorScheme.primary,
             fontSize: 20,
@@ -56,34 +79,35 @@ class ProfileView extends StatelessWidget {
         ),
 
         //Action Buttons
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            _popupMenuButton(context, model),
-            PopupMenuButton<String>(
-              onSelected: (String result) {
-                if (result == 'Ayarlar') {
-                  // Ayarlar sayfasına yönlendirin veya işlemleri burada yapın
-                  print('Ayarlar seçildi');
-                } else if (result == 'Yardım ve Destek') {
-                  // Yardım ve Destek sayfasına yönlendirin veya işlemleri burada yapın
-                  print('Yardım ve Destek seçildi');
-                }
-              },
-              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                const PopupMenuItem<String>(
-                  value: 'Ayarlar',
-                  child: Text('Ayarlar'),
-                ),
-                const PopupMenuItem<String>(
-                  value: 'Yardım ve Destek',
-                  child: Text('Yardım ve Destek'),
-                ),
-              ],
-            ),
-          ],
-        )
+        if (profileUid == null)
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              _popupMenuButton(context, model),
+              PopupMenuButton<String>(
+                onSelected: (String result) {
+                  if (result == 'Ayarlar') {
+                    // Ayarlar sayfasına yönlendirin veya işlemleri burada yapın
+                    print('Ayarlar seçildi');
+                  } else if (result == 'Yardım ve Destek') {
+                    // Yardım ve Destek sayfasına yönlendirin veya işlemleri burada yapın
+                    print('Yardım ve Destek seçildi');
+                  }
+                },
+                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                  const PopupMenuItem<String>(
+                    value: 'Ayarlar',
+                    child: Text('Ayarlar'),
+                  ),
+                  const PopupMenuItem<String>(
+                    value: 'Yardım ve Destek',
+                    child: Text('Yardım ve Destek'),
+                  ),
+                ],
+              ),
+            ],
+          )
       ],
     );
   }
@@ -110,6 +134,7 @@ class ProfileView extends StatelessWidget {
                 borderRadius: BorderRadius.circular(999.0),
                 image: DecorationImage(
                   image: NetworkImage(user!.imageUrl),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -195,72 +220,13 @@ class ProfileView extends StatelessWidget {
         ),
 
         const SizedBox(height: 16),
-
         //Buttons
-        Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 170,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  elevation: 0,
-                ),
-                onPressed: () {
-                  model.navigationService.navigateTo(Routes.editedProfileView);
-                },
-                child: Text(
-                  "Profili Düzenle",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
-            ),
-            SizedBox(
-              width: 170,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Theme.of(context).colorScheme.secondary,
-                  elevation: 0,
-                ),
-                onPressed: () {
-                  showDialog<String>(
-                    context: context,
-                    builder: (BuildContext context) => Dialog(
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text('https://master-hands/uid:${user.uid}'),
-                            const SizedBox(height: 15),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Close'),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  );
-                },
-                child: Text(
-                  "Profili Paylaş",
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        profileUid != null
+            ? _buildAnotherProfileButtons(context, model)
+            : _buildMyProfileButtons(context, model),
+
+        const SizedBox(height: 16),
+        //Post And Product
       ],
     );
   }
@@ -337,6 +303,239 @@ class ProfileView extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildMyProfileButtons(BuildContext context, ProfileViewModel model) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          width: 170,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              elevation: 0,
+            ),
+            onPressed: () {
+              model.navigationService.navigateTo(Routes.editedProfileView);
+            },
+            child: Text(
+              "Profili Düzenle",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 170,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              elevation: 0,
+            ),
+            onPressed: () => model.shareLink(context),
+            child: Text(
+              "Profili Paylaş",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildAnotherProfileButtons(
+      BuildContext context, ProfileViewModel model) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        SizedBox(
+          width: 170,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: model.isFollow
+                  ? Theme.of(context).colorScheme.primary.withOpacity(0.4)
+                  : Theme.of(context).colorScheme.onPrimary,
+              elevation: 0,
+            ),
+            onPressed: () {
+              model.isFollow ? model.unfollowUser() : model.followUser();
+            },
+            child: Text(
+              model.isFollow ? "Takipten Çık" : "Takip Et",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.surface,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
+          width: 170,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
+              elevation: 0,
+            ),
+            onPressed: () => model.goToChat(),
+            child: Text(
+              "Mesaj",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildPostAndProduct(BuildContext context, ProfileViewModel model) {
+    return Column(
+      children: [
+        _buildSegmentedControl(context, model),
+
+        //Grid
+        SizedBox(
+          height: Scaler.height(model.posts.length.ceilToDouble(), context),
+          child: model.filter == "posts"
+              ? GridView.count(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 10,
+                  mainAxisSpacing: 10,
+                  padding: const EdgeInsets.all(10),
+                  children: [
+                    ...model.posts.map(
+                      (item) => Container(
+                        padding: const EdgeInsets.all(4),
+                        alignment: Alignment.topRight,
+                        width: Scaler.width(0.27, context),
+                        height: Scaler.width(0.27, context),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(8),
+                          image: DecorationImage(
+                            image: NetworkImage(item.medias[0].url),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                        child: item.medias.length > 1
+                            ? Icon(
+                                Icons.collections_sharp,
+                                color: Theme.of(context).colorScheme.primary,
+                              )
+                            : Container(),
+                      ),
+                    ),
+                  ],
+                )
+              : Wrap(
+                  spacing: 10,
+                  runSpacing: 10,
+                  crossAxisAlignment: WrapCrossAlignment.start,
+                  children: [
+                    ...model.products.map(
+                      (item) => GestureDetector(
+                        onTap: () => model.goToProductDetail(item),
+                        child: Container(
+                          padding: const EdgeInsets.all(8),
+                          width: Scaler.width(0.4, context),
+                          height: Scaler.width(0.6, context),
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Theme.of(context).colorScheme.secondary,
+                            ),
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                width: Scaler.width(1, context),
+                                height: Scaler.width(0.32, context),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  image: DecorationImage(
+                                    image: NetworkImage(item.mainImageUrl),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                item.name,
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 14,
+                                ),
+                              ),
+                              Text(
+                                "${item.price} ${item.priceUnit}",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSegmentedControl(BuildContext context, ProfileViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          _buildSegmentButton(context, model, 'Gönderi', 'posts'),
+          _buildSegmentButton(context, model, 'Ürünler', 'products'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSegmentButton(BuildContext context, ProfileViewModel model,
+      String text, String filter) {
+    return Container(
+      width: Scaler.width(0.4, context),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: model.filter == filter
+                ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.secondary,
+            width: 2,
+          ),
+        ),
+      ),
+      child: ElevatedButton(
+        onPressed: () => model.setFilter(filter),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: model.filter == filter
+                ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.secondary,
+            fontSize: 14,
+          ),
+        ),
+      ),
     );
   }
 }

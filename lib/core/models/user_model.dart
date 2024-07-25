@@ -75,10 +75,38 @@ class User {
     );
   }
 
-   factory User.fromDocumentSnapshot(DocumentSnapshot doc) {
-    final data = doc.data() as Map<String, dynamic>;
-    return User.fromMap(data, doc.id);
-  }
+
+  factory User.fromDocumentSnapshot(DocumentSnapshot doc) {
+    Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
+    return User(
+      uid: doc.id,
+      name: data['name'] as String,
+      surname: data['surname'] as String,
+      email: data['email'] as String,
+      imageUrl: data['image_url'] as String,
+      phoneNumber: data['phone_number'] as String,
+      birthDay: data['birth_day'] as int,
+      createDate: data['create_date'] as int,
+      isActive: data['isActive'] as bool,
+      followerCount: data['follower_count'] as int,
+      productCount: data['product_count'] as int,
+      postCount: data['post_count'] as int,
+      followerIds: (data['follower_ids'] as List)
+          .map((item) => _ListObjectOfIds.fromMap(item))
+          .toList(),
+      favoredProductIds: (data['favored_product_ids'] as List)
+          .map((item) => _ListObjectOfIds.fromMap(item))
+          .toList(),
+      favoredPostIds: (data['favored_post_ids'] as List)
+          .map((item) => _ListObjectOfIds.fromMap(item))
+          .toList(),
+      recordedProductIds: (data['recorded_product_ids'] as List)
+          .map((item) => _ListObjectOfIds.fromMap(item))
+          .toList(),
+      recordedPostIds: (data['recorded_post_ids'] as List)
+          .map((item) => _ListObjectOfIds.fromMap(item))
+          .toList(),
+    );
 }
 
 

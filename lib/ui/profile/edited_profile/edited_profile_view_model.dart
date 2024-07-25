@@ -17,7 +17,7 @@ class EditedProfileViewModel extends AppBaseViewModel {
     _isLoading = true;
     notifyListeners();
 
-    _user = userService.user;
+    _user = await userService.getUserData();
 
     _isLoading = false;
     notifyListeners();

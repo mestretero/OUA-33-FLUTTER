@@ -39,7 +39,7 @@ class _PostCaroseulState extends State<PostCarousel> {
                 ? _popupMenuButtonForProducts(
                     context,
                     widget.model,
-                    post.relatedProducts,
+                    post,
                   )
                 : null,
           ),
@@ -93,13 +93,13 @@ class _PostCaroseulState extends State<PostCarousel> {
     );
   }
 
-  Widget _popupMenuButtonForProducts(BuildContext context, HomeViewModel model,
-      List<RelatedProducts> products) {
+  Widget _popupMenuButtonForProducts(
+      BuildContext context, HomeViewModel model, Post post) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (model.isShowProducts)
+        if (model.isShowProducts && model.showProductPostId == post.id)
           Container(
             width: Scaler.width(0.55, context),
             padding: const EdgeInsets.all(4),
@@ -112,17 +112,18 @@ class _PostCaroseulState extends State<PostCarousel> {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
-              children: List.generate(products.length, (i) {
-                final element = products[i];
+              children: List.generate(post.relatedProducts.length, (i) {
+                final element = post.relatedProducts[i];
                 return InkWell(
                   onTap: () {
                     model.navigationService.navigateTo(
                       Routes.productDetailView,
-                      arguments: ProductDetailViewArguments(productId: element.produtId),
+                      arguments: ProductDetailViewArguments(
+                          productId: element.produtId),
                     );
                   },
                   child: Container(
-                    margin: (products.length - 1) == i
+                    margin: (post.relatedProducts.length - 1) == i
                         ? null
                         : const EdgeInsets.only(bottom: 8),
                     child: Row(
@@ -160,7 +161,7 @@ class _PostCaroseulState extends State<PostCarousel> {
             ),
           ),
         IconButton(
-          onPressed: () => model.changeShowProduct(),
+          onPressed: () => model.changeShowProduct(post),
           icon: Container(
             height: 36,
             width: 36,
@@ -182,4 +183,4 @@ class _PostCaroseulState extends State<PostCarousel> {
       ],
     );
   }
-  }
+}

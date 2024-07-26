@@ -1,14 +1,19 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously, avoid_print, unnecessary_null_comparison
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/comment_model.dart';
 import 'package:oua_flutter33/core/models/post_model.dart';
+import 'package:oua_flutter33/core/models/user_model.dart';
+import 'package:oua_flutter33/core/models/view_model/comment_view.dart';
 import 'package:oua_flutter33/core/models/view_model/post_view_model.dart';
 import 'package:oua_flutter33/core/services/auth_service.dart';
+import 'package:oua_flutter33/core/services/user_service.dart';
 
 class PostService {
   static final authService = getIt<AuthServices>();
+  static final _userService = getIt<UserService>();
+
   static final _firestore = FirebaseFirestore.instance;
 
   static const _collectionName = "posts";
@@ -64,15 +69,23 @@ class PostService {
   }
 
   // Post'a bağlı comment'leri getirme
-  Future<List<Comment>> getCommentsByPostId(String postId) async {
+  Future<List<CommentView>> getCommentsByPostId(String postId) async {
     CollectionReference commentCollection = _firestore
         .collection(_collectionName)
         .doc(postId)
         .collection('comments');
     QuerySnapshot querySnapshot = await commentCollection.get();
-    return querySnapshot.docs
-        .map((doc) => Comment.fromDocumentSnapshot(doc))
-        .toList();
+
+    List<CommentView> list = [];
+
+    querySnapshot.docs.map((doc) async {
+      Comment comment = Comment.fromDocumentSnapshot(doc);
+      User? user = await _userService.getUserDetail(comment.uid);
+
+      list.add(CommentView(user: user!, comment: comment));
+    });
+
+    return list;
   }
 
   // Post'a bağlı peopleWhoLike'ı getirme
@@ -91,9 +104,12 @@ class PostService {
   Future<PostViewModel?> getPostViewModelById(String id) async {
     Post? post = await getPostById(id);
     if (post != null) {
-      List<Comment> comments = await getCommentsByPostId(id);
+      User? user = await _userService.getUserDetail(post.uid);
+
+      List<CommentView> comments = await getCommentsByPostId(id);
       List<PepoleWhoLike> peopleWhoLike = await getPeopleWhoLikeByPostId(id);
       return PostViewModel(
+        user: user!,
         post: post,
         comments: comments,
         peopleWhoLike: peopleWhoLike,
@@ -103,25 +119,108 @@ class PostService {
   }
 
   Future<List<PostViewModel>> getAllPosts() async {
-    QuerySnapshot querySnapshot =
-        await _firestore.collection(_collectionName).get();
-        
+    QuerySnapshot querySnapshot = await _firestore
+        .collection(_collectionName)
+        .orderBy("create_date", descending: true)
+        .get();
+
     List<PostViewModel> postViewModels = [];
 
     for (var doc in querySnapshot.docs) {
       Post post = Post.fromDocumentSnapshot(doc);
 
-      List<Comment> comments = await getCommentsByPostId(post.id!);
+      User? user = await _userService.getUserDetail(post.uid);
+
+      List<CommentView> comments = await getCommentsByPostId(post.id!);
       List<PepoleWhoLike> peopleWhoLike =
           await getPeopleWhoLikeByPostId(post.id!);
 
       postViewModels.add(PostViewModel(
+        user: user!,
         post: post,
         comments: comments,
         peopleWhoLike: peopleWhoLike,
       ));
     }
 
-    return postViewModels;
+    return postViewModels.where((item) => item.user != null).toList();
+  }
+
+  Future<void> addPostToFavorites(String? postId) async {
+    String currentUserId = authService.user!.uid;
+    DocumentReference userRef =
+        _firestore.collection("users").doc(currentUserId);
+    DocumentReference postRef =
+        _firestore.collection(_collectionName).doc(postId);
+
+    await _firestore.runTransaction((transaction) async {
+      // Kullanıcı belgesini getir
+      DocumentSnapshot userSnapshot = await transaction.get(userRef);
+      if (!userSnapshot.exists) {
+        throw Exception("User does not exist!");
+      }
+
+      // Ürün belgesini getir
+      DocumentSnapshot postSnapshot = await transaction.get(postRef);
+      if (!postSnapshot.exists) {
+        throw Exception("Product does not exist!");
+      }
+
+      Post post = Post.fromDocumentSnapshot(postSnapshot);
+
+      // Ürün verisini kullanıcı favorilerine ekle
+      transaction.update(userRef, {
+        'favored_post_ids': FieldValue.arrayUnion([
+          {
+            'id': post.id,
+            'title': post.uid,
+            'image_url': post.medias[0].url,
+          }
+        ])
+      });
+
+      // Ürünün favori sayısını arttır
+      transaction.update(postRef, {'count_of_likes': FieldValue.increment(1)});
+    });
+  }
+
+  Future<void> removePostFromFavorites(String? postId) async {
+    String currentUserId = authService.user!.uid;
+    DocumentReference userRef =
+        _firestore.collection("users").doc(currentUserId);
+    DocumentReference postRef =
+        _firestore.collection(_collectionName).doc(postId);
+
+    await _firestore.runTransaction((transaction) async {
+      // Kullanıcı belgesini getir
+      DocumentSnapshot userSnapshot = await transaction.get(userRef);
+      if (!userSnapshot.exists) {
+        throw Exception("User does not exist!");
+      }
+
+      // Ürün belgesini getir
+      DocumentSnapshot postSnapshot = await transaction.get(postRef);
+      if (!postSnapshot.exists) {
+        throw Exception("Product does not exist!");
+      }
+
+      Post post = Post.fromDocumentSnapshot(postSnapshot);
+
+      // Ürün verisini kullanıcı favorilerinden çıkar
+      transaction.update(userRef, {
+        'favored_post_ids': FieldValue.arrayRemove([
+          {
+            'id': post.id,
+            'title': post.uid,
+            'image_url': post.medias[0].url,
+          }
+        ])
+      });
+
+      // Ürünün favori sayısını azalt
+      transaction.update(postRef, {'count_of_likes': FieldValue.increment(-1)});
+    });
+
+    //Add notification
   }
 }

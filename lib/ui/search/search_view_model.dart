@@ -75,12 +75,12 @@ class SearchViewModel extends AppBaseViewModel {
   }
 
   void goToProductDetail(Product product) {
-    // navigationService.navigateTo(
-    //   Routes.produtDetailView,
-    //   arguments: ProductDetailViewArguments(
-    //     product: product,
-    //   ),
-    // );
+    navigationService.navigateTo(
+      Routes.productDetailView,
+      arguments: ProductDetailViewArguments(
+        productId: product.id ?? "",
+      ),
+    );
   }
 
   Future<void> favored(Product product) async {
@@ -198,8 +198,7 @@ class SearchViewModel extends AppBaseViewModel {
                               ),
                             ),
                             child: ElevatedButton(
-                              onPressed: () =>
-                                  setState(() => filter = "post"),
+                              onPressed: () => setState(() => filter = "post"),
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.transparent,
                                 elevation: 0,

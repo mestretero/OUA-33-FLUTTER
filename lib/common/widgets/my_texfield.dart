@@ -55,7 +55,7 @@ class MyTextField extends StatelessWidget {
                 color: Theme.of(context).colorScheme.primary,
                 fontSize: 16,
               ),
-              validator: (value) => validate(context, name!, value),
+              validator: (value) => validate(context, hintText, value),
               autovalidateMode: AutovalidateMode.onUserInteraction,
               decoration: prefixIcon == null
                   ? InputDecoration(
@@ -126,7 +126,7 @@ class MyTextField extends StatelessWidget {
                         borderSide:
                             BorderSide(color: Colors.redAccent.shade700),
                         borderRadius:
-                            const BorderRadius.all(Radius.circular(10)),
+                            const BorderRadius.all(Radius.circular(16)),
                       ),
                       alignLabelWithHint: true,
                     ),
@@ -136,7 +136,7 @@ class MyTextField extends StatelessWidget {
   }
 
   validate(BuildContext context, String name, value) {
-    if (name == 'Email') {
+    if (name == 'Email Adresiniz') {
       if (value == null || value.isEmpty) {
         return 'Please enter your email';
       } else if (!isEmailValid(value)) {
@@ -151,6 +151,10 @@ class MyTextField extends StatelessWidget {
         return 'Please enter your password';
       } else if (value.length < 8) {
         return 'Password can\'t be less than 8 characters';
+      }
+    } else if (name == 'Surname') {
+      if (value == null || value.isEmpty) {
+        return 'Please enter your surname';
       }
     }
     return null;

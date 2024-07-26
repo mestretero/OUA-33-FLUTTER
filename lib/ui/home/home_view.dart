@@ -167,119 +167,166 @@ class HomeView extends StatelessWidget {
     return Column(
       children: [
         ...model.posts.map(
-          (item) => Container(
-            margin: const EdgeInsets.only(bottom: 16),
-            child: DottedBorder(
-              color: Theme.of(context).colorScheme.secondary,
-              radius: const Radius.circular(24),
-              borderType: BorderType.RRect,
-              strokeWidth: 3,
-              dashPattern: const [8, 4],
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(24),
-                child: Container(
-                  width: Scaler.width(1, context),
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Post Top Bar
-                      Row(
-                        children: [
-                          Container(
-                            height: 48,
-                            width: 48,
-                            margin: const EdgeInsets.only(right: 8),
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: Theme.of(context).colorScheme.onPrimary,
-                                width: 2,
-                              ),
-                              borderRadius: BorderRadius.circular(999.0),
-                              image: DecorationImage(
-                                image: NetworkImage(model.userData!.imageUrl),
-                                fit: BoxFit.cover,
+          (item) {
+            bool isFavored = model.userData!.favoredPostIds
+                    .where((element) => element.id == item.post.id)
+                    .toList()
+                    .isEmpty
+                ? false
+                : true;
+
+            return Container(
+              margin: const EdgeInsets.only(bottom: 16),
+              child: DottedBorder(
+                color: Theme.of(context).colorScheme.secondary,
+                radius: const Radius.circular(24),
+                borderType: BorderType.RRect,
+                strokeWidth: 3,
+                dashPattern: const [8, 4],
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(24),
+                  child: Container(
+                    width: Scaler.width(1, context),
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Post Top Bar
+                        Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () => model.goToProfil(item.user),
+                              child: Container(
+                                height: 48,
+                                width: 48,
+                                margin: const EdgeInsets.only(right: 8),
+                                decoration: BoxDecoration(
+                                  border: Border.all(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    width: 2,
+                                  ),
+                                  borderRadius: BorderRadius.circular(999.0),
+                                  image: item.user != null
+                                      ? DecorationImage(
+                                          image:
+                                              NetworkImage(item.user!.imageUrl),
+                                          fit: BoxFit.cover,
+                                        )
+                                      : const DecorationImage(
+                                          image: AssetImage(
+                                              "assets/images/none-pp.png"),
+                                          fit: BoxFit.cover,
+                                        ),
+                                ),
                               ),
                             ),
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${model.userData!.name.capitalize()} ${model.userData!.surname.capitalize()}",
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${item.user?.name.capitalize()} ${item.user?.surname.capitalize()}",
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                '@${'${model.userData?.name}_${model.userData?.surname}'}',
-                                style: TextStyle(
+                                Text(
+                                  '@${'${item.user?.name}_${item.user?.surname}'}',
+                                  style: TextStyle(
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const Spacer(),
+                            IconButton(
+                              style: IconButton.styleFrom(
+                                backgroundColor: Theme.of(context)
+                                    .colorScheme
+                                    .secondary
+                                    .withOpacity(0.4),
+                                side: BorderSide(
                                   color:
                                       Theme.of(context).colorScheme.onPrimary,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 16),
-                      item.post.medias.length == 1
-                          ? Container(
-                              width: Scaler.width(1, context),
-                              height: Scaler.width(0.8, context),
-                              alignment: Alignment.bottomRight,
-                              padding: const EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                image: DecorationImage(
-                                  image: NetworkImage(item.post.medias[0].url),
-                                  fit: BoxFit.cover,
-                                ),
+                              onPressed: () => isFavored
+                                  ? model.unfavoriedPost(item)
+                                  : model.favoriedPost(item),
+                              icon: Icon(
+                                isFavored
+                                    ? Icons.favorite_rounded
+                                    : Icons.favorite_outline_rounded,
+                                color: isFavored
+                                    ? Colors.red
+                                    : Theme.of(context).colorScheme.primary,
+                                size: 24,
                               ),
-                              child: _popupMenuButtonForProducts(
-                                context,
-                                model,
-                                item.post.relatedProducts,
-                              ),
-                            )
-                          : PostCarousel(
-                              post: item.post,
-                              model: model,
-                            ), //Carousel eklenecek,
-
-                      const SizedBox(height: 8),
-                      Text(
-                        item.post.explanation,
-                        style: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w300,
+                            ),
+                          ],
                         ),
-                      ),
-                      const SizedBox(height: 24),
-                      _buildActionButtons(context, model, item),
-                    ],
+
+                        const SizedBox(height: 16),
+                        item.post.medias.length == 1
+                            ? Container(
+                                width: Scaler.width(1, context),
+                                height: Scaler.width(0.8, context),
+                                alignment: Alignment.bottomRight,
+                                padding: const EdgeInsets.all(8),
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image:
+                                        NetworkImage(item.post.medias[0].url),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                child: _popupMenuButtonForProducts(
+                                  context,
+                                  model,
+                                  item.post,
+                                ),
+                              )
+                            : PostCarousel(
+                                post: item.post,
+                                model: model,
+                              ),
+
+                        const SizedBox(height: 8),
+                        Text(
+                          item.post.explanation,
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        _buildActionButtons(context, model, item),
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
-          ),
+            );
+          },
         ),
       ],
     );
   }
 
-  Widget _popupMenuButtonForProducts(BuildContext context, HomeViewModel model,
-      List<RelatedProducts> products) {
+  Widget _popupMenuButtonForProducts(
+      BuildContext context, HomeViewModel model, Post post) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.end,
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
-        if (model.isShowProducts)
+        if (model.isShowProducts && model.showProductPostId == post.id)
           Container(
             width: Scaler.width(0.55, context),
             padding: const EdgeInsets.all(4),
@@ -292,17 +339,18 @@ class HomeView extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
             ),
             child: Column(
-              children: List.generate(products.length, (i) {
-                final element = products[i];
+              children: List.generate(post.relatedProducts.length, (i) {
+                final element = post.relatedProducts[i];
                 return InkWell(
                   onTap: () {
                     model.navigationService.navigateTo(
                       Routes.productDetailView,
-                      arguments: ProductDetailViewArguments(productId: element.produtId),
+                      arguments: ProductDetailViewArguments(
+                          productId: element.produtId),
                     );
                   },
                   child: Container(
-                    margin: (products.length - 1) == i
+                    margin: (post.relatedProducts.length - 1) == i
                         ? null
                         : const EdgeInsets.only(bottom: 8),
                     child: Row(
@@ -340,7 +388,7 @@ class HomeView extends StatelessWidget {
             ),
           ),
         IconButton(
-          onPressed: () => model.changeShowProduct(),
+          onPressed: () => model.changeShowProduct(post),
           icon: Container(
             height: 36,
             width: 36,
@@ -363,7 +411,6 @@ class HomeView extends StatelessWidget {
     );
   }
 
-
   Widget _buildActionButtons(
       BuildContext context, HomeViewModel model, PostViewModel data) {
     return Row(
@@ -372,38 +419,50 @@ class HomeView extends StatelessWidget {
       children: [
         Row(
           children: [
-            Row(
-              children: [
-                const Icon(
-                  Icons.favorite_rounded,
-                  color: Colors.red,
-                  size: 24,
-                ),
-                Text(
-                  data.post.countOfLikes.toString(),
-                  style: TextStyle(
+            GestureDetector(
+              onTap: () => model.showBottomSheetForUsersWhoLike(context, data),
+              child: Row(
+                children: [
+                  const Icon(
+                    Icons.favorite_rounded,
+                    color: Colors.red,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    data.post.countOfLikes.toString(),
+                    style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400),
-                )
-              ],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
+              ),
             ),
-            const SizedBox(width: 8),
-            Row(
-              children: [
-                Icon(
-                  Icons.chat_bubble_outline_sharp,
-                  color: Theme.of(context).colorScheme.primary,
-                  size: 24,
-                ),
-                Text(
-                  data.post.countOfComments.toString(),
-                  style: TextStyle(
+            const SizedBox(width: 16),
+
+            //
+            GestureDetector(
+              onTap: () => model.showBottomSheetForComments(context, data),
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.chat_bubble_outline_sharp,
+                    color: Theme.of(context).colorScheme.primary,
+                    size: 24,
+                  ),
+                  const SizedBox(width: 4),
+                  Text(
+                    data.post.countOfComments.toString(),
+                    style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
-                      fontSize: 12,
-                      fontWeight: FontWeight.w400),
-                )
-              ],
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ],
+              ),
             )
           ],
         ),

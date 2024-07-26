@@ -19,8 +19,8 @@ class Comment {
     return {
       'uid': uid,
       'comment': comment,
-      'createDate': createDate,
-      'isActive': isActive,
+      'create_date': createDate,
+      'is_active': isActive,
     };
   }
 
@@ -29,8 +29,8 @@ class Comment {
       id: id,
       uid: map['uid'],
       comment: map['comment'],
-      createDate: map['createDate'],
-      isActive: map['isActive'],
+      createDate: map['create_date'],
+      isActive: map['is_active'],
     );
   }
 

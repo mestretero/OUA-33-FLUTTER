@@ -32,48 +32,18 @@ class UserService {
       "surname": auth.surname.toLowerCase(),
       "email": auth.email,
       "phone_number": "",
-      "image_url": "",
+      "image_url": "https://firebasestorage.googleapis.com/v0/b/ouaflutter33.appspot.com/o/images%2Fnone-pp.png?alt=media&token=64eeecb0-8d11-4b3c-ab42-2225f5857472",
       "birth_day": 0,
       "create_date": 0,
       "isActive": true,
       "follower_count": 0,
       "product_count": 0,
       "post_count": 0,
-      "follower_ids": [
-        {
-          "id": "",
-          "title": "",
-          "image_url": "",
-        }
-      ],
-      "favored_product_ids": [
-        {
-          "id": "",
-          "title": "",
-          "image_url": "",
-        }
-      ],
-      "favored_post_ids": [
-        {
-          "id": "",
-          "title": "",
-          "image_url": "",
-        }
-      ],
-      "recorded_product_ids": [
-        {
-          "id": "",
-          "title": "",
-          "image_url": "",
-        }
-      ],
-      "recorded_post_ids": [
-        {
-          "id": "",
-          "title": "",
-          "image_url": "",
-        }
-      ],
+      "follower_ids": [],
+      "favored_product_ids": [],
+      "favored_post_ids": [],
+      "recorded_product_ids": [],
+      "recorded_post_ids": [],
     });
   }
 

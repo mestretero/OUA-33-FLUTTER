@@ -4,6 +4,8 @@ import 'package:oua_flutter33/ui/cart/cart_list_view_model.dart';
 import 'package:stacked/stacked.dart';
 
 class CartListView extends StatelessWidget {
+  const CartListView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return ViewModelBuilder<CartListViewModel>.reactive(
@@ -14,14 +16,14 @@ class CartListView extends StatelessWidget {
             onPressed: (){
                   model.navigationService.navigateTo(Routes.mainView);
             },
-            icon:SizedBox(
+            icon:const SizedBox(
               width: 40,
               height: 40,
               child: Icon( Icons.keyboard_arrow_left_rounded,)),
-            color:Color(0xFF6EDB2A), 
+            color:const Color(0xFF6EDB2A), 
 
           ),
-           title: Text('Sepetim',
+           title: const Text('Sepetim',
             style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -30,7 +32,7 @@ class CartListView extends StatelessWidget {
           ),
         ),
         body: model.cartItems.isEmpty
-            ? Center(
+            ? const Center(
                 child: Text('Sepetiniz boş',
                 style: TextStyle(
                 fontSize: 16,
@@ -44,11 +46,11 @@ class CartListView extends StatelessWidget {
                   final item = model.cartItems[index];
                   return SingleChildScrollView(
                     child: Container(
-                      margin: EdgeInsets.all(8),
+                      margin: const EdgeInsets.all(8),
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(16.0),
                         border: Border.all(
-                          color:Color(0xFFD3F4BF),
+                          color:const Color(0xFFD3F4BF),
                           width: 1 ),
                       ),
                       child: ListTile(
@@ -56,7 +58,7 @@ class CartListView extends StatelessWidget {
                         title: Text(item.name),
                         subtitle: Text('₺${item.price.toString()}'),
                         trailing: IconButton(
-                          icon: Icon(Icons.remove_circle,
+                          icon: const Icon(Icons.remove_circle,
                           color: Color(0xFFD3F4BF),
                           ),
                           onPressed: () {
@@ -76,18 +78,18 @@ class CartListView extends StatelessWidget {
               SafeArea(
                 child: Text(
                   'Toplam: ₺${model.totalPrice.toString()}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
               ),
               SafeArea(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:Color(0xFFD3F4BF), 
+                    backgroundColor:const Color(0xFFD3F4BF), 
                   ),
                   onPressed: () {
                     
                   },
-                  child: Text('Satın Al',style: TextStyle(color:Colors.black,),),
+                  child: const Text('Satın Al',style: TextStyle(color:Colors.black,),),
                 ),
               ),
             ],

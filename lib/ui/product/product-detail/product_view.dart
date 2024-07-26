@@ -27,8 +27,8 @@ class ProductDetailView extends StatelessWidget {
         body: model.isBusy
             ? const Center(child: CircularProgressIndicator())
             : model.product == null
-                ? Center(
-                  child: const Text("Ürün Yaratıcısı Tarafından Kaldırıldı",
+                ? const Center(
+                  child: Text("Ürün Yaratıcısı Tarafından Kaldırıldı",
                   style: TextStyle(fontSize: 20,
                   fontWeight: FontWeight.w500,
                   ),
@@ -135,7 +135,7 @@ class ProductDetailView extends StatelessWidget {
                                     SnackBar(
                                       backgroundColor:const Color(0xFFD3F4BF),
                                       content: Text(
-                                        style: TextStyle(color:Colors.black,),
+                                        style: const TextStyle(color:Colors.black,),
                                           "${model.product!.name} sepete eklendi"),
                                     ),
                                   );

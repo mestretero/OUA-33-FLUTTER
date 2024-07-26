@@ -92,6 +92,7 @@ class SearchView extends StatelessWidget {
 
   Widget _buildPostAndProduct(BuildContext context, SearchViewModel model) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSegmentedControl(context, model),
 
@@ -170,6 +171,7 @@ class SearchView extends StatelessWidget {
               : Wrap(
                   spacing: 10,
                   runSpacing: 10,
+                  alignment: WrapAlignment.start,
                   crossAxisAlignment: WrapCrossAlignment.start,
                   children: [
                     ...model.products.map(

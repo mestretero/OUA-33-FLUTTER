@@ -6,14 +6,19 @@ import 'package:oua_flutter33/app/app_base_view_model.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/cart_%C4%B1tem_model.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
+import 'package:oua_flutter33/core/models/user_model.dart';
 import 'package:oua_flutter33/core/services/auth_service.dart';
 import 'package:oua_flutter33/core/services/cart_service.dart';
 import 'package:oua_flutter33/core/services/product_service.dart';
 import 'package:oua_flutter33/ui/chat_list/chat/chat_view.dart';
 
 class ProductViewModel extends AppBaseViewModel {
+    User? _user;
+    User? get user => _user;
+
   final ProductService _productService = getIt<ProductService>();
   late Product? product;
+
   static final authService = getIt<AuthServices>();
   static final _firestore = FirebaseFirestore.instance;
   static const _collectionName = "products";
@@ -36,6 +41,33 @@ class ProductViewModel extends AppBaseViewModel {
   } finally {
     setBusy(false);
   }
+  }
+    Future<void> favored(Product product) async {
+    try {
+      await _productService.addProductToFavorites(product.id);
+      user!.favoredProductIds.add(
+        ListObjectOfIds(
+          id: product.id ?? "",
+          title: product.name,
+          imageUrl: product.mainImageUrl,
+        ),
+      );
+      notifyListeners();
+    } on Exception catch (e) {
+      print("Failed to add product from favorites: $e");
+    }
+  }
+
+  Future<void> unfavored(String? productId) async {
+    try {
+      if (productId != "" || productId != null) {
+        await _productService.removeProductFromFavorites(productId);
+        user!.favoredProductIds.removeWhere((e) => e.id == productId);
+        notifyListeners();
+      }
+    } on Exception catch (e) {
+      print("Failed to remove product from favorites: $e");
+    }
   }
   
   Future<void> updateProduct(Product product) async {

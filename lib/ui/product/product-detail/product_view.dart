@@ -12,7 +12,6 @@ class ProductDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return ViewModelBuilder<ProductViewModel>.reactive(
       viewModelBuilder: () => ProductViewModel(),
       onModelReady: (model) async => await model.fetchProductDetails(productId),
@@ -27,13 +26,15 @@ class ProductDetailView extends StatelessWidget {
         body: model.isBusy
             ? const Center(child: CircularProgressIndicator())
             : model.product == null
-                ? Center(
-                  child: const Text("Ürün Yaratıcısı Tarafından Kaldırıldı",
-                  style: TextStyle(fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  ),
-                  ),
-                )
+                ? const Center(
+                    child: Text(
+                      "Ürün Yaratıcısı Tarafından Kaldırıldı",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
                 : SingleChildScrollView(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -48,51 +49,25 @@ class ProductDetailView extends StatelessWidget {
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                         const Row(
+                        const Row(
                           children: [
-                            Text('Ürün Açıklaması',
-                                style: TextStyle(color: Color(0xFF6EDB2A),),),
+                            Text(
+                              'Ürün Açıklaması',
+                              style: TextStyle(
+                                color: Color(0xFF6EDB2A),
+                              ),
+                            ),
                             SizedBox(width: 16),
-                        /*  FutureBuilder<User?>(
-                              future: getIt<ProductService>()
-                                  .getUserByProductId(productId),
-                              builder: (context, snapshot) {
-                                if (snapshot.connectionState ==
-                                    ConnectionState.waiting) {
-                                  return CircularProgressIndicator();
-                                } else if (snapshot.hasError) {
-                                  return Text("Hata: ${snapshot.error}");
-                                } else if (!snapshot.hasData) {
-                                  return Text("Kullanıcı Bulunamadı");
-                                } else {
-                                  final user = snapshot.data!;
-                                  return InkWell(
-                                    onTap: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ChatView(
-                                            receiverUser: user,
-                                          ),
-                                        ),
-                                      );
-                                    },
-                                    child: Text('İletişim',
-                                        style: TextStyle(color: Color(0xFF6EDB2A))),
-                                  );
-                                }
-                              },
-                            ), */
                           ],
                         ),
                         const SizedBox(height: 16),
                         Text(model.product!.description),
                         const SizedBox(height: 16),
-                        Text(
+                        /* Text(
                           '₺${model.product!.price}',
                           style: const TextStyle(
                               fontSize: 24, fontWeight: FontWeight.bold),
-                        ),
+                        ), */
                         const SizedBox(height: 16),
                         if (model.product!.uid == model.authServices.user!.uid)
                           Row(
@@ -112,42 +87,85 @@ class ProductDetailView extends StatelessWidget {
                                       product: model.product!,
                                     ),
                                   ).then((_) {
-                                    Future.delayed(const Duration(milliseconds: 500), () {
+                                    Future.delayed(
+                                        const Duration(milliseconds: 500), () {
                                       model.fetchProductDetails(productId);
                                     });
                                   });
                                 },
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed:() {model.deleteProduct(productId);}
-                              ),
+                                  icon: const Icon(Icons.delete),
+                                  onPressed: () {
+                                    model.deleteProduct(productId);
+                                  }),
                             ],
                           )
                         else
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
+                              Text(
+                                '₺${model.product!.price}',
+                                style: const TextStyle(
+                                  color: Color(0xFF6EDB2A),
+                                    fontSize: 24, fontWeight: FontWeight.bold),
+                              ),
+                              
                               ElevatedButton(
-                                onPressed: (){
-                                   model.addToCart();
+                                style: ElevatedButton.styleFrom(
+                                  side: const BorderSide(
+                                    width: 2,
+                                    color: Color(0XffB6ED94),
+                                  ),
+                                ),
+                                onPressed: () {
+                                  model.addToCart();
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      backgroundColor:const Color(0xFFD3F4BF),
+                                      backgroundColor: const Color(0xFFD3F4BF),
                                       content: Text(
-                                        style: TextStyle(color:Colors.black,),
+                                          style: const TextStyle(
+                                            color: Color(0XffB6ED94),
+                                          ),
                                           "${model.product!.name} sepete eklendi"),
                                     ),
                                   );
                                 },
-                                child: const Text('Sepete Ekle'),
+                                child: const Text(
+                                  'Sepete Ekle',
+                                  style: TextStyle(
+                                    color: Color(0XffB6ED94),
+                                    fontSize: 16,
+                                  ),
+                                ),
                               ),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:  const Color(0xFF6EDB2A),
+                                  backgroundColor: const Color(0XffB6ED94),
+                                
+                        
                                 ),
-                                onPressed: () => model.sendMessage(context, productId),
-                                child: const Text('Mesaj Gönder'),
+                                onPressed: () =>
+                                    model.sendMessage(context, productId),
+                                child: const Row(
+                                  children: [
+                                    Icon(
+                                      color:  Colors.white,
+                                      Icons.chat,
+                                    ),
+                                    SizedBox(
+                                      width: 8,
+                                    ),
+                                    Text(
+                                    'Mesaj',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                  ]
+                                ),
                               ),
                             ],
                           ),

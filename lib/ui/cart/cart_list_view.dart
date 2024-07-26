@@ -14,14 +14,14 @@ class CartListView extends StatelessWidget {
             onPressed: (){
                   model.navigationService.navigateTo(Routes.mainView);
             },
-            icon:SizedBox(
-              width: 40,
-              height: 40,
+            icon:const SizedBox(
+              width: 60,
+              height: 60,
               child: Icon( Icons.keyboard_arrow_left_rounded,)),
             color:Color(0xFF6EDB2A), 
 
           ),
-           title: Text('Sepetim',
+           title: const Text('Sepetim',
             style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w500,
@@ -30,7 +30,7 @@ class CartListView extends StatelessWidget {
           ),
         ),
         body: model.cartItems.isEmpty
-            ? Center(
+            ? const Center(
                 child: Text('Sepetiniz boş',
                 style: TextStyle(
                 fontSize: 16,
@@ -56,7 +56,7 @@ class CartListView extends StatelessWidget {
                         title: Text(item.name),
                         subtitle: Text('₺${item.price.toString()}'),
                         trailing: IconButton(
-                          icon: Icon(Icons.remove_circle,
+                          icon: const Icon(Icons.remove_circle,
                           color: Color(0xFFD3F4BF),
                           ),
                           onPressed: () {
@@ -76,18 +76,18 @@ class CartListView extends StatelessWidget {
               SafeArea(
                 child: Text(
                   'Toplam: ₺${model.totalPrice.toString()}',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+                  style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
                 ),
               ),
               SafeArea(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
-                    backgroundColor:Color(0xFFD3F4BF), 
+                    backgroundColor:const Color(0xFFD3F4BF), 
                   ),
                   onPressed: () {
                     
                   },
-                  child: Text('Satın Al',style: TextStyle(color:Colors.black,),),
+                  child: const Text('Satın Al',style: TextStyle(color:Colors.black,),),
                 ),
               ),
             ],

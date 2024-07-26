@@ -1,18 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/common/widgets/my_button.dart';
 import 'package:oua_flutter33/common/widgets/my_texfield.dart';
 import 'package:oua_flutter33/ui/auth/login/login_view_model.dart';
 import 'package:stacked/stacked.dart';
 
 class LoginView extends StatelessWidget {
-  LoginView({super.key});
-
-  final formKey = GlobalKey<FormState>();
-  final emailController = TextEditingController();
-  final passController = TextEditingController();
+  const LoginView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +19,7 @@ class LoginView extends StatelessWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Form(
-              key: formKey,
+              key: model.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -35,27 +30,27 @@ class LoginView extends StatelessWidget {
                     width: 200,
                   ),
                   Text(
-                  "Giriş Yap",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 32,
-                    fontWeight: FontWeight.w500,
+                    "Giriş Yap",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 32,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  "Hayatın her anında el yapımı bir dokunuş arayanlar için Usta Eller özenle seçilmiş el işleri ve kişisel dokunuşlarla dolu bir dünyaya kapı aralıyor.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w300,
+                  const SizedBox(height: 8),
+                  Text(
+                    "Hayatın her anında el yapımı bir dokunuş arayanlar için Usta Eller özenle seçilmiş el işleri ve kişisel dokunuşlarla dolu bir dünyaya kapı aralıyor.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w300,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
+                  const SizedBox(height: 16),
                   MyTextField(
-                    controller: emailController,
+                    controller: model.emailController,
                     name: "",
                     hintText: "Email Adresiniz",
                     inputType: TextInputType.emailAddress,
@@ -63,7 +58,7 @@ class LoginView extends StatelessWidget {
                     isTextArea: false,
                   ),
                   MyTextField(
-                    controller: passController,
+                    controller: model.passController,
                     name: "",
                     hintText: "Password",
                     inputType: TextInputType.text,
@@ -73,17 +68,7 @@ class LoginView extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   MyButton(
-                    onTap: () {
-                      if (formKey.currentState!.validate()) {
-                        model.authServices.login(
-                          context,
-                          emailController.text,
-                          passController.text,
-                        );
-
-                        model.navigationService.navigateTo(Routes.mainView);
-                      }
-                    },
+                    onTap: () => model.login(context),
                     text: "Giriş Yap",
                     buttonStyle: 1,
                     isExpanded: true,
@@ -100,14 +85,7 @@ class LoginView extends StatelessWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          model.navigationService
-                              .navigateTo(Routes.registerView)
-                              ?.then((_) {
-                            formKey.currentState?.reset();
-                            FocusScope.of(context).requestFocus(FocusNode());
-                          });
-                        },
+                        onPressed: () => model.goToRegister(context),
                         child: Text(
                           "Kayıt Ol",
                           style: TextStyle(

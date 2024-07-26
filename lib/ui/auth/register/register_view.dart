@@ -1,20 +1,13 @@
 // ignore_for_file: deprecated_member_use
 
 import 'package:flutter/material.dart';
-import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/common/widgets/my_button.dart';
 import 'package:oua_flutter33/common/widgets/my_texfield.dart';
 import 'package:oua_flutter33/ui/auth/register/register_view_model.dart';
 import 'package:stacked/stacked.dart';
 
 class RegisterView extends StatelessWidget {
-  RegisterView({super.key});
-
-  final formKey = GlobalKey<FormState>();
-  final nameController = TextEditingController();
-  final surnameController = TextEditingController();
-  final emailController = TextEditingController();
-  final passController = TextEditingController();
+  const RegisterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +19,7 @@ class RegisterView extends StatelessWidget {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(20),
             child: Form(
-              key: formKey,
+              key: model.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -56,7 +49,7 @@ class RegisterView extends StatelessWidget {
                     ),
                   ),
                   MyTextField(
-                    controller: nameController,
+                    controller: model.nameController,
                     name: "Name",
                     hintText: "Name",
                     inputType: TextInputType.name,
@@ -65,7 +58,7 @@ class RegisterView extends StatelessWidget {
                     textCapitalization: TextCapitalization.words,
                   ),
                   MyTextField(
-                    controller: surnameController,
+                    controller: model.surnameController,
                     name: "Surname",
                     hintText: "Surname",
                     inputType: TextInputType.name,
@@ -74,7 +67,7 @@ class RegisterView extends StatelessWidget {
                     textCapitalization: TextCapitalization.words,
                   ),
                   MyTextField(
-                    controller: emailController,
+                    controller: model.emailController,
                     name: "Email",
                     hintText: "Email",
                     inputType: TextInputType.emailAddress,
@@ -82,7 +75,7 @@ class RegisterView extends StatelessWidget {
                     isTextArea: false,
                   ),
                   MyTextField(
-                    controller: passController,
+                    controller: model.passController,
                     name: "Password",
                     hintText: "Password",
                     inputType: TextInputType.text,
@@ -92,17 +85,7 @@ class RegisterView extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   MyButton(
-                    onTap: () {
-                      if (formKey.currentState!.validate()) {
-                        model.authServices.register(
-                          context,
-                          nameController.text,
-                          surnameController.text,
-                          emailController.text,
-                          passController.text,
-                        );
-                      }
-                    },
+                    onTap: () => model.register(context),
                     text: "Kayıt Ol",
                     buttonStyle: 1,
                     isExpanded: true,
@@ -119,14 +102,7 @@ class RegisterView extends StatelessWidget {
                         ),
                       ),
                       TextButton(
-                        onPressed: () {
-                          model.navigationService
-                              .navigateTo(Routes.loginView)
-                              ?.then((_) {
-                            formKey.currentState?.reset();
-                            FocusScope.of(context).requestFocus(FocusNode());
-                          });
-                        },
+                        onPressed: () => model.goToLogin(context),
                         child: Text(
                           "Giriş Yap",
                           style: TextStyle(

@@ -168,7 +168,7 @@ class _EditProductViewState extends State<EditProductView> {
                       child: Text("Kaydet"),
                     ),
                   ),
-                  // Add more fields as needed
+                
                 ],
               ),
             ),

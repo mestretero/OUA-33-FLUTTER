@@ -4,8 +4,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:oua_flutter33/app/app_base_view_model.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
+import 'package:oua_flutter33/core/models/cart_%C4%B1tem_model.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
 import 'package:oua_flutter33/core/services/auth_service.dart';
+import 'package:oua_flutter33/core/services/cart_service.dart';
 import 'package:oua_flutter33/core/services/product_service.dart';
 import 'package:oua_flutter33/ui/chat_list/chat/chat_view.dart';
 
@@ -15,6 +17,7 @@ class ProductViewModel extends AppBaseViewModel {
   static final authService = getIt<AuthServices>();
   static final _firestore = FirebaseFirestore.instance;
   static const _collectionName = "products";
+  final CartService cartService = getIt<CartService>();
   /* final UserService userService = getIt<UserService>();
   static final auth = FirebaseAuth.instance;
   var user = auth.currentUser; */
@@ -48,8 +51,26 @@ class ProductViewModel extends AppBaseViewModel {
   }
 
   void addToCart() {
-    // Implement add to cart logic
+  if (product != null) {
+    final productId = product!.id;
+    if (productId != null) { // Null kontrolü
+      final cartItem = CartItem(
+        id: productId,
+        name: product!.name,
+        mainImageUrl: product!.mainImageUrl,
+        price: product!.price,
+      );
+      cartService.addToCart(cartItem);
+      notifyListeners();
+    } else {
+      print("Error: Product ID is null");
+    }
+  } else {
+    print("Error: Product is null");
   }
+}
+
+
 
 void sendMessage(BuildContext context, String productId) {
   userService.getUserByProductId(productId).then((user) {

@@ -27,7 +27,13 @@ class ProductDetailView extends StatelessWidget {
         body: model.isBusy
             ? const Center(child: CircularProgressIndicator())
             : model.product == null
-                ? const Text("Ürün Bulunamadı")
+                ? Center(
+                  child: const Text("Ürün Yaratıcısı Tarafından Kaldırıldı",
+                  style: TextStyle(fontSize: 20,
+                  fontWeight: FontWeight.w500,
+                  ),
+                  ),
+                )
                 : SingleChildScrollView(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -123,7 +129,17 @@ class ProductDetailView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               ElevatedButton(
-                                onPressed: model.addToCart,
+                                onPressed: (){
+                                   model.addToCart();
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      backgroundColor:const Color(0xFFD3F4BF),
+                                      content: Text(
+                                        style: TextStyle(color:Colors.black,),
+                                          "${model.product!.name} sepete eklendi"),
+                                    ),
+                                  );
+                                },
                                 child: const Text('Sepete Ekle'),
                               ),
                               ElevatedButton(

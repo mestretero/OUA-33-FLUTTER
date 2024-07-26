@@ -12,7 +12,7 @@ class CartListView extends StatelessWidget {
         appBar: AppBar(
           leading: IconButton(
             onPressed: (){
-                  model.navigationService.navigateTo(Routes.homeView);
+                  model.navigationService.navigateTo(Routes.mainView);
             },
             icon:SizedBox(
               width: 40,

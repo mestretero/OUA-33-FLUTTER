@@ -12,6 +12,7 @@ class ProductDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProductViewModel>.reactive(
       viewModelBuilder: () => ProductViewModel(),
+      // ignore: deprecated_member_use
       onModelReady: (model) async => await model.fetchProductDetails(productId),
       builder: (context, model, widget) => Scaffold(
         appBar: AppBar(
@@ -306,3 +307,4 @@ class ProductDetailView extends StatelessWidget {
     );
   }
 }
+

@@ -18,14 +18,14 @@ class _EditProductViewState extends State<EditProductView> {
   final _formKey = GlobalKey<FormState>();
   late String _name;
   late String _description;
-  late double _price; // Ürün fiyatı için bir değişken ekleyin
+  late double _price; 
 
   @override
   void initState() {
     super.initState();
     _name = widget.product.name;
     _description = widget.product.description;
-    _price = widget.product.price; // Ürün fiyatını başlatın
+    _price = widget.product.price; 
   }
 
   @override

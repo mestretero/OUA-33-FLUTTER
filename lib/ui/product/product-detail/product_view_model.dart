@@ -12,8 +12,19 @@ import 'package:oua_flutter33/core/services/user_service.dart';
 import 'package:oua_flutter33/ui/chat_list/chat/chat_view.dart';
 
 class ProductViewModel extends AppBaseViewModel {
+    User? _user;
+    User? get user => _user;
+
   final ProductService _productService = getIt<ProductService>();
+<<<<<<< HEAD
   final AuthServices authService = getIt<AuthServices>();
+=======
+  late Product? product;
+
+  static final authService = getIt<AuthServices>();
+  static final _firestore = FirebaseFirestore.instance;
+  static const _collectionName = "products";
+>>>>>>> c4cc25a3ee8b7b773a5bddd41db67c7f1d30c0fb
   final CartService cartService = getIt<CartService>();
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   
@@ -43,6 +54,7 @@ class ProductViewModel extends AppBaseViewModel {
   bool isFavored(Product product) {
     return user != null && user!.favoredProductIds.any((element) => element.id == product.id);
   }
+<<<<<<< HEAD
 
   Future<void> favored(Product product) async {
     try {
@@ -61,23 +73,49 @@ class ProductViewModel extends AppBaseViewModel {
       }
     } on Exception catch (e) {
       print("Failed to add product to favorites: $e");
+=======
+    Future<void> favored(Product product) async {
+    try {
+      await _productService.addProductToFavorites(product.id);
+      user!.favoredProductIds.add(
+        ListObjectOfIds(
+          id: product.id ?? "",
+          title: product.name,
+          imageUrl: product.mainImageUrl,
+        ),
+      );
+      notifyListeners();
+    } on Exception catch (e) {
+      print("Failed to add product from favorites: $e");
+>>>>>>> c4cc25a3ee8b7b773a5bddd41db67c7f1d30c0fb
     }
   }
 
   Future<void> unfavored(String? productId) async {
     try {
+<<<<<<< HEAD
       if (productId != null && productId.isNotEmpty && user != null) {
         await _productService.removeProductFromFavorites(productId);
         user!.favoredProductIds.removeWhere((e) => e.id == productId);
         notifyListeners();
       } else {
         print("Error: Product ID is null or User is null");
+=======
+      if (productId != "" || productId != null) {
+        await _productService.removeProductFromFavorites(productId);
+        user!.favoredProductIds.removeWhere((e) => e.id == productId);
+        notifyListeners();
+>>>>>>> c4cc25a3ee8b7b773a5bddd41db67c7f1d30c0fb
       }
     } on Exception catch (e) {
       print("Failed to remove product from favorites: $e");
     }
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> c4cc25a3ee8b7b773a5bddd41db67c7f1d30c0fb
   Future<void> updateProduct(Product product) async {
     try {
       await _firestore.collection(_collectionName).doc(product.id).update(product.toMap());

@@ -260,20 +260,14 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i8.LoginView: (data) {
-      final args = data.getArgs<LoginViewArguments>(
-        orElse: () => const LoginViewArguments(),
-      );
       return _i26.MaterialPageRoute<dynamic>(
-        builder: (context) => _i8.LoginView(key: args.key),
+        builder: (context) => const _i8.LoginView(),
         settings: data,
       );
     },
     _i9.RegisterView: (data) {
-      final args = data.getArgs<RegisterViewArguments>(
-        orElse: () => const RegisterViewArguments(),
-      );
       return _i26.MaterialPageRoute<dynamic>(
-        builder: (context) => _i9.RegisterView(key: args.key),
+        builder: (context) => const _i9.RegisterView(),
         settings: data,
       );
     },
@@ -400,50 +394,6 @@ class StackedRouter extends _i1.RouterBase {
 
   @override
   Map<Type, _i1.StackedRouteFactory> get pagesMap => _pagesMap;
-}
-
-class LoginViewArguments {
-  const LoginViewArguments({this.key});
-
-  final _i26.Key? key;
-
-  @override
-  String toString() {
-    return '{"key": "$key"}';
-  }
-
-  @override
-  bool operator ==(covariant LoginViewArguments other) {
-    if (identical(this, other)) return true;
-    return other.key == key;
-  }
-
-  @override
-  int get hashCode {
-    return key.hashCode;
-  }
-}
-
-class RegisterViewArguments {
-  const RegisterViewArguments({this.key});
-
-  final _i26.Key? key;
-
-  @override
-  String toString() {
-    return '{"key": "$key"}';
-  }
-
-  @override
-  bool operator ==(covariant RegisterViewArguments other) {
-    if (identical(this, other)) return true;
-    return other.key == key;
-  }
-
-  @override
-  int get hashCode {
-    return key.hashCode;
-  }
 }
 
 class ProfileViewArguments {
@@ -725,32 +675,28 @@ extension NavigatorStateExtension on _i30.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToLoginView({
-    _i26.Key? key,
+  Future<dynamic> navigateToLoginView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return navigateTo<dynamic>(Routes.loginView,
-        arguments: LoginViewArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
         transition: transition);
   }
 
-  Future<dynamic> navigateToRegisterView({
-    _i26.Key? key,
+  Future<dynamic> navigateToRegisterView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return navigateTo<dynamic>(Routes.registerView,
-        arguments: RegisterViewArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1097,32 +1043,28 @@ extension NavigatorStateExtension on _i30.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithLoginView({
-    _i26.Key? key,
+  Future<dynamic> replaceWithLoginView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return replaceWith<dynamic>(Routes.loginView,
-        arguments: LoginViewArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
         transition: transition);
   }
 
-  Future<dynamic> replaceWithRegisterView({
-    _i26.Key? key,
+  Future<dynamic> replaceWithRegisterView([
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  }) async {
+  ]) async {
     return replaceWith<dynamic>(Routes.registerView,
-        arguments: RegisterViewArguments(key: key),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

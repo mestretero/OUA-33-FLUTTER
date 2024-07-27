@@ -127,7 +127,7 @@ class _ChatViewState extends State<ChatView> {
     );
   }
 
-  //Message Input
+ 
   Widget _buildMessageInput(BuildContext context, ChatViewModel model) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -147,7 +147,7 @@ class _ChatViewState extends State<ChatView> {
             child: IconButton(
               icon: const Icon(Icons.image, color: Colors.black),
               onPressed: () {
-                // Handle image selection
+                
               },
             ),
           ),
@@ -169,7 +169,7 @@ class _ChatViewState extends State<ChatView> {
           IconButton(
             icon: const Icon(Icons.mic, color: Colors.white),
             onPressed: () {
-              // Handle voice message
+              
             },
           ),
         ],

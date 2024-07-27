@@ -44,6 +44,10 @@ class HomeViewModel extends AppBaseViewModel {
     notifyListeners();
   }
 
+  Future<void> refreshPosts() async {
+    await _loadPosts();
+  }
+
   Future<void> _loadPosts() async {
     posts = await _postService.getAllPosts();
     notifyListeners();

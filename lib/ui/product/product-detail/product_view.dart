@@ -12,7 +12,6 @@ class ProductDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    
     return ViewModelBuilder<ProductViewModel>.reactive(
       viewModelBuilder: () => ProductViewModel(),
       onModelReady: (model) async => await model.fetchProductDetails(productId),
@@ -28,12 +27,14 @@ class ProductDetailView extends StatelessWidget {
             ? const Center(child: CircularProgressIndicator())
             : model.product == null
                 ? const Center(
-                  child: Text("Ürün Yaratıcısı Tarafından Kaldırıldı",
-                  style: TextStyle(fontSize: 20,
-                  fontWeight: FontWeight.w500,
-                  ),
-                  ),
-                )
+                    child: Text(
+                      "Ürün Yaratıcısı Tarafından Kaldırıldı",
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  )
                 : SingleChildScrollView(
                     padding: const EdgeInsets.all(16.0),
                     child: Column(
@@ -48,12 +49,16 @@ class ProductDetailView extends StatelessWidget {
                               fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
-                         const Row(
+                        const Row(
                           children: [
-                            Text('Ürün Açıklaması',
-                                style: TextStyle(color: Color(0xFF6EDB2A),),),
+                            Text(
+                              'Ürün Açıklaması',
+                              style: TextStyle(
+                                color: Color(0xFF6EDB2A),
+                              ),
+                            ),
                             SizedBox(width: 16),
-                        /*  FutureBuilder<User?>(
+                            /*  FutureBuilder<User?>(
                               future: getIt<ProductService>()
                                   .getUserByProductId(productId),
                               builder: (context, snapshot) {
@@ -100,7 +105,8 @@ class ProductDetailView extends StatelessWidget {
                             children: [
                               IconButton(
                                 icon: const Icon(Icons.archive),
-                                onPressed: model.archiveProduct,
+                                onPressed: () =>
+                                    model.archiveProduct(model.product!.id),
                               ),
                               IconButton(
                                 icon: const Icon(Icons.edit),
@@ -112,16 +118,18 @@ class ProductDetailView extends StatelessWidget {
                                       product: model.product!,
                                     ),
                                   ).then((_) {
-                                    Future.delayed(const Duration(milliseconds: 500), () {
+                                    Future.delayed(
+                                        const Duration(milliseconds: 500), () {
                                       model.fetchProductDetails(productId);
                                     });
                                   });
                                 },
                               ),
                               IconButton(
-                                icon: const Icon(Icons.delete),
-                                onPressed:() {model.deleteProduct(productId);}
-                              ),
+                                  icon: const Icon(Icons.delete),
+                                  onPressed: () {
+                                    model.deleteProduct(productId);
+                                  }),
                             ],
                           )
                         else
@@ -129,13 +137,15 @@ class ProductDetailView extends StatelessWidget {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
                               ElevatedButton(
-                                onPressed: (){
-                                   model.addToCart();
+                                onPressed: () {
+                                  model.addToCart();
                                   ScaffoldMessenger.of(context).showSnackBar(
                                     SnackBar(
-                                      backgroundColor:const Color(0xFFD3F4BF),
+                                      backgroundColor: const Color(0xFFD3F4BF),
                                       content: Text(
-                                        style: const TextStyle(color:Colors.black,),
+                                          style: const TextStyle(
+                                            color: Colors.black,
+                                          ),
                                           "${model.product!.name} sepete eklendi"),
                                     ),
                                   );
@@ -144,9 +154,10 @@ class ProductDetailView extends StatelessWidget {
                               ),
                               ElevatedButton(
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor:  const Color(0xFF6EDB2A),
+                                  backgroundColor: const Color(0xFF6EDB2A),
                                 ),
-                                onPressed: () => model.sendMessage(context, productId),
+                                onPressed: () =>
+                                    model.sendMessage(context, productId),
                                 child: const Text('Mesaj Gönder'),
                               ),
                             ],

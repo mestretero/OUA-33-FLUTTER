@@ -25,7 +25,21 @@ class ProductService {
 
   Future<void> deleteProduct(String productId) async {
     try {
-      await _firestore.collection(_collectionName).doc(productId).delete();
+      await _firestore
+          .collection(_collectionName)
+          .doc(productId)
+          .update({"is_active": false});
+    } catch (e) {
+      print("Error deleting product: $e");
+    }
+  }
+
+  Future<void> archiveProduct(String productId) async {
+    try {
+      await _firestore
+          .collection(_collectionName)
+          .doc(productId)
+          .update({"is_archive": false});
     } catch (e) {
       print("Error deleting product: $e");
     }

@@ -13,6 +13,7 @@ class ProductService {
   static final userService = getIt<UserService>();
   static final _firestore = FirebaseFirestore.instance;
   static const _collectionName = "products";
+  
 
   Future<void> addProduct(Product product) async {
     try {
@@ -30,6 +31,22 @@ class ProductService {
       print("Error deleting product: $e");
     }
   }
+  Future<int> getProductFavoriteCount(String productId) async {
+  try {
+    DocumentSnapshot productSnapshot =
+        await _firestore.collection(_collectionName).doc(productId).get();
+
+    if (productSnapshot.exists) {
+      return productSnapshot.get('count_of_favored') ?? 0;
+    } else {
+      throw Exception("Product does not exist!");
+    }
+  } catch (e) {
+    print("Error getting product favorite count: $e");
+    return 0;
+  }
+}
+
 
   Future<void> updateProduct(Product product) async {
     try {

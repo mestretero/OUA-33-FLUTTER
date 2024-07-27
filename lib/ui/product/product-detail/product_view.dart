@@ -10,12 +10,14 @@ class ProductDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    
     return ViewModelBuilder<ProductViewModel>.reactive(
       viewModelBuilder: () => ProductViewModel(),
       // ignore: deprecated_member_use
       onModelReady: (model) async => await model.fetchProductDetails(productId),
       builder: (context, model, widget) => Scaffold(
         appBar: AppBar(
+          
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),
             onPressed: () => Navigator.pop(context),
@@ -203,12 +205,16 @@ class ProductDetailView extends StatelessWidget {
                               ),
                               if(model.product!.uid ==
                                 model.authServices.user!.uid)
-                                const Column(
+                                 Column(
                                   children: [
-                                    Icon(Icons.favorite,
+                                    const Icon(Icons.favorite,
                                     color: Color(0xFF6EDB2A),
                                 ),
-                                Text("FAV SAYISI"),
+                                Text("${model.favoriteCount}",
+                                style: const TextStyle(color: Color(0xFF6EDB2A),
+                                fontSize: 16,
+                                ),
+                                ),
                                   ],
                                 ),
                              

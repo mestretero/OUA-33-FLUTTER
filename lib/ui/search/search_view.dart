@@ -34,8 +34,8 @@ class SearchView extends StatelessWidget {
                               model.navigationService.back();
                             },
                             icon: Icon(
-                              Icons.keyboard_arrow_left_rounded,
-                              size: 32,
+                              Icons.arrow_back_ios_new_rounded,
+                              size: 24,
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
@@ -106,6 +106,7 @@ class SearchView extends StatelessWidget {
                       return Container(
                         width: Scaler.width(1, context),
                         padding: const EdgeInsets.all(8),
+                        margin: const EdgeInsets.only(bottom: 16),
                         decoration: BoxDecoration(
                           border: Border.all(
                             color: Theme.of(context).colorScheme.secondary,

@@ -58,8 +58,8 @@ class SearchResultView extends StatelessWidget {
                               model.navigationService.back();
                             },
                             icon: Icon(
-                              Icons.keyboard_arrow_left_rounded,
-                              size: 32,
+                              Icons.arrow_back_ios_new_rounded,
+                              size: 24,
                               color: Theme.of(context).colorScheme.primary,
                             ),
                           ),
@@ -131,7 +131,7 @@ class SearchResultView extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,
       children: [
-        if (model.data!.users.isNotEmpty)
+        if (model.searchType == "all" || model.searchType == "profil")
           Text(
             "İlgili Profiller",
             style: TextStyle(
@@ -140,83 +140,110 @@ class SearchResultView extends StatelessWidget {
               fontWeight: FontWeight.w500,
             ),
           ),
-        if (model.data!.users.isNotEmpty)
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            padding: const EdgeInsets.only(top: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                ...model.data!.users.map(
-                  (item) => Container(
-                    padding: const EdgeInsets.all(8),
-                    margin: const EdgeInsets.only(right: 8),
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          width: 44,
-                          height: 44,
-                          margin: const EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(8),
-                            image: DecorationImage(
-                              image: NetworkImage(
-                                item.imageUrl,
+
+        if (model.searchType == "all" || model.searchType == "profil")
+          model.data!.users.isNotEmpty
+              ? SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.only(top: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      ...model.data!.users.map(
+                        (item) => GestureDetector(
+                          onTap: () => model.goToProfile(item.uid),
+                          child: Container(
+                            padding: const EdgeInsets.all(8),
+                            margin: const EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.secondary,
                               ),
-                              fit: BoxFit.cover,
+                              borderRadius: BorderRadius.circular(16),
+                            ),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: 44,
+                                  height: 44,
+                                  margin: const EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(8),
+                                    image: DecorationImage(
+                                      image: NetworkImage(
+                                        item.imageUrl,
+                                      ),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(
+                                  width: Scaler.width(0.3, context),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${item.name.capitalize()} ${item.surname.capitalize()}",
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Text(
+                                        "@${item.name.toLowerCase()}_${item.surname.toLowerCase()}",
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          fontSize: 12,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_circle_right,
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  size: 32,
+                                ),
+                              ],
                             ),
                           ),
                         ),
-                        SizedBox(
-                          width: Scaler.width(0.3, context),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${item.name.capitalize()} ${item.surname.capitalize()}",
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                              Text(
-                                "@${item.name.toLowerCase()}_${item.surname.toLowerCase()}",
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
+                      ),
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      Icon(
+                        Icons.file_copy_outlined,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        size: 48,
+                      ),
+                      Text(
+                        "Bu aramaya göre \n profil bulunamadı...",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontSize: 16,
                         ),
-                        IconButton(
-                          onPressed: () => model.goToProfile(item.uid),
-                          icon: Icon(
-                            Icons.arrow_circle_right,
-                            color: Theme.of(context).colorScheme.secondary,
-                            size: 32,
-                          ),
-                        )
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
 
         const SizedBox(height: 16),
 
-        if (model.data!.products.isNotEmpty)
+        if (model.searchType == "all" || model.searchType == "product")
           Padding(
             padding: const EdgeInsets.only(bottom: 8),
             child: Text(
@@ -229,119 +256,170 @@ class SearchResultView extends StatelessWidget {
             ),
           ),
 
-        model.searchType == "all"
-            ? SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.only(top: 8),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    ...model.data!.products.map(
-                      (item) => GestureDetector(
-                        onTap: () => model.goToProductDetail(item),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          margin: const EdgeInsets.only(right: 8),
-                          width: Scaler.width(0.4, context),
-                          height: Scaler.width(0.6, context),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: Scaler.width(1, context),
-                                height: Scaler.width(0.32, context),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  image: DecorationImage(
-                                    image: NetworkImage(item.mainImageUrl),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                item.name,
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Text(
-                                "${item.price} ${item.priceUnit}",
-                                style: TextStyle(
+        model.data!.products.isNotEmpty
+            ? model.searchType == "all"
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        ...model.data!.products.map(
+                          (item) => GestureDetector(
+                            onTap: () => model.goToProductDetail(item),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              margin: const EdgeInsets.only(right: 8),
+                              width: Scaler.width(0.4, context),
+                              height: Scaler.width(0.55, context),
+                              decoration: BoxDecoration(
+                                border: Border.all(
                                   color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
+                                      Theme.of(context).colorScheme.secondary,
                                 ),
+                                borderRadius: BorderRadius.circular(8),
                               ),
-                            ],
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: Scaler.width(1, context),
+                                        height: Scaler.width(0.32, context),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          image: DecorationImage(
+                                            image:
+                                                NetworkImage(item.mainImageUrl),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        item.name,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    "${item.price} ${item.priceUnit}",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+                : SizedBox(
+                    height: Scaler.height(
+                        model.data!.posts.length.ceilToDouble(), context),
+                    child: Wrap(
+                      spacing: 10,
+                      runSpacing: 10,
+                      crossAxisAlignment: WrapCrossAlignment.center,
+                      children: [
+                        ...model.data!.products.map(
+                          (item) => GestureDetector(
+                            onTap: () => model.goToProductDetail(item),
+                            child: Container(
+                              padding: const EdgeInsets.all(8),
+                              width: Scaler.width(0.4, context),
+                              height: Scaler.width(0.55, context),
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                ),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        width: Scaler.width(1, context),
+                                        height: Scaler.width(0.32, context),
+                                        decoration: BoxDecoration(
+                                          borderRadius:
+                                              BorderRadius.circular(4),
+                                          image: DecorationImage(
+                                            image:
+                                                NetworkImage(item.mainImageUrl),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Text(
+                                        item.name,
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  Text(
+                                    "${item.price} ${item.priceUnit}",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    )
-                  ],
-                ),
-              )
-            : SizedBox(
-                height: Scaler.height(
-                    model.data!.posts.length.ceilToDouble(), context),
-                child: Wrap(
-                  spacing: 10,
-                  runSpacing: 10,
-                  crossAxisAlignment: WrapCrossAlignment.center,
+                      ],
+                    ),
+                  )
+            : Center(
+                child: Column(
                   children: [
-                    ...model.data!.products.map(
-                      (item) => GestureDetector(
-                        onTap: () => model.goToProductDetail(item),
-                        child: Container(
-                          padding: const EdgeInsets.all(8),
-                          width: Scaler.width(0.4, context),
-                          height: Scaler.width(0.6, context),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context).colorScheme.secondary,
-                            ),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                width: Scaler.width(1, context),
-                                height: Scaler.width(0.32, context),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  image: DecorationImage(
-                                    image: NetworkImage(item.mainImageUrl),
-                                    fit: BoxFit.cover,
-                                  ),
-                                ),
-                              ),
-                              Text(
-                                item.name,
-                                style: TextStyle(
-                                  color: Theme.of(context).colorScheme.primary,
-                                  fontSize: 14,
-                                ),
-                              ),
-                              Text(
-                                "${item.price} ${item.priceUnit}",
-                                style: TextStyle(
-                                  color:
-                                      Theme.of(context).colorScheme.onPrimary,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                    const SizedBox(height: 16),
+                    Icon(
+                      Icons.file_copy_outlined,
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      size: 48,
+                    ),
+                    Text(
+                      "Bu aramaya göre \n ürün bulunamadı...",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontSize: 16,
                       ),
                     ),
                   ],
@@ -350,7 +428,7 @@ class SearchResultView extends StatelessWidget {
 
         const SizedBox(height: 16),
 
-        if (model.data!.posts.isNotEmpty)
+        if (model.searchType == "all" || model.searchType == "post")
           Text(
             "İlgili Gönderiler",
             style: TextStyle(
@@ -360,40 +438,65 @@ class SearchResultView extends StatelessWidget {
             ),
           ),
         //
-        if (model.data!.posts.isNotEmpty)
-          SizedBox(
-            height:
-                Scaler.height(model.data!.posts.length.ceilToDouble(), context),
-            child: GridView.count(
-              crossAxisCount: 3,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              padding: const EdgeInsets.only(top: 8),
-              children: [
-                ...model.data!.posts.map(
-                  (item) => Container(
-                    padding: const EdgeInsets.all(4),
-                    alignment: Alignment.topRight,
-                    width: Scaler.width(0.27, context),
-                    height: Scaler.width(0.27, context),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(8),
-                      image: DecorationImage(
-                        image: NetworkImage(item.medias[0].url),
-                        fit: BoxFit.cover,
+        if (model.searchType == "all" || model.searchType == "post")
+          model.data!.posts.isNotEmpty
+              ? SizedBox(
+                  height: Scaler.height(
+                      (((model.data!.posts.length + 2) / 3) * 0.2), context),
+                  child: GridView.count(
+                    crossAxisCount: 3,
+                    crossAxisSpacing: 10,
+                    mainAxisSpacing: 10,
+                    padding: const EdgeInsets.only(top: 8),
+                    children: [
+                      ...model.data!.posts.map(
+                        (item) => GestureDetector(
+                          onTap: () => model.goToPostDetail(item.id ?? ""),
+                          child: Container(
+                            padding: const EdgeInsets.all(4),
+                            alignment: Alignment.topRight,
+                            width: Scaler.width(0.27, context),
+                            height: Scaler.width(0.27, context),
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              image: DecorationImage(
+                                image: NetworkImage(item.medias[0].url),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                            child: item.medias.length > 1
+                                ? Icon(
+                                    Icons.collections_sharp,
+                                    color:
+                                        Theme.of(context).colorScheme.primary,
+                                  )
+                                : Container(),
+                          ),
+                        ),
                       ),
-                    ),
-                    child: item.medias.length > 1
-                        ? Icon(
-                            Icons.collections_sharp,
-                            color: Theme.of(context).colorScheme.primary,
-                          )
-                        : Container(),
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Column(
+                    children: [
+                      const SizedBox(height: 16),
+                      Icon(
+                        Icons.file_copy_outlined,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        size: 48,
+                      ),
+                      Text(
+                        "Bu aramaya göre \n gönderi bulunamadı...",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: Theme.of(context).colorScheme.onPrimary,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
       ],
     );
   }

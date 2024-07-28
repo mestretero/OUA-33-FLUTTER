@@ -104,12 +104,23 @@ class SearchResultViewModel extends AppBaseViewModel {
   }
 
   void goToProductDetail(Product product) {
-    // navigationService.navigateTo(
-    //   Routes.produtDetailView,
-    //   arguments: ProductDetailViewArguments(
-    //     product: product,
-    //   ),
-    // );
+    if (product.id!.isNotEmpty) {
+      navigationService.navigateTo(
+        Routes.productDetailView,
+        arguments: ProductDetailViewArguments(
+          productId: product.id ?? "",
+        ),
+      );
+    }
+  }
+
+  void goToPostDetail(String postId) {
+    navigationService.navigateTo(
+      Routes.postDetailView,
+      arguments: PostDetailViewArguments(
+        postId: postId,
+      ),
+    );
   }
 
   void search() {

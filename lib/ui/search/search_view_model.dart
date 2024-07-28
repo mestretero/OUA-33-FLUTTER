@@ -111,24 +111,29 @@ class SearchViewModel extends AppBaseViewModel {
     }
   }
 
-  void search() {
+  void search(context) {
+    Navigator.pop(context);
+
     navigationService.navigateTo(
       Routes.searchResultView,
       arguments: SearchResultViewArguments(
         searchText: searchController.text,
         searchType: _filter,
-        location: _location == "Lütfen Seçiniz" ? " " : _location,
+        location: _location == "Lütfen Seçiniz" ? "" : _location,
         category: _selectedCategory,
         subcategory: _selectedSubCategory,
         subSubCategory: _selectedSubSubCategory,
       ),
     );
+
+    searchController.clear();
+    notifyListeners();
   }
 
-  void showFilterDialog(BuildContext context) {
+  void showFilterDialog(BuildContext contextmain) {
     String filter = "all";
     showModalBottomSheet(
-      context: context,
+      context: contextmain,
       useSafeArea: true,
       builder: (
         BuildContext bc,
@@ -392,7 +397,7 @@ class SearchViewModel extends AppBaseViewModel {
                     onTap: () {
                       setFilter(filter, context);
                       notifyListeners();
-                      search();
+                      search(context);
                     },
                     isExpanded: true,
                     buttonStyle: 1,

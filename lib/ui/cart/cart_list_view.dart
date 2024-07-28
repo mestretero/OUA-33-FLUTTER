@@ -19,6 +19,7 @@ class CartListView extends StatelessWidget {
             icon:const SizedBox(
               width: 40,
               height: 40,
+
               child: Icon( Icons.keyboard_arrow_left_rounded,)),
             color:const Color(0xFF6EDB2A), 
 

@@ -5,35 +5,71 @@ import 'package:oua_flutter33/app/app_base_view_model.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/cart_%C4%B1tem_model.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
+import 'package:oua_flutter33/core/models/user_model.dart';
 import 'package:oua_flutter33/core/services/cart_service.dart';
 import 'package:oua_flutter33/core/services/product_service.dart';
 import 'package:oua_flutter33/ui/chat_list/chat/chat_view.dart';
 
 class ProductViewModel extends AppBaseViewModel {
+  User? _user;
+  User? get user => _user;
+  int favoriteCount = 0;
+
   final ProductService _productService = getIt<ProductService>();
   final CartService cartService = getIt<CartService>();
   Product? product;
-
-  init(BuildContext context) {}
 
   Future<void> fetchProductDetails(String productId) async {
     setBusy(true);
     try {
       product = await _productService.getProductById(productId);
+      favoriteCount = await _productService.getProductFavoriteCount(productId);
       notifyListeners();
     } catch (e) {
       print("Error fetching product details: $e");
-    } finally {
-      setBusy(false);
     }
   }
 
   Future<void> updateProduct(Product product) async {
+    await _productService.addProduct(product);
+  }
+
+  bool isFavored(Product product) {
+    return user != null &&
+        user!.favoredProductIds.any((element) => element.id == product.id);
+  }
+
+  Future<void> favored(Product product) async {
     try {
-      await _productService.addProduct(product);
-      notifyListeners();
-    } catch (e) {
-      print("Error updating product: $e");
+      if (user != null) {
+        await _productService.addProductToFavorites(product.id);
+        user!.favoredProductIds.add(
+          ListObjectOfIds(
+            id: product.id ?? "",
+            title: product.name,
+            imageUrl: product.mainImageUrl,
+          ),
+        );
+        notifyListeners();
+      } else {
+        print("Error: User is null");
+      }
+    } on Exception catch (e) {
+      print("Failed to add product to favorites: $e");
+    }
+  }
+
+  Future<void> unfavored(String? productId) async {
+    try {
+      if (productId != null && productId.isNotEmpty && user != null) {
+        await _productService.removeProductFromFavorites(productId);
+        user!.favoredProductIds.removeWhere((e) => e.id == productId);
+        notifyListeners();
+      } else {
+        print("Error: Product ID is null or User is null");
+      }
+    } on Exception catch (e) {
+      print("Failed to remove product from favorites: $e");
     }
   }
 
@@ -93,13 +129,6 @@ class ProductViewModel extends AppBaseViewModel {
     }
   }
 
-  void editProduct() {
-    // Implement edit product logic
-  }
-
-  // void deleteProduct() {
-  // Implement delete product logic
-  //}
   Future<void> deleteProduct(String productId) async {
     try {
       await _productService.deleteProduct(productId);

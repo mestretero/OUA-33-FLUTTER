@@ -85,27 +85,7 @@ class ProfileView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               _popupMenuButton(context, model),
-              PopupMenuButton<String>(
-                onSelected: (String result) {
-                  if (result == 'Ayarlar') {
-                    // Ayarlar sayfasına yönlendirin veya işlemleri burada yapın
-                    print('Ayarlar seçildi');
-                  } else if (result == 'Yardım ve Destek') {
-                    // Yardım ve Destek sayfasına yönlendirin veya işlemleri burada yapın
-                    print('Yardım ve Destek seçildi');
-                  }
-                },
-                itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                  const PopupMenuItem<String>(
-                    value: 'Ayarlar',
-                    child: Text('Ayarlar'),
-                  ),
-                  const PopupMenuItem<String>(
-                    value: 'Yardım ve Destek',
-                    child: Text('Yardım ve Destek'),
-                  ),
-                ],
-              ),
+              _popupSettingsMenuButtons(context, model),
             ],
           )
       ],
@@ -306,6 +286,76 @@ class ProfileView extends StatelessWidget {
     );
   }
 
+  Widget _popupSettingsMenuButtons(
+      BuildContext context, ProfileViewModel model) {
+    return MenuAnchor(
+      alignmentOffset: Offset.fromDirection(0, -100),
+      style: const MenuStyle(
+          elevation: WidgetStatePropertyAll(0.7),
+          padding: WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 8))),
+      builder:
+          (BuildContext context, MenuController controller, Widget? child) {
+        return IconButton(
+          onPressed: () {
+            if (controller.isOpen) {
+              controller.close();
+            } else {
+              controller.open();
+            }
+          },
+          icon: Icon(
+            Icons.settings,
+            color: Theme.of(context).colorScheme.onPrimary,
+            size: 24,
+          ),
+        );
+      },
+      menuChildren: [
+        PopupMenuItem(
+          enabled: false,
+          onTap: () {},
+          child: ListTile(
+            leading: Icon(
+              Icons.support_agent_rounded,
+              color: Theme.of(context).colorScheme.primary,
+            ),
+            title: Text(
+              'Yardım ve Destek',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ),
+        PopupMenuItem(
+          onTap: () {
+            model.logOut(context);
+          },
+          child: const ListTile(
+            shape: Border(
+              top: BorderSide(
+                color: Colors.red,
+                width: 1,
+              ),
+            ),
+            leading: Icon(
+              Icons.logout_outlined,
+              color: Colors.red,
+            ),
+            title: Text(
+              'Çıkış',
+              style: TextStyle(
+                color: Colors.red,
+                fontSize: 14,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
   Widget _buildMyProfileButtons(BuildContext context, ProfileViewModel model) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -397,12 +447,14 @@ class ProfileView extends StatelessWidget {
 
   Widget _buildPostAndProduct(BuildContext context, ProfileViewModel model) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSegmentedControl(context, model),
 
         //Grid
         SizedBox(
-          height: Scaler.height(model.posts.length.ceilToDouble(), context),
+          height:
+              Scaler.height((((model.posts.length + 2) / 3) * 0.2), context),
           child: model.filter == "posts"
               ? GridView.count(
                   crossAxisCount: 3,
@@ -411,24 +463,27 @@ class ProfileView extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   children: [
                     ...model.posts.map(
-                      (item) => Container(
-                        padding: const EdgeInsets.all(4),
-                        alignment: Alignment.topRight,
-                        width: Scaler.width(0.27, context),
-                        height: Scaler.width(0.27, context),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(8),
-                          image: DecorationImage(
-                            image: NetworkImage(item.medias[0].url),
-                            fit: BoxFit.cover,
+                      (item) => GestureDetector(
+                        onTap: () => model.goToPostDetail(item.id),
+                        child: Container(
+                          padding: const EdgeInsets.all(4),
+                          alignment: Alignment.topRight,
+                          width: Scaler.width(0.27, context),
+                          height: Scaler.width(0.27, context),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(8),
+                            image: DecorationImage(
+                              image: NetworkImage(item.medias[0].url),
+                              fit: BoxFit.cover,
+                            ),
                           ),
+                          child: item.medias.length > 1
+                              ? Icon(
+                                  Icons.collections_sharp,
+                                  color: Theme.of(context).colorScheme.primary,
+                                )
+                              : Container(),
                         ),
-                        child: item.medias.length > 1
-                            ? Icon(
-                                Icons.collections_sharp,
-                                color: Theme.of(context).colorScheme.primary,
-                              )
-                            : Container(),
                       ),
                     ),
                   ],
@@ -444,7 +499,7 @@ class ProfileView extends StatelessWidget {
                         child: Container(
                           padding: const EdgeInsets.all(8),
                           width: Scaler.width(0.4, context),
-                          height: Scaler.width(0.6, context),
+                          height: Scaler.width(0.55, context),
                           decoration: BoxDecoration(
                             border: Border.all(
                               color: Theme.of(context).colorScheme.secondary,
@@ -470,6 +525,7 @@ class ProfileView extends StatelessWidget {
                                 style: TextStyle(
                                   color: Theme.of(context).colorScheme.primary,
                                   fontSize: 14,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                               Text(

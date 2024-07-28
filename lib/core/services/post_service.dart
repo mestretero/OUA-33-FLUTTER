@@ -63,6 +63,7 @@ class PostService {
     QuerySnapshot querySnapshot = await _firestore
         .collection(_collectionName)
         .where('uid', isEqualTo: uid)
+        .orderBy("create_date", descending: true)
         .get();
     return querySnapshot.docs
         .map((doc) => Post.fromDocumentSnapshot(doc))
@@ -150,7 +151,7 @@ class PostService {
     String currentUserId = authService.user!.uid;
     DocumentReference userRef =
         _firestore.collection("users").doc(currentUserId);
-        
+
     DocumentReference postRef =
         _firestore.collection(_collectionName).doc(postId);
 

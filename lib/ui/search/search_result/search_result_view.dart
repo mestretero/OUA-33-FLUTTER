@@ -117,7 +117,7 @@ class SearchResultView extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 16),
-                      _buildListProducts(context, model),
+                      _buildListResult(context, model),
                     ],
                   ),
                 ),
@@ -126,7 +126,7 @@ class SearchResultView extends StatelessWidget {
     );
   }
 
-  Widget _buildListProducts(BuildContext context, SearchResultViewModel model) {
+  Widget _buildListResult(BuildContext context, SearchResultViewModel model) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.start,

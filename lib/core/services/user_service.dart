@@ -32,7 +32,8 @@ class UserService {
       "surname": auth.surname.toLowerCase(),
       "email": auth.email,
       "phone_number": "",
-      "image_url": "https://firebasestorage.googleapis.com/v0/b/ouaflutter33.appspot.com/o/images%2Fnone-pp.png?alt=media&token=64eeecb0-8d11-4b3c-ab42-2225f5857472",
+      "image_url":
+          "https://firebasestorage.googleapis.com/v0/b/ouaflutter33.appspot.com/o/images%2Fnone-pp.png?alt=media&token=64eeecb0-8d11-4b3c-ab42-2225f5857472",
       "birth_day": 0,
       "create_date": 0,
       "isActive": true,
@@ -182,13 +183,11 @@ class UserService {
 
   Future<User?> getUserByProductId(String productId) async {
     try {
-    
       DocumentSnapshot productDoc =
           await firestore.collection(collectionName).doc(productId).get();
       if (productDoc.exists) {
-      
         String uid = productDoc['uid'];
-       
+
         DocumentSnapshot userDoc =
             await firestore.collection('users').doc(uid).get();
         return User.fromDocumentSnapshot(userDoc);
@@ -260,5 +259,31 @@ class UserService {
 
     List<dynamic> currentUserFollowerIds = currentUserSnapshot['follower_ids'];
     return currentUserFollowerIds.any((item) => item['id'] == targetUserId);
+  }
+
+  Future<String> updateProfileImage(File imageFile, User user) async {
+    final path = "images/user_profile/${user.uid}";
+
+    try {
+      // Eski resmi sil
+      if (user.imageUrl.isNotEmpty) {
+        await firestorage.refFromURL(user.imageUrl).delete();
+      }
+
+      // Yeni resmi yükle
+      Reference storageRef = firestorage.ref().child(path);
+
+      await storageRef.putFile(imageFile);
+      String newImageUrl = await storageRef.getDownloadURL();
+
+      // Kullanıcı belgesini güncelle
+      await firestore.collection(collectionName).doc(user.uid).update({
+        'image_url': newImageUrl,
+      });
+
+      return newImageUrl;
+    } catch (e) {
+      return "";
+    }
   }
 }

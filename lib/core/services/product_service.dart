@@ -88,6 +88,7 @@ class ProductService {
       QuerySnapshot querySnapshot = await _firestore
           .collection(_collectionName)
           .where('uid', isEqualTo: uid)
+          .orderBy("create_date", descending: true)
           .get();
 
       return querySnapshot.docs

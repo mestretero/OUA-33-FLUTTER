@@ -43,17 +43,12 @@ class EditedProfileView extends StatelessWidget {
 
   Widget _buildEditForm(
       BuildContext context, EditedProfileViewModel model, User? user) {
-    final formKey = GlobalKey<FormState>();
-    final nameController = TextEditingController();
-    final surnameController = TextEditingController();
-    final emailController = TextEditingController();
-
-    nameController.text = user!.name.capitalize();
-    surnameController.text = user.surname.capitalize();
-    emailController.text = user.email;
+    model.nameController.text = user!.name.capitalize();
+    model.surnameController.text = user.surname.capitalize();
+    model.emailController.text = user.email;
 
     return Form(
-      key: formKey,
+      key: model.formKey,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -61,6 +56,8 @@ class EditedProfileView extends StatelessWidget {
           Container(
             height: 104,
             width: 104,
+            alignment: Alignment.bottomRight,
+            padding: const EdgeInsets.all(0),
             decoration: BoxDecoration(
               border: Border.all(
                 color: Theme.of(context).colorScheme.onPrimary,
@@ -72,10 +69,26 @@ class EditedProfileView extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
+            child: SizedBox(
+              width: 32,
+              height: 32,
+              child: IconButton(
+                style: IconButton.styleFrom(
+                  backgroundColor: Theme.of(context).colorScheme.secondary,
+                  padding: const EdgeInsets.all(0),
+                ),
+                onPressed: () => model.pickImage(context),
+                icon: Icon(
+                  Icons.edit_outlined,
+                  color: Theme.of(context).colorScheme.primary,
+                  size: 16,
+                ),
+              ),
+            ),
           ),
           const SizedBox(height: 8),
           MyTextField(
-            controller: nameController,
+            controller: model.nameController,
             name: "Name",
             hintText: "Name",
             inputType: TextInputType.name,
@@ -84,7 +97,7 @@ class EditedProfileView extends StatelessWidget {
             textCapitalization: TextCapitalization.words,
           ),
           MyTextField(
-            controller: surnameController,
+            controller: model.surnameController,
             name: "Surname",
             hintText: "Surname",
             inputType: TextInputType.name,
@@ -93,7 +106,7 @@ class EditedProfileView extends StatelessWidget {
             textCapitalization: TextCapitalization.words,
           ),
           MyTextField(
-            controller: emailController,
+            controller: model.emailController,
             name: "Email",
             hintText: "Email",
             inputType: TextInputType.emailAddress,
@@ -102,11 +115,7 @@ class EditedProfileView extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           MyButton(
-            onTap: () {
-              if (formKey.currentState!.validate()) {
-                //User update fonksiyonu
-              }
-            },
+            onTap: () => model.updateProfile(context),
             text: "Tamamla",
             buttonStyle: 1,
             isExpanded: true,

@@ -24,10 +24,10 @@ class User {
   });
 
   final String uid;
-  final String name;
-  final String surname;
-  final String email;
-  final String imageUrl;
+  String name;
+  String surname;
+  String email;
+  String imageUrl;
   final String phoneNumber;
   final int birthDay;
   final int createDate;

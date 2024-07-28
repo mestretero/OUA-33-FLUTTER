@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/app/app_base_view_model.dart';
+import 'package:oua_flutter33/common/helpers/scaler.dart';
+import 'package:oua_flutter33/common/helpers/toast_functions.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/post_model.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
@@ -57,26 +60,32 @@ class ProfileViewModel extends AppBaseViewModel {
   }
 
   void shareLink(BuildContext context) {
-    showDialog<String>(
-      context: context,
-      builder: (BuildContext context) => Dialog(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('https://master-hands/uid:${user?.uid}'),
-              const SizedBox(height: 15),
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: const Text('Close'),
-              ),
-            ],
+    final scaffold = ScaffoldMessenger.of(context);
+
+    scaffold.showSnackBar(
+      SnackBar(
+        elevation: 0,
+        padding: const EdgeInsets.all(16),
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        content: SizedBox(
+          width: Scaler.width(0.7, context),
+          child: Text(
+            'https://master-hands/uid:${user?.uid}',
+            style: TextStyle(color: Theme.of(context).colorScheme.primary),
           ),
+        ),
+        action: SnackBarAction(
+          label: "COPY",
+          textColor: Theme.of(context).colorScheme.primary,
+          onPressed: () {
+            Clipboard.setData(
+              ClipboardData(text: 'https://master-hands/uid:${user?.uid}'),
+            );
+          },
         ),
       ),
     );
@@ -92,14 +101,36 @@ class ProfileViewModel extends AppBaseViewModel {
   }
 
   void goToProductDetail(Product product) {
-    // navigationService.navigateTo(
-    //   Routes.produtDetailView,
-    //   arguments: ProductDetailViewArguments(
-    //     product: product,
-    //   ),
-    // );
+    navigationService.navigateTo(
+      Routes.productDetailView,
+      arguments: ProductDetailViewArguments(
+        productId: product.id ?? "",
+      ),
+    );
   }
-  
+
+  void goToPostDetail(String? postId) {
+    navigationService.navigateTo(
+      Routes.postDetailView,
+      arguments: PostDetailViewArguments(
+        postId: postId ?? "",
+      ),
+    );
+  }
+
+  void logOut(BuildContext context) {
+    final scaffold = ScaffoldMessenger.of(context);
+
+    MyToast.showLoadingToast(scaffold, context, "");
+
+    Future.delayed(
+      const Duration(seconds: 2),
+      () async {
+        await authServices.logOut();
+        MyToast.closeToast(scaffold);
+      },
+    );
+  }
 
   Future<void> followUser() async {
     if (user != null) {

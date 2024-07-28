@@ -77,17 +77,17 @@ class User {
     Map<String, dynamic> data = doc.data() as Map<String, dynamic>;
     return User(
       uid: doc.id,
-      name: data['name'] as String,
-      surname: data['surname'] as String,
-      email: data['email'] as String,
-      imageUrl: data['image_url'] as String,
-      phoneNumber: data['phone_number'] as String,
-      birthDay: data['birth_day'] as int,
-      createDate: data['create_date'] as int,
-      isActive: data['is_active'] as bool,
-      followerCount: data['follower_count'] as int,
-      productCount: data['product_count'] as int,
-      postCount: data['post_count'] as int,
+      name: data['name'] ?? '',
+      surname: data['surname'] ?? '',
+      email: data['email'] ?? '',
+      imageUrl: data['image_url'] ?? '',
+      phoneNumber: data['phone_number'] ?? '',
+      birthDay: data['birth_day'] ?? 0,
+      createDate: data['create_date'] ?? 0,
+      isActive: data['is_active'] ?? false,
+      followerCount: data['follower_count'] ?? 0,
+      productCount: data['product_count'] ?? 0,
+      postCount: data['post_count'] ?? 0,
       followerIds: (data['follower_ids'] as List)
           .map((item) => ListObjectOfIds.fromMap(item))
           .toList(),

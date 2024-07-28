@@ -22,12 +22,13 @@ class HomeView extends StatelessWidget {
       viewModelBuilder: () => HomeViewModel(),
       onModelReady: (viewModel) => viewModel.initialise(),
       builder: (context, model, child) => Scaffold(
-        body: SafeArea(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
-            child: model.userData == null
-                ? const Center(child: CircularProgressIndicator())
-                : RefreshIndicator(
+        body: model.userData == null
+            ? const Center(child: CircularProgressIndicator())
+            : SafeArea(
+                child: SingleChildScrollView(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 24, vertical: 48),
+                  child: RefreshIndicator(
                     onRefresh: () => model.refreshPosts(),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,13 +42,16 @@ class HomeView extends StatelessWidget {
                       ],
                     ),
                   ),
-          ),
-        ),
+                ),
+              ),
       ),
     );
   }
 
   Widget _buildTopBar(BuildContext context, HomeViewModel model, User? user) {
+    if (user == null) {
+      return Container();
+    }
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -64,9 +68,13 @@ class HomeView extends StatelessWidget {
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(999.0),
-                image: DecorationImage(
-                  image: NetworkImage(user!.imageUrl),
-                ),
+                image: user.imageUrl.isNotEmpty
+                    ? DecorationImage(
+                        image: NetworkImage(user.imageUrl),
+                      )
+                    : const DecorationImage(
+                        image: AssetImage("assets/images/none-pp.png"),
+                      ),
               ),
             ),
             const SizedBox(width: 8),
@@ -198,7 +206,7 @@ class HomeView extends StatelessWidget {
                         Row(
                           children: [
                             GestureDetector(
-                              onTap: () => model.goToProfil(item.user),
+                              onTap: () => model.goToProfil(item.user?.uid),
                               child: Container(
                                 height: 48,
                                 width: 48,
@@ -345,13 +353,7 @@ class HomeView extends StatelessWidget {
               children: List.generate(post.relatedProducts.length, (i) {
                 final element = post.relatedProducts[i];
                 return InkWell(
-                  onTap: () {
-                    model.navigationService.navigateTo(
-                      Routes.productDetailView,
-                      arguments: ProductDetailViewArguments(
-                          productId: element.produtId),
-                    );
-                  },
+                  onTap: () => model.goToProductDetail(element.productId),
                   child: Container(
                     margin: (post.relatedProducts.length - 1) == i
                         ? null

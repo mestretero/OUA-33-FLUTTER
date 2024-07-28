@@ -119,7 +119,7 @@ class _PostCaroseulState extends State<PostCarousel> {
                     model.navigationService.navigateTo(
                       Routes.productDetailView,
                       arguments: ProductDetailViewArguments(
-                          productId: element.produtId),
+                          productId: element.productId),
                     );
                   },
                   child: Container(

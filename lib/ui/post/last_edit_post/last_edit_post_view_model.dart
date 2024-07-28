@@ -99,7 +99,7 @@ class LastEditPostViewModel extends AppBaseViewModel {
     for (var item in products) {
       relatedProducts.add(
         RelatedProducts(
-          produtId: item.id.toString(),
+          productId: item.id.toString(),
           name: item.name,
           imageUrl: item.mainImageUrl,
         ),

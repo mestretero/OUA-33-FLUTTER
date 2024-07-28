@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/comment_model.dart';
 import 'package:oua_flutter33/core/models/post_model.dart';
+import 'package:oua_flutter33/core/models/response_model.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
 import 'package:oua_flutter33/core/models/view_model/comment_view.dart';
 import 'package:oua_flutter33/core/models/view_model/post_view_model.dart';
@@ -74,18 +75,17 @@ class PostService {
         .collection(_collectionName)
         .doc(postId)
         .collection('comments');
-    QuerySnapshot querySnapshot = await commentCollection.get();
+    QuerySnapshot querySnapshot =
+        await commentCollection.orderBy("create_date", descending: true).get();
 
-    List<CommentView> list = [];
-
-    querySnapshot.docs.map((doc) async {
+    List<Future<CommentView>> list = querySnapshot.docs.map((doc) async {
       Comment comment = Comment.fromDocumentSnapshot(doc);
       User? user = await _userService.getUserDetail(comment.uid);
 
-      list.add(CommentView(user: user!, comment: comment));
-    });
+      return CommentView(user: user!, comment: comment);
+    }).toList();
 
-    return list;
+    return await Future.wait(list);
   }
 
   // Post'a bağlı peopleWhoLike'ı getirme
@@ -150,6 +150,7 @@ class PostService {
     String currentUserId = authService.user!.uid;
     DocumentReference userRef =
         _firestore.collection("users").doc(currentUserId);
+        
     DocumentReference postRef =
         _firestore.collection(_collectionName).doc(postId);
 
@@ -159,6 +160,8 @@ class PostService {
       if (!userSnapshot.exists) {
         throw Exception("User does not exist!");
       }
+
+      User user = User.fromDocumentSnapshot(userSnapshot);
 
       // Ürün belgesini getir
       DocumentSnapshot postSnapshot = await transaction.get(postRef);
@@ -181,6 +184,16 @@ class PostService {
 
       // Ürünün favori sayısını arttır
       transaction.update(postRef, {'count_of_likes': FieldValue.increment(1)});
+
+      // Ürünü favori bilgisini ekler
+
+      await postRef.collection("people_who_like").add(PepoleWhoLike(
+            uid: post.uid,
+            name: user.name,
+            surname: user.surname,
+            imageUrl: user.imageUrl,
+            createDate: Timestamp.now(),
+          ).toMap());
     });
   }
 
@@ -219,8 +232,43 @@ class PostService {
 
       // Ürünün favori sayısını azalt
       transaction.update(postRef, {'count_of_likes': FieldValue.increment(-1)});
+
+      // Ürünü eklenen collectiondan silme
+      QuerySnapshot querySnapshot = await postRef
+          .collection("people_who_like")
+          .where("uid", isEqualTo: post.uid)
+          .get();
+
+      for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+        await doc.reference.delete();
+      }
     });
 
     //Add notification
+  }
+
+  Future<ResponseModel> sendComment(String postId, Comment comment) async {
+    DocumentReference postRef =
+        _firestore.collection(_collectionName).doc(postId);
+
+    try {
+      await _firestore
+          .collection(_collectionName)
+          .doc(postId)
+          .collection("comments")
+          .add(comment.toMap());
+
+      await _firestore.runTransaction((transaction) async {
+        transaction
+            .update(postRef, {'count_of_comments': FieldValue.increment(-1)});
+      });
+
+      return ResponseModel(success: true, message: "");
+    } catch (e) {
+      return ResponseModel(
+        success: false,
+        message: "Error adding post: $e",
+      );
+    }
   }
 }

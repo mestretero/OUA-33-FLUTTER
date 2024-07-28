@@ -35,6 +35,10 @@ class MyToast extends StatelessWidget {
     BuildContext context,
     String message,
   ) {
+    if (message.isEmpty) {
+      message = "İşleminiz gerçleştiriliyor...";
+    }
+
     scaffold.showSnackBar(
       SnackBar(
         elevation: 0,

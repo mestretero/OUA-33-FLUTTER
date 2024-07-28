@@ -10,8 +10,8 @@ class Post {
   final List<Media> medias;
   final List<RelatedProducts> relatedProducts;
   final String location;
-  final int countOfLikes;
-  final int countOfComments;
+  int countOfLikes;
+  int countOfComments;
 
   Post({
     this.id,
@@ -44,18 +44,18 @@ class Post {
   factory Post.fromMap(Map<String, dynamic> map, {String? id}) {
     return Post(
       id: id,
-      uid: map['uid'],
-      createDate: map['create_date'],
-      isActive: map['is_active'],
-      explanation: map['explanation'],
+      uid: map['uid'] ?? '',
+      createDate: map['create_date'] ?? Timestamp.now(),
+      isActive: map['is_active'] ?? false,
+      explanation: map['explanation'] ?? '',
       medias:
           (map['medias'] as List).map((media) => Media.fromMap(media)).toList(),
       relatedProducts: (map['related_products'] as List)
           .map((product) => RelatedProducts.fromMap(product))
           .toList(),
-      location: map['location'],
-      countOfLikes: map['count_of_likes'],
-      countOfComments: map['count_of_comments'],
+      location: map['location'] ?? '',
+      countOfLikes: map['count_of_likes'] ?? 0,
+      countOfComments: map['count_of_comments'] ?? 0,
     );
   }
 
@@ -65,29 +65,29 @@ class Post {
 }
 
 class RelatedProducts {
-  final String produtId;
+  final String productId;
   final String name;
   final String imageUrl;
 
   RelatedProducts({
-    required this.produtId,
+    required this.productId,
     required this.name,
     required this.imageUrl,
   });
 
   Map<String, dynamic> toMap() {
     return {
-      'produtId': produtId,
+      'product_id': productId,
       'name': name,
-      'imageUrl': imageUrl,
+      'image_url': imageUrl,
     };
   }
 
   factory RelatedProducts.fromMap(Map<String, dynamic> map) {
     return RelatedProducts(
-      produtId: map['produtId'],
-      name: map['name'],
-      imageUrl: map['imageUrl'],
+      productId: map['product_id'] ?? '',
+      name: map['name'] ?? '',
+      imageUrl: map['image_url'] ?? '',
     );
   }
 }
@@ -97,12 +97,14 @@ class PepoleWhoLike {
   final String name;
   final String surname;
   final String imageUrl;
+  final Timestamp createDate;
 
   PepoleWhoLike({
     required this.uid,
     required this.name,
     required this.surname,
     required this.imageUrl,
+    required this.createDate,
   });
 
   Map<String, dynamic> toMap() {
@@ -110,16 +112,18 @@ class PepoleWhoLike {
       'uid': uid,
       'name': name,
       'surname': surname,
-      'imageUrl': imageUrl,
+      'image_url': imageUrl,
+      'create_date': createDate,
     };
   }
 
   factory PepoleWhoLike.fromMap(Map<String, dynamic> map) {
     return PepoleWhoLike(
-      uid: map['uid'],
-      name: map['name'],
-      surname: map['surname'],
-      imageUrl: map['imageUrl'],
+      uid: map['uid'] ?? '',
+      name: map['name'] ?? '',
+      surname: map['surname'] ?? '',
+      imageUrl: map['image_url'] ?? '',
+      createDate: map['create_date'] ?? Timestamp.now(),
     );
   }
 

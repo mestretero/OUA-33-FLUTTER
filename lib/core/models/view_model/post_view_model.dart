@@ -3,10 +3,10 @@ import 'package:oua_flutter33/core/models/user_model.dart';
 import 'package:oua_flutter33/core/models/view_model/comment_view.dart';
 
 class PostViewModel {
-  final User? user;
-  final Post post;
-  final List<CommentView> comments;
-  final List<PepoleWhoLike> peopleWhoLike;
+  User? user;
+  Post post;
+  List<CommentView> comments;
+  List<PepoleWhoLike> peopleWhoLike;
 
   PostViewModel({
     this.user,

@@ -1,7 +1,17 @@
+// ignore_for_file: use_build_context_synchronously
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:oua_flutter33/common/helpers/toast_functions.dart';
+import 'package:oua_flutter33/core/models/comment_model.dart';
+import 'package:oua_flutter33/core/models/response_model.dart';
+import 'package:oua_flutter33/core/models/view_model/comment_view.dart';
+import 'package:timeago/timeago.dart' as timeago;
+
 import 'package:flutter/material.dart';
 import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/app/app_base_view_model.dart';
 import 'package:oua_flutter33/common/helpers/scaler.dart';
+import 'package:oua_flutter33/common/helpers/string_functions.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/post_model.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
@@ -13,6 +23,8 @@ class HomeViewModel extends AppBaseViewModel {
   final UserService _userService = getIt<UserService>();
   final PostService _postService = getIt<PostService>();
 
+  final TextEditingController _commentCntrl = TextEditingController();
+
   User? userData;
   bool isShowProducts = false;
   String showProductPostId = "";
@@ -22,6 +34,7 @@ class HomeViewModel extends AppBaseViewModel {
   void initialise() {
     _loadUserData();
     _loadPosts();
+    notifyListeners();
   }
 
   void changeShowProduct(Post post) {
@@ -44,13 +57,13 @@ class HomeViewModel extends AppBaseViewModel {
     notifyListeners();
   }
 
-  Future<void> refreshPosts() async {
-    await _loadPosts();
-  }
-
   Future<void> _loadPosts() async {
     posts = await _postService.getAllPosts();
     notifyListeners();
+  }
+
+  Future<void> refreshPosts() async {
+    await _loadPosts();
   }
 
   Future<void> unfavoriedPost(PostViewModel data) async {
@@ -72,15 +85,51 @@ class HomeViewModel extends AppBaseViewModel {
         ),
       );
     }
+
+    data.post.countOfLikes += 1;
     notifyListeners();
   }
 
-  void goToProfil(User? user) {
-    if (user!.uid != userData!.uid) {
+  void goToProfil(String? userId) {
+    if (userId != userData!.uid) {
       navigationService.navigateTo(
         Routes.profileView,
-        arguments: ProfileViewArguments(profileUid: user.uid),
+        arguments: ProfileViewArguments(profileUid: userId),
       );
+    }
+  }
+
+  void goToProductDetail(String id) {
+    navigationService.navigateTo(
+      Routes.productDetailView,
+      arguments: ProductDetailViewArguments(productId: id),
+    );
+  }
+
+  Future<void> sendComment(BuildContext context, PostViewModel data) async {
+    if (data.post.id!.isEmpty || userData!.uid.isEmpty) {
+      return;
+    } else {
+      final scaffold = ScaffoldMessenger.of(context);
+      MyToast.showLoadingToast(scaffold, context, "");
+
+      ResponseModel result = await _postService.sendComment(
+        data.post.id ?? "",
+        Comment(
+          uid: userData!.uid,
+          comment: _commentCntrl.text,
+          createDate: Timestamp.now(),
+          isActive: true,
+        ),
+      );
+
+      MyToast.closeToast(scaffold);
+
+      if (result.success) {
+        refreshPosts();
+      } else {
+        MyToast.showErrorTost(context, result.message);
+      }
     }
   }
 
@@ -90,17 +139,128 @@ class HomeViewModel extends AppBaseViewModel {
     PostViewModel data,
   ) {
     showModalBottomSheet(
-        context: context,
-        useSafeArea: true,
-        builder: (
-          BuildContext bc,
-        ) {
-          return StatefulBuilder(
-            builder: (BuildContext context, setState) => Container(
-              padding: const EdgeInsets.all(16),
-            ),
-          );
-        });
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext bc) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return Container(
+              width: Scaler.width(1, context),
+              height: Scaler.width(1, context),
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    padding:
+                        const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
+                    decoration: BoxDecoration(
+                      border: Border(
+                        bottom: BorderSide(
+                            color: Theme.of(context).colorScheme.primary),
+                      ),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          "Beğenmeler",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.primary,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        Text(
+                          "${data.peopleWhoLike.length} beğenme",
+                          style: TextStyle(
+                            color: Theme.of(context).colorScheme.onPrimary,
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: data.peopleWhoLike.length,
+                      itemBuilder: (context, index) {
+                        var item = data.peopleWhoLike[index];
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 16),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () => goToProfil(item.uid),
+                                    child: Container(
+                                      width: 56,
+                                      height: 56,
+                                      margin: const EdgeInsets.only(right: 8),
+                                      decoration: BoxDecoration(
+                                        borderRadius:
+                                            BorderRadius.circular(999),
+                                        image: DecorationImage(
+                                          image: NetworkImage(item.imageUrl),
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "${item.name.capitalize()} ${item.surname.capitalize()}",
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      Text(
+                                        timeago.format(
+                                          item.createDate.toDate(),
+                                        ),
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          fontSize: 14,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const Icon(
+                                Icons.favorite_rounded,
+                                color: Colors.red,
+                                size: 24,
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   void showBottomSheetForComments(
@@ -108,31 +268,189 @@ class HomeViewModel extends AppBaseViewModel {
     PostViewModel data,
   ) {
     showModalBottomSheet(
-        context: context,
-        useSafeArea: true,
-        builder: (
-          BuildContext bc,
-        ) {
-          return StatefulBuilder(
-            builder: (BuildContext context, setState) => Container(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext bc) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return Container(
               width: Scaler.width(1, context),
+              height: Scaler.width(1, context),
               padding: const EdgeInsets.all(16),
+              margin: EdgeInsets.only(
+                bottom: MediaQuery.of(bc).viewInsets.bottom,
+              ),
               child: Column(
                 children: [
-                  ...data.comments.map(
-                    (item) => Container(
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Theme.of(context).colorScheme.secondary,
+                  Expanded(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      itemCount: data.comments.length,
+                      itemBuilder: (context, index) {
+                        var item = data.comments[index];
+                        return Container(
+                          margin: const EdgeInsets.only(bottom: 16),
+                          child: Row(
+                            children: [
+                              GestureDetector(
+                                onTap: () => goToProfil(item.user.uid),
+                                child: Container(
+                                  width: 44,
+                                  height: 44,
+                                  margin: const EdgeInsets.only(right: 8),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(999),
+                                    image: DecorationImage(
+                                      image: NetworkImage(item.user.imageUrl),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      Text(
+                                        "${item.user.name.capitalize()} ${item.user.surname.capitalize()}",
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary,
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        timeago.format(
+                                            item.comment.createDate.toDate()),
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .onPrimary,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.6,
+                                    child: Text(
+                                      item.comment.comment,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary
+                                            .withOpacity(0.5),
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  // Comment Input
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: Scaler.width(0.78, context),
+                          child: TextFormField(
+                            enabled: true,
+                            controller: _commentCntrl,
+                            maxLength: 128,
+                            keyboardType: TextInputType.text,
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                              fontSize: 16,
+                            ),
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            decoration: InputDecoration(
+                              isDense: true,
+                              enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(16)),
+                              ),
+                              hintText:
+                                  "@${data.user!.name}_${data.user!.surname} için bir yorum ekle...",
+                              hintStyle: TextStyle(
+                                color: Theme.of(context).colorScheme.secondary,
+                                fontSize: 14,
+                              ),
+                              counterText: "",
+                              border: OutlineInputBorder(
+                                borderSide: BorderSide(
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .secondary),
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(16)),
+                              ),
+                              alignLabelWithHint: true,
+                            ),
+                          ),
                         ),
-                        borderRadius: BorderRadius.circular(16),
-                      ),
+                        IconButton(
+                          style: IconButton.styleFrom(
+                            backgroundColor:
+                                Theme.of(context).colorScheme.onPrimary,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(999),
+                            ),
+                          ),
+                          onPressed: () async {
+                            await sendComment(context, data);
+                            setState(() {
+                              data.comments.add(
+                                CommentView(
+                                  user: userData!,
+                                  comment: Comment(
+                                    uid: userData!.uid,
+                                    comment: _commentCntrl.text,
+                                    createDate: Timestamp.now(),
+                                    isActive: true,
+                                  ),
+                                ),
+                              );
+                              _commentCntrl.clear();
+                            });
+                          },
+                          icon: const Icon(
+                            Icons.send_sharp,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        )
+                      ],
                     ),
                   ),
                 ],
               ),
-            ),
-          );
-        });
+            );
+          },
+        );
+      },
+    );
   }
 }

@@ -8,7 +8,6 @@ class ChatViewModel extends AppBaseViewModel {
 
   init(BuildContext context) {}
   navigatePage() {
-    // navigationService.navigateTo(Routes.exampleView);
   }
 
   void sendMessage(
@@ -17,5 +16,9 @@ class ChatViewModel extends AppBaseViewModel {
       await chatService.sendMessage(receireverId, controller.text);
       controller.clear();
     }
+  }
+
+  void sendFileMessage(){
+
   }
 }

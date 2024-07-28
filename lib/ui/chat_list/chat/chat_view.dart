@@ -1,8 +1,9 @@
 // ignore_for_file: deprecated_member_use
+import 'package:timeago/timeago.dart' as timeago;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:oua_flutter33/app/app.router.dart';
+import 'package:oua_flutter33/common/helpers/string_functions.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
 import 'package:oua_flutter33/ui/chat_list/chat/chat_view_model.dart';
 import 'package:stacked/stacked.dart';
@@ -29,126 +30,225 @@ class _ChatViewState extends State<ChatView> {
       viewModelBuilder: () => ChatViewModel(),
       onModelReady: (model) => model.init(context),
       builder: (context, model, viewwidget) => Scaffold(
-        appBar: AppBar(
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => model.navigationService.navigateTo(Routes.mainView),
-          ),
-          title: GestureDetector(
-            onTap: () => model.navigationService.navigateTo(
-              Routes.profileView,
-              arguments: ProfileViewArguments(profileUid: receiverUser.uid),
-            ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(receiverUser.imageUrl),
-                ),
-                const SizedBox(width: 8),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+        body: receiverUser.uid.isEmpty
+            ? const Center(child: CircularProgressIndicator())
+            : SafeArea(
+                child: Column(
                   children: [
-                    Text(
-                      receiverUser.name,
-                      style: const TextStyle(
-                        color: Colors.black,
-                        fontSize: 16,
-                      ),
-                    ),
-                    Text(
-                      '@${'${receiverUser.name}_${receiverUser.surname}'}',
-                      style: const TextStyle(
-                        color: Color(0xFF7DBE48),
-                        fontSize: 16,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          backgroundColor: Colors.white,
-          elevation: 0,
-        ),
-        body: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: StreamBuilder<QuerySnapshot>(
-                  stream: model.chatService.getMessages(
-                      model.authServices.user!.uid, receiverUser.uid),
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
-
-                    if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-                      return const Center(child: Text('No messages yet'));
-                    }
-
-                    return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        var message = snapshot.data!.docs[index];
-                        var isMe = message['sender_user_id'] ==
-                            model.authServices.user!.uid;
-
-                        return Align(
-                          alignment: isMe
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                          child: Container(
-                            margin: const EdgeInsets.symmetric(
-                                vertical: 5, horizontal: 10),
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                              color: isMe
-                                  ? const Color(0xFF142924)
-                                  : const Color(0xFFD3F4BF),
-                              borderRadius: BorderRadius.circular(10),
+                    Padding(
+                      padding: const EdgeInsets.all(24),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          IconButton(
+                            style: IconButton.styleFrom(
+                              padding: const EdgeInsets.all(0),
+                              elevation: 0,
+                              backgroundColor:
+                                  Theme.of(context).colorScheme.secondary,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(999),
+                              ),
                             ),
-                            child: Text(
-                              message['message'],
-                              style: TextStyle(
-                                  color: isMe ? Colors.white : Colors.black),
+                            onPressed: () => model.navigationService.back(),
+                            icon: Icon(
+                              Icons.keyboard_arrow_left_rounded,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 40,
                             ),
                           ),
-                        );
-                      },
-                    );
-                  },
+
+                          const SizedBox(width: 16),
+
+                          //User Image
+                          Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Theme.of(context).colorScheme.primary,
+                                width: 2,
+                              ),
+                              borderRadius: BorderRadius.circular(999),
+                              image: DecorationImage(
+                                image: NetworkImage(receiverUser.imageUrl),
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          ),
+
+                          const SizedBox(width: 8),
+
+                          //User Info
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "${receiverUser.name.capitalize()} ${receiverUser.surname.capitalize()}",
+                                style: TextStyle(
+                                  color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              Text(
+                                "@${receiverUser.name.toLowerCase()}_${receiverUser.surname.toLowerCase()}",
+                                style: TextStyle(
+                                  color:
+                                      Theme.of(context).colorScheme.onPrimary,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Expanded(
+                      child: StreamBuilder<QuerySnapshot>(
+                        stream: model.chatService.getMessages(
+                            model.authServices.user!.uid, receiverUser.uid),
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          }
+
+                          if (!snapshot.hasData ||
+                              snapshot.data!.docs.isEmpty) {
+                            return Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(
+                                    Icons.chat_rounded,
+                                    color:
+                                        Theme.of(context).colorScheme.onPrimary,
+                                    size: 48,
+                                  ),
+                                  Text(
+                                    "No message yet",
+                                    style: TextStyle(
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+
+                          return ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            itemBuilder: (context, index) {
+                              var message = snapshot.data!.docs[index];
+                              var isMe = message['sender_user_id'] ==
+                                  model.authServices.user!.uid;
+
+                              return Align(
+                                alignment: isMe
+                                    ? Alignment.centerRight
+                                    : Alignment.centerLeft,
+                                child: Column(
+                                  crossAxisAlignment: isMe
+                                      ? CrossAxisAlignment.end
+                                      : CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          vertical: 5, horizontal: 24),
+                                      padding: const EdgeInsets.symmetric(
+                                        vertical: 8,
+                                        horizontal: 16,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: isMe
+                                            ? Theme.of(context)
+                                                .colorScheme
+                                                .primary
+                                            : Theme.of(context)
+                                                .colorScheme
+                                                .secondary,
+                                        borderRadius: BorderRadius.only(
+                                          topLeft: const Radius.circular(8),
+                                          topRight: const Radius.circular(8),
+                                          bottomLeft: isMe
+                                              ? const Radius.circular(8)
+                                              : const Radius.circular(2),
+                                          bottomRight: isMe
+                                              ? const Radius.circular(2)
+                                              : const Radius.circular(8),
+                                        ),
+                                      ),
+                                      child: Text(
+                                        message['message'],
+                                        style: TextStyle(
+                                            color: isMe
+                                                ? Colors.white
+                                                : Theme.of(context)
+                                                    .colorScheme
+                                                    .primary),
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: isMe
+                                          ? const EdgeInsets.only(right: 24)
+                                          : const EdgeInsets.only(left: 24),
+                                      child: Text(
+                                        timeago.format(
+                                            message["timestamp"].toDate()),
+                                        style: TextStyle(
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .primary
+                                              .withOpacity(0.6),
+                                          fontSize: 10,
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                    _buildMessageInput(context, model),
+                  ],
                 ),
               ),
-              _buildMessageInput(context, model),
-            ],
-          ),
-        ),
       ),
     );
   }
 
- 
   Widget _buildMessageInput(BuildContext context, ChatViewModel model) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      padding: const EdgeInsets.all(8.0),
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
-        color: Colors.black87,
-        borderRadius: BorderRadius.circular(30.0),
+        color: Theme.of(context).colorScheme.primary,
+        borderRadius: BorderRadius.circular(100.0),
       ),
       child: Row(
         children: [
-          Container(
-            margin: const EdgeInsets.all(5),
-            decoration: const BoxDecoration(
-              color: Color(0xFFD3F4BF),
-              shape: BoxShape.circle,
+          IconButton(
+            style: IconButton.styleFrom(
+              backgroundColor: Theme.of(context).colorScheme.secondary,
             ),
-            child: IconButton(
-              icon: const Icon(Icons.image, color: Colors.black),
-              onPressed: () {
-                
-              },
+            onPressed: () => model.sendFileMessage(),
+            icon: Icon(
+              Icons.image_rounded,
+              color: Theme.of(context).colorScheme.primary,
+              size: 16,
             ),
           ),
           const SizedBox(width: 8.0),
@@ -167,10 +267,17 @@ class _ChatViewState extends State<ChatView> {
           ),
           const SizedBox(width: 8.0),
           IconButton(
-            icon: const Icon(Icons.mic, color: Colors.white),
-            onPressed: () {
-              
-            },
+            style: IconButton.styleFrom(
+              backgroundColor:
+                  Theme.of(context).colorScheme.secondary.withOpacity(0.6),
+            ),
+            icon: const Icon(
+              Icons.send,
+              color: Colors.white,
+              size: 16,
+            ),
+            onPressed: () =>
+                model.sendMessage(_messageController, widget.receiverUser.uid),
           ),
         ],
       ),

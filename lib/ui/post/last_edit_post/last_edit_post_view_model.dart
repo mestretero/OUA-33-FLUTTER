@@ -1,4 +1,4 @@
-// ignore_for_file: unused_field, depend_on_referenced_packages, implementation_imports
+// ignore_for_file: unused_field, depend_on_referenced_packages, implementation_imports, use_build_context_synchronously
 
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';

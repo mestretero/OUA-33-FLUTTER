@@ -1,4 +1,4 @@
-// ignore_for_file: avoid_print, unused_import, unused_field, use_build_context_synchronously, unnecessary_null_comparison, depend_on_referenced_packages
+// ignore_for_file: avoid_print, unused_import, unused_field, use_build_context_synchronously, unnecessary_null_comparison, depend_on_referenced_packages, prefer_final_fields
 
 import 'dart:io';
 import 'package:oua_flutter33/common/helpers/toast_functions.dart';

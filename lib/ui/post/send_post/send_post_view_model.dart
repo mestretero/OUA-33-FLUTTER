@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/app/app_base_view_model.dart';
 import 'package:oua_flutter33/common/helpers/scaler.dart';
+import 'package:oua_flutter33/common/helpers/toast_functions.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
 import 'package:oua_flutter33/core/services/post_service.dart';
@@ -224,10 +225,15 @@ class SendPostViewModel extends AppBaseViewModel {
       return showErrorMessage(context);
     }
 
+    final scaffold = ScaffoldMessenger.of(context);
+    MyToast.showLoadingToast(scaffold, context, "");
+
     List<XFile> images = selectedGalleryImages;
     if (selectedGalleryImages.isEmpty) {
       images.add(selectedImage!);
     }
+
+    MyToast.closeToast(scaffold);
 
     navigationService.navigateTo(
       Routes.lastEditPostView,
@@ -247,22 +253,9 @@ class SendPostViewModel extends AppBaseViewModel {
   }
 
   void showErrorMessage(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Error"),
-          content: const Text("Error Message"),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Tamam"),
-            ),
-          ],
-        );
-      },
+    MyToast.showErrorTost(
+      context,
+      "Lütfen formu dikkatli şekilde doldurduğunuzdan emin olunuz...",
     );
   }
 }

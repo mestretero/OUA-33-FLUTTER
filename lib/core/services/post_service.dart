@@ -19,11 +19,14 @@ class PostService {
 
   static const _collectionName = "posts";
 
-  Future<void> addPost(Post post) async {
+  Future<ResponseModel> addPost(Post post) async {
     try {
       await _firestore.collection(_collectionName).add(post.toMap());
+      return ResponseModel(success: true, message: "");
     } catch (e) {
       print("Error adding post: $e");
+      return ResponseModel(
+          success: false, message: "Hata! Gönderi oluşturulamadı...");
     }
   }
 

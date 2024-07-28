@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print, unused_import, unused_field, use_build_context_synchronously, unnecessary_null_comparison, depend_on_referenced_packages
 
 import 'dart:io';
+import 'package:oua_flutter33/common/helpers/toast_functions.dart';
+import 'package:oua_flutter33/core/models/response_model.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -41,22 +43,9 @@ class ProductAddViewModel extends AppBaseViewModel {
   }
 
   void showErrorMessage(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Error"),
-          content: const Text("Error Message"),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Tamam"),
-            ),
-          ],
-        );
-      },
+    MyToast.showErrorTost(
+      context,
+      "Lütfen formu dikkatli şekilde doldurduğunuzdan emin olunuz...",
     );
   }
 
@@ -106,7 +95,8 @@ class ProductAddViewModel extends AppBaseViewModel {
       return showErrorMessage(context);
     }
 
-    _isLoading = true;
+    final scaffold = ScaffoldMessenger.of(context);
+    MyToast.showLoadingToast(scaffold, context, "");
 
     //Upload Files return List<Media>
     List<Media> medias = await uploadMedia(_images);
@@ -129,10 +119,15 @@ class ProductAddViewModel extends AppBaseViewModel {
       createDate: Timestamp.now(),
     );
 
-    await _productService.addProduct(product).then((_) {
+    ResponseModel result = await _productService.addProduct(product);
+
+    MyToast.closeToast(scaffold);
+
+    if (result.success) {
       navigationService.navigateTo(Routes.sendPostView);
-      _isLoading = false;
-    });
+    } else {
+      MyToast.showErrorTost(context, result.message);
+    }
   }
 
   bool _isInputValid() {

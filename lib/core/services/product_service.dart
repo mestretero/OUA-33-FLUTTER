@@ -3,6 +3,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
+import 'package:oua_flutter33/core/models/response_model.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
 import 'package:oua_flutter33/core/models/view_model/product_view_model.dart';
 import 'package:oua_flutter33/core/services/auth_service.dart';
@@ -14,12 +15,14 @@ class ProductService {
   static final _firestore = FirebaseFirestore.instance;
   static const _collectionName = "products";
 
-  Future<void> addProduct(Product product) async {
+  Future<ResponseModel> addProduct(Product product) async {
     try {
       await _firestore.collection(_collectionName).add(product.toMap());
       await userService.increaseCountOfProduct();
+
+      return ResponseModel(success: true, message: "");
     } catch (e) {
-      print("Error adding product: $e");
+      return ResponseModel(success: false, message: "Hata! Ürün eklenemedi...");
     }
   }
 

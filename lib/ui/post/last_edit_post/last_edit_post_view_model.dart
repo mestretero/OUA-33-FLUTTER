@@ -3,6 +3,8 @@
 import 'dart:io';
 import 'package:image_picker/image_picker.dart';
 import 'package:oua_flutter33/app/app.router.dart';
+import 'package:oua_flutter33/common/helpers/toast_functions.dart';
+import 'package:oua_flutter33/core/models/response_model.dart';
 import 'package:oua_flutter33/core/services/post_service.dart';
 import 'package:path/path.dart' as p;
 
@@ -85,7 +87,8 @@ class LastEditPostViewModel extends AppBaseViewModel {
   ) async {
     if (_isInvalid() == false) return showErrorMessage(context);
 
-    _isLoading = true;
+    final scaffold = ScaffoldMessenger.of(context);
+    MyToast.showLoadingToast(scaffold, context, "");
 
     List<File> files = [];
     List<RelatedProducts> relatedProducts = [];
@@ -106,8 +109,7 @@ class LastEditPostViewModel extends AppBaseViewModel {
       );
     }
 
-    await _postService
-        .addPost(
+    ResponseModel result = await _postService.addPost(
       Post(
         uid: user!.uid,
         createDate: Timestamp.now(),
@@ -119,11 +121,17 @@ class LastEditPostViewModel extends AppBaseViewModel {
         countOfLikes: 0,
         countOfComments: 0,
       ),
-    )
-        .then((_) {
-      _isLoading = false;
+    );
+
+    MyToast.closeToast(scaffold);
+
+    if (result.success) {
       navigationService.navigateTo(Routes.mainView);
-    });
+    } else {
+      MyToast.showErrorTost(context, result.message);
+    }
+
+    _isLoading = false;
   }
 
   bool _isInvalid() {

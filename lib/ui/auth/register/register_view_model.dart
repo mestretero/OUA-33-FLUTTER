@@ -55,6 +55,7 @@ class RegisterViewModel extends AppBaseViewModel {
       return false;
     }
     if (nameController.text.isEmpty || nameController.text == "") return false;
+    if (formKey.currentState!.validate() == false) return false;
 
     return true;
   }

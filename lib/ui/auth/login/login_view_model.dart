@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/app/app_base_view_model.dart';
 import 'package:oua_flutter33/common/helpers/toast_functions.dart';
+import 'package:oua_flutter33/core/models/response_model.dart';
 
 class LoginViewModel extends AppBaseViewModel {
   final formKey = GlobalKey<FormState>();
@@ -17,14 +18,19 @@ class LoginViewModel extends AppBaseViewModel {
         scaffold, context, "İşleminiz gerçleştiriliyor...");
 
     if (_isInvalid()) {
-      await authServices.login(
+      ResponseModel result = await authServices.login(
         context,
         emailController.text,
         passController.text,
       );
 
       MyToast.closeToast(scaffold);
-      navigationService.navigateTo(Routes.mainView);
+
+      if (result.success) {
+        navigationService.navigateTo(Routes.mainView);
+      } else {
+        MyToast.showErrorTost(context, result.message);
+      }
     } else {
       Future.delayed(
         const Duration(seconds: 2),
@@ -49,6 +55,7 @@ class LoginViewModel extends AppBaseViewModel {
       return false;
     }
     if (passController.text.isEmpty || passController.text == "") return false;
+    if (formKey.currentState!.validate() == false) return false;
     return true;
   }
 }

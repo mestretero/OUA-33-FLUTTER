@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/auth_model.dart';
+import 'package:oua_flutter33/core/models/response_model.dart';
 import 'package:oua_flutter33/core/services/user_service.dart';
 import 'package:stacked_services/stacked_services.dart';
 
@@ -53,7 +54,8 @@ class AuthServices {
     // context.loaderOverlay.hide();
   }
 
-  login(BuildContext context, String email, String pass) async {
+  Future<ResponseModel> login(
+      BuildContext context, String email, String pass) async {
     try {
       await auth
           .signInWithEmailAndPassword(
@@ -64,11 +66,19 @@ class AuthServices {
         user = auth.currentUser;
         userService.init();
       });
+
+      return ResponseModel(success: true, message: "");
     } on FirebaseAuthException catch (e) {
       if (e.code == 'INVALID_LOGIN_CREDENTIALS') {
-        showMsg(context, 'Invalid Email & Password');
+        return ResponseModel(
+          success: false,
+          message: 'Invalid Email & Password',
+        );
       } else {
-        showMsg(context, e.message.toString());
+        return ResponseModel(
+          success: false,
+          message: e.message.toString(),
+        );
       }
     }
   }

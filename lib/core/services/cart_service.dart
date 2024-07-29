@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oua_flutter33/core/models/cart_%C4%B1tem_model.dart';
+import 'package:oua_flutter33/core/models/cart_item_model.dart';
 
 class CartService with ChangeNotifier {
   final List<CartItem> _cartItems = [];
@@ -37,7 +37,8 @@ class CartService with ChangeNotifier {
   }
 
   double get totalPrice {
-    return _cartItems.fold(0, (sum, item) => sum + (item.price * item.quantity));
+    return _cartItems.fold(
+        0, (sum, item) => sum + (item.price * item.quantity));
   }
 
   int get totalItems {

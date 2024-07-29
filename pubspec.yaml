@@ -11,7 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.6
+  cupertino_icons: ^1.0.8
 
   carousel_slider: ^4.0.0
   provider: ^6.0.0
@@ -54,3 +54,5 @@ flutter:
   assets:
    - assets/
    - assets/images/
+   - assets/icons/
+

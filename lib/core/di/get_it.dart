@@ -16,7 +16,6 @@ import 'package:stacked_services/stacked_services.dart';
 final getIt = GetIt.instance;
 
 void setupDI() {
-  getIt.registerLazySingleton(()=>CartService());
   getIt.registerLazySingleton(() => AppBaseViewModel());
   getIt.registerLazySingleton(() => NavigationService());
 
@@ -31,4 +30,5 @@ void setupDI() {
   getIt.registerLazySingleton(() => CategoryService());
   getIt.registerLazySingleton(() => MediaService());
   getIt.registerLazySingleton(() => SearchService());
+  getIt.registerLazySingleton(() => CartService());
 }

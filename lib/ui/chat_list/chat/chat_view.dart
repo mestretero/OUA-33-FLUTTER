@@ -232,7 +232,7 @@ class _ChatViewState extends State<ChatView> {
 
   Widget _buildMessageInput(BuildContext context, ChatViewModel model) {
     return Container(
-      padding: const EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(4.0),
       margin: const EdgeInsets.all(8.0),
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
@@ -240,18 +240,18 @@ class _ChatViewState extends State<ChatView> {
       ),
       child: Row(
         children: [
-          IconButton(
-            style: IconButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.secondary,
-            ),
-            onPressed: () => model.sendFileMessage(),
-            icon: Icon(
-              Icons.image_rounded,
-              color: Theme.of(context).colorScheme.primary,
-              size: 16,
-            ),
-          ),
-          const SizedBox(width: 8.0),
+          // IconButton(
+          //   style: IconButton.styleFrom(
+          //     backgroundColor: Theme.of(context).colorScheme.secondary,
+          //   ),
+          //   onPressed: () => model.sendFileMessage(),
+          //   icon: Icon(
+          //     Icons.image_rounded,
+          //     color: Theme.of(context).colorScheme.primary,
+          //     size: 16,
+          //   ),
+          // ),
+          const SizedBox(width: 16.0),
           Expanded(
             child: TextField(
               controller: _messageController,

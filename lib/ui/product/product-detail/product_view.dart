@@ -1,5 +1,10 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
-import 'package:oua_flutter33/app/app.router.dart';
+import 'package:oua_flutter33/common/helpers/scaler.dart';
+import 'package:oua_flutter33/common/helpers/string_functions.dart';
+import 'package:oua_flutter33/common/helpers/toast_functions.dart';
+import 'package:oua_flutter33/common/widgets/product_detail_carousel.dart';
 import 'package:oua_flutter33/ui/product/product-detail/product_view_model.dart';
 import 'package:stacked/stacked.dart';
 
@@ -10,339 +15,276 @@ class ProductDetailView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewModelBuilder<ProductViewModel>.reactive(
-      viewModelBuilder: () => ProductViewModel(),
-      // ignore: deprecated_member_use
+    return ViewModelBuilder<ProductDetailViewModel>.reactive(
+      viewModelBuilder: () => ProductDetailViewModel(),
       onModelReady: (model) async => await model.fetchProductDetails(productId),
       builder: (context, model, widget) => Scaffold(
-        appBar: AppBar(
-          
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),
-          ),
-          actions: const [],
-        ),
-        body: model.isBusy
+        body: model.isLoading
             ? const Center(child: CircularProgressIndicator())
-            : model.product == null
-                ? const Center(
-                    child: Text(
-                      "Ürün Yaratıcısı Tarafından Kaldırıldı",
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  )
-                : SingleChildScrollView(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Stack(
+            : SafeArea(
+                child: SingleChildScrollView(
+                  padding: model.productView == null
+                      ? const EdgeInsets.all(24)
+                      : const EdgeInsets.all(0),
+                  // No Found Product And Product Detail
+                  child: model.productView == null
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Image.network(
-                              model.product!.mainImageUrl,
-                              fit: BoxFit.cover,
-                              width: double.infinity,
+                            IconButton(
+                              style: IconButton.styleFrom(
+                                backgroundColor:
+                                    Theme.of(context).colorScheme.secondary,
+                              ),
+                              onPressed: () => model.navigationService.back(),
+                              icon: Icon(
+                                Icons.arrow_back_ios_new_rounded,
+                                color: Theme.of(context).colorScheme.primary,
+                                size: 24,
+                              ),
                             ),
-                           /*  Positioned(
-                              top: 10,
-                              left: 10,
-                              child: IconButton(
-                                onPressed: () => model.navigationService.back,
-                                icon: Container(
-                                  height: 36,
-                                  width: 36,
-                                  decoration: BoxDecoration(
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onSecondary
-                                        .withOpacity(0.4),
-                                    border: Border.all(
+                            Center(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const SizedBox(height: 128),
+                                  Image.asset(
+                                    "assets/icons/no-products-found-icon.png",
+                                    fit: BoxFit.cover,
+                                    width: 100,
+                                    height: 100,
+                                  ),
+                                  Text(
+                                    "Ürün Bulunamadı",
+                                    style: TextStyle(
                                       color: Theme.of(context)
                                           .colorScheme
-                                          .secondary,
-                                      width: 1,
+                                          .onPrimary,
+                                      fontSize: 24,
+                                      fontWeight: FontWeight.w500,
                                     ),
-                                    borderRadius: BorderRadius.circular(999),
                                   ),
-                                  child: Icon(
-                                    Icons.arrow_back_ios_new_rounded,
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    size: 18,
+                                  SizedBox(
+                                    width: Scaler.width(0.7, context),
+                                    child: Text(
+                                      "Aradığınız ürün, ürün sahibi tarafından satıştan kaldırılmış olabilir...",
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimary,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w300,
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ), */
-                            if (model.product!.uid ==
-                                model.authServices.user!.uid)
-                              Positioned(
-                                top: 10,
-                                right: 10,
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    IconButton(
-                                      onPressed: () =>
-                                          model.deleteProduct(productId),
-                                      icon: Container(
-                                        height: 36,
-                                        width: 36,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSecondary
-                                              .withOpacity(0.4),
-                                          border: Border.all(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                            width: 1,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(999),
-                                        ),
-                                        child: Icon(
-                                          Icons.delete_rounded,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          size: 18,
-                                        ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () => model.archiveProduct(productId),
-                                      icon: Container(
-                                        height: 36,
-                                        width: 36,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSecondary
-                                              .withOpacity(0.4),
-                                          border: Border.all(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                            width: 1,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(999),
-                                        ),
-                                        child: Icon(
-                                          Icons.archive_rounded,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          size: 18,
-                                        ),
-                                      ),
-                                    ),
-                                    IconButton(
-                                      onPressed: () {
-                                        Navigator.pushNamed(
-                                          context,
-                                          Routes.editProductView,
-                                          arguments: EditProductViewArguments(
-                                            product: model.product!,
-                                          ),
-                                        ).then((_) {
-                                          Future.delayed(
-                                              const Duration(milliseconds: 500),
-                                              () {
-                                            model
-                                                .fetchProductDetails(productId);
-                                          });
-                                        });
-                                      },
-                                      icon: Container(
-                                        height: 36,
-                                        width: 36,
-                                        decoration: BoxDecoration(
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .onSecondary
-                                              .withOpacity(0.4),
-                                          border: Border.all(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .secondary,
-                                            width: 1,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(999),
-                                        ),
-                                        child: Icon(
-                                          Icons.edit_rounded,
-                                          color: Theme.of(context)
-                                              .colorScheme
-                                              .primary,
-                                          size: 18,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        SafeArea(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  model.product!.name,
-                                  style: const TextStyle(
-                                      fontSize: 24, fontWeight: FontWeight.bold),
-                                ),
-                              ),
-                              if(model.product!.uid ==
-                                model.authServices.user!.uid)
-                                 Column(
-                                  children: [
-                                    const Icon(Icons.favorite,
-                                    color: Color(0xFF6EDB2A),
-                                ),
-                                Text("${model.favoriteCount}",
-                                style: const TextStyle(color: Color(0xFF6EDB2A),
-                                fontSize: 16,
-                                ),
-                                ),
-                                  ],
-                                ),
-                             
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        const Row(
-                          children: [
-                            Text(
-                              'Ürün Açıklaması',
-                              style: TextStyle(
-                                color: Color(0xFF6EDB2A),
+                                ],
                               ),
                             ),
-                            SizedBox(width: 16),
+                          ],
+                        )
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            _buildProductMediaCarousel(context, model),
+                            _buildProductInfoBox(context, model)
                           ],
                         ),
-                        const SizedBox(height: 16),
-                        Text(model.product!.description),
-                        const SizedBox(height: 16),
-                        if (model.product!.uid != model.authServices.user!.uid)
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.archive),
-                                onPressed: () =>
-                                    model.archiveProduct(model.product!.id),
-                              ),
-                              IconButton(
-                                icon: const Icon(Icons.edit),
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    Routes.editProductView,
-                                    arguments: EditProductViewArguments(
-                                      product: model.product!,
-                                    ),
-                                  ).then((_) {
-                                    Future.delayed(
-                                        const Duration(milliseconds: 500), () {
-                                      model.fetchProductDetails(productId);
-                                    });
-                                  });
-                                },
-                              ),
-                              IconButton(
-                                  icon: const Icon(Icons.delete),
-                                  onPressed: () {
-                                    model.deleteProduct(productId);
-                                  }),
-                            ],
-                          )
-                        else
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              Text(
-                                '₺${model.product!.price}',
-                                style: const TextStyle(
-                                  color: Color(0xFF6EDB2A),
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w900,
-                                ),
-                              ),
-                              const SizedBox(width: 10),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  side: const BorderSide(
-                                    color: Color(0xFFD3F4BF),
-                                    width: 2,
-                                  ),
-                                ),
-                                onPressed: () {
-                                  model.addToCart();
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      backgroundColor: const Color(0xFFD3F4BF),
-                                      content: Text(
-                                        style: const TextStyle(
-                                          color: Colors.black,
-                                        ),
-                                        "${model.product!.name} sepete eklendi",
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: const Text(
-                                  'Sepete Ekle',
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Color(0xFFD3F4BF),
-                                  ),
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFFD3F4BF),
-                                ),
-                                onPressed: () =>
-                                    model.sendMessage(context, productId),
-                                child: const Row(
-                                  children: [
-                                    Icon(
-                                      Icons.chat,
-                                      color: Colors.white,
-                                    ),
-                                    SizedBox(
-                                      width: 8,
-                                    ),
-                                    Text(
-                                      'Mesaj',
-                                      style: TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 16,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                      ],
-                    ),
-                  ),
+                ),
+              ),
       ),
     );
   }
-}
 
+  Widget _buildProductMediaCarousel(
+      BuildContext context, ProductDetailViewModel model) {
+    return CarouselWithProduct(
+      product: model.productView!.product,
+      model: model,
+    );
+  }
+
+  Widget _buildProductInfoBox(
+      BuildContext context, ProductDetailViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(
+        vertical: 24,
+        horizontal: 16,
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: Scaler.width(0.8, context),
+                child: Text(
+                  model.productView!.product.name.capitalize(),
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.primary,
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              Column(
+                children: [
+                  Icon(
+                    Icons.favorite_rounded,
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: 24,
+                  ),
+                  Text(
+                    model.productView!.product.countOfFavored.toString(),
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.secondary,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
+          _buildSegmentedControl(context, model),
+          const SizedBox(height: 8),
+          Text(
+            model.segmentText,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              color: Theme.of(context).colorScheme.primary.withOpacity(0.7),
+              fontSize: 14,
+              fontWeight: FontWeight.w300,
+            ),
+          ),
+          if (model.isMine == false &&
+              model.productView!.product.isActive == true)
+            _buildActionButtons(context, model),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSegmentedControl(
+      BuildContext context, ProductDetailViewModel model) {
+    return Padding(
+      padding: const EdgeInsets.all(0.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _buildSegmentButton(context, model, 'Ürün Açıklaması', 'description'),
+          // _buildSegmentButton(context, model, 'İletişim', 'communication'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSegmentButton(BuildContext context, ProductDetailViewModel model,
+      String text, String filter) {
+    return Container(
+      padding: const EdgeInsets.all(0),
+      decoration: BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: model.segmentValue == filter
+                ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.secondary,
+            width: 2,
+          ),
+        ),
+      ),
+      child: TextButton(
+        onPressed: () => model.changeSegment(filter),
+        style: TextButton.styleFrom(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 0),
+        ),
+        child: Text(
+          text,
+          style: TextStyle(
+            color: model.segmentValue == filter
+                ? Theme.of(context).colorScheme.onPrimary
+                : Theme.of(context).colorScheme.secondary,
+            fontSize: 16,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildActionButtons(
+      BuildContext context, ProductDetailViewModel model) {
+    return Column(
+      children: [
+        const SizedBox(height: 32),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              '₺${model.productView!.product.price}',
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.onPrimary,
+                fontSize: 24,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+            const Spacer(),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                side: BorderSide(
+                  color: Theme.of(context).colorScheme.secondary,
+                  width: 1,
+                ),
+                elevation: 0,
+              ),
+              onPressed: () {
+                model.addToCart();
+                MyToast.showErrorTost(context,
+                    "${model.productView!.product.name} sepete eklendi");
+              },
+              child: Text(
+                'Sepete Ekle',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: Theme.of(context).colorScheme.secondary,
+                ),
+              ),
+            ),
+            const SizedBox(width: 8),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Theme.of(context).colorScheme.secondary,
+                elevation: 0,
+              ),
+              onPressed: () => model.sendMessage(),
+              child: const Row(
+                children: [
+                  Icon(
+                    Icons.chat,
+                    color: Colors.white,
+                    size: 16,
+                  ),
+                  SizedBox(
+                    width: 8,
+                  ),
+                  Text(
+                    'Mesaj',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}

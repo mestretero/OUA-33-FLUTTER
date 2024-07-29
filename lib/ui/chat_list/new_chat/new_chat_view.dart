@@ -76,61 +76,65 @@ class NewChatView extends StatelessWidget {
                       ...model.users.map(
                         (item) => item.uid == model.authServices.user?.uid
                             ? Container()
-                            : Container(
-                                margin: const EdgeInsets.only(bottom: 8),
-                                padding: const EdgeInsets.all(8),
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    color:
-                                        Theme.of(context).colorScheme.primary,
-                                    width: 1,
+                            : GestureDetector(
+                                onTap: () => model.startChat(item),
+                                child: Container(
+                                  margin: const EdgeInsets.only(bottom: 8),
+                                  padding: const EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color:
+                                          Theme.of(context).colorScheme.primary,
+                                      width: 1,
+                                    ),
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Container(
-                                          width: 44,
-                                          height: 44,
-                                          decoration: BoxDecoration(
-                                            image: DecorationImage(
-                                              image:
-                                                  NetworkImage(item.imageUrl),
-                                              fit: BoxFit.cover,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Row(
+                                        children: [
+                                          Container(
+                                            width: 44,
+                                            height: 44,
+                                            decoration: BoxDecoration(
+                                              image: DecorationImage(
+                                                image:
+                                                    NetworkImage(item.imageUrl),
+                                                fit: BoxFit.cover,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
                                             ),
-                                            borderRadius:
-                                                BorderRadius.circular(8),
                                           ),
-                                        ),
-                                        const SizedBox(width: 8),
-                                        Text(
-                                          "${item.name.capitalize()} ${item.surname.capitalize()}",
-                                          style: TextStyle(
-                                            color: Theme.of(context)
-                                                .colorScheme
-                                                .primary,
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w400,
+                                          const SizedBox(width: 8),
+                                          Text(
+                                            "${item.name.capitalize()} ${item.surname.capitalize()}",
+                                            style: TextStyle(
+                                              color: Theme.of(context)
+                                                  .colorScheme
+                                                  .primary,
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           ),
-                                        ),
-                                      ],
-                                    ),
-                                    IconButton(
-                                      onPressed: () => model.startChat(item),
-                                      icon: Icon(
-                                        Icons.arrow_circle_right,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .secondary,
-                                        size: 32,
+                                        ],
                                       ),
-                                    ),
-                                  ],
+                                      IconButton(
+                                        onPressed: () {},
+                                        icon: Icon(
+                                          Icons.arrow_circle_right,
+                                          color: Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
+                                          size: 32,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                       ),

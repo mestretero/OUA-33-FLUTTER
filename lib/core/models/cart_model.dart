@@ -1,5 +1,5 @@
 
-import 'package:oua_flutter33/core/models/cart_%C4%B1tem_model.dart';
+import 'package:oua_flutter33/core/models/cart_item_model.dart';
 
 class Cart {
   final List<CartItem> items;

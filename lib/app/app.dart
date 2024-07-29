@@ -14,7 +14,6 @@ import 'package:oua_flutter33/ui/onboarding/onboarding_view.dart';
 import 'package:oua_flutter33/ui/post/last_edit_post/last_edit_post_view.dart';
 import 'package:oua_flutter33/ui/post/post_detail/post_detail_view.dart';
 import 'package:oua_flutter33/ui/post/send_post/send_post_view.dart';
-import 'package:oua_flutter33/ui/product/product_edit/edit_product_view.dart';
 import 'package:oua_flutter33/ui/product/product-detail/product_view.dart';
 import 'package:oua_flutter33/ui/product/product_add/product_add_view.dart';
 import 'package:oua_flutter33/ui/profile/edited_profile/edited_profile_view.dart';
@@ -49,7 +48,6 @@ import 'package:stacked/stacked_annotations.dart';
     MaterialRoute(page: EditedProfileView),
     MaterialRoute(page: LastEditPostView),
     MaterialRoute(page: NewChatView),
-    MaterialRoute(page: EditProductView),
     MaterialRoute(page: SearchResultView),
     MaterialRoute(page: PostDetailView),
   ],

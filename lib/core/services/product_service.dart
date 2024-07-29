@@ -1,4 +1,4 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print
+// ignore_for_file: use_build_context_synchronously, avoid_print, no_leading_underscores_for_local_identifiers
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
@@ -42,6 +42,17 @@ class ProductService {
       await _firestore
           .collection(_collectionName)
           .doc(productId)
+          .update({"is_archive": true});
+    } catch (e) {
+      print("Error deleting product: $e");
+    }
+  }
+
+  Future<void> unarchiveProduct(String productId) async {
+    try {
+      await _firestore
+          .collection(_collectionName)
+          .doc(productId)
           .update({"is_archive": false});
     } catch (e) {
       print("Error deleting product: $e");
@@ -75,11 +86,22 @@ class ProductService {
     }
   }
 
-  Future<Product?> getProductById(String productId) async {
+  Future<ProductView?> getProductById(String productId) async {
     try {
       DocumentSnapshot doc =
           await _firestore.collection(_collectionName).doc(productId).get();
-      return Product.fromDocumentSnapshot(doc);
+
+      Product _product = Product.fromDocumentSnapshot(doc);
+
+      DocumentSnapshot userDoc =
+          await _firestore.collection("users").doc(_product.uid).get();
+
+      User _user = User.fromDocumentSnapshot(userDoc);
+
+      return ProductView(
+        product: _product,
+        user: _user,
+      );
     } catch (e) {
       print("Error getting product: $e");
       return null;

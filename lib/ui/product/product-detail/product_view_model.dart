@@ -1,48 +1,97 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:oua_flutter33/app/app.router.dart';
 import 'package:oua_flutter33/app/app_base_view_model.dart';
+import 'package:oua_flutter33/common/helpers/toast_functions.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
-import 'package:oua_flutter33/core/models/cart_%C4%B1tem_model.dart';
+import 'package:oua_flutter33/core/models/cart_item_model.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
+import 'package:oua_flutter33/core/models/view_model/product_view_model.dart';
 import 'package:oua_flutter33/core/services/cart_service.dart';
 import 'package:oua_flutter33/core/services/product_service.dart';
-import 'package:oua_flutter33/ui/chat_list/chat/chat_view.dart';
 
-class ProductViewModel extends AppBaseViewModel {
-  User? _user;
-  User? get user => _user;
-  int favoriteCount = 0;
-
+class ProductDetailViewModel extends AppBaseViewModel {
   final ProductService _productService = getIt<ProductService>();
   final CartService cartService = getIt<CartService>();
-  Product? product;
+
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
+
+  bool _isMine = false;
+  bool get isMine => _isMine;
+
+  bool _isFavoride = false;
+  bool get isFavoride => _isFavoride;
+
+  String _segmentValue = "description";
+  String get segmentValue => _segmentValue;
+
+  String _segmentText = "";
+  String get segmentText => _segmentText;
+
+  User? _user;
+  User? get user => _user;
+
+  ProductView? _productView;
+  ProductView? get productView => _productView;
 
   Future<void> fetchProductDetails(String productId) async {
-    setBusy(true);
+    _isLoading = true;
+
     try {
-      product = await _productService.getProductById(productId);
-      favoriteCount = await _productService.getProductFavoriteCount(productId);
-      notifyListeners();
+      _productView = await _productService.getProductById(productId);
+      _user = await userService.getUserData();
+      _isLoading = false;
     } catch (e) {
+      _isLoading = false;
       print("Error fetching product details: $e");
     }
+
+    changeSegment("description");
+    _isMine = productView!.user.uid == user!.uid ? true : false;
+    _isFavoride = user!.favoredProductIds
+        .any((element) => element.id == productView!.product.id);
+
+    notifyListeners();
   }
 
-  Future<void> updateProduct(Product product) async {
-    await _productService.addProduct(product);
+  Future<void> refreshProduct(ScaffoldMessengerState scaffold) async {
+    if (productView!.product.id!.isEmpty) {
+      return;
+    }
+    _productView =
+        await _productService.getProductById(productView!.product.id ?? "");
+
+    MyToast.closeToast(scaffold);
+
+    notifyListeners();
   }
 
-  bool isFavored(Product product) {
-    return user != null &&
-        user!.favoredProductIds.any((element) => element.id == product.id);
+  void changeSegment(String value) {
+    _segmentValue = value;
+
+    if ("description" == value) {
+      _segmentText = productView!.product.description;
+    }
+
+    notifyListeners();
   }
 
-  Future<void> favored(Product product) async {
+  Future<void> editProduct(Product product) async {
+    print("editproduct ${product.id}");
+  }
+
+  Future<void> favored(Product product, BuildContext context) async {
     try {
       if (user != null) {
+        final scaffold = ScaffoldMessenger.of(context);
+
+        MyToast.showLoadingToast(scaffold, context, "");
+
         await _productService.addProductToFavorites(product.id);
+
         user!.favoredProductIds.add(
           ListObjectOfIds(
             id: product.id ?? "",
@@ -50,7 +99,9 @@ class ProductViewModel extends AppBaseViewModel {
             imageUrl: product.mainImageUrl,
           ),
         );
-        notifyListeners();
+
+        _isFavoride = true;
+        refreshProduct(scaffold);
       } else {
         print("Error: User is null");
       }
@@ -59,11 +110,19 @@ class ProductViewModel extends AppBaseViewModel {
     }
   }
 
-  Future<void> unfavored(String? productId) async {
+  Future<void> unfavored(BuildContext context, String? productId) async {
     try {
       if (productId != null && productId.isNotEmpty && user != null) {
+        final scaffold = ScaffoldMessenger.of(context);
+
+        MyToast.showLoadingToast(
+            scaffold, context, "İşleminiz gerçleştiriliyor...");
+
         await _productService.removeProductFromFavorites(productId);
         user!.favoredProductIds.removeWhere((e) => e.id == productId);
+        _isFavoride = false;
+        refreshProduct(scaffold);
+
         notifyListeners();
       } else {
         print("Error: Product ID is null or User is null");
@@ -74,15 +133,15 @@ class ProductViewModel extends AppBaseViewModel {
   }
 
   void addToCart() {
-    if (product != null) {
-      final productId = product!.id;
+    if (_productView != null) {
+      final productId = _productView!.product.id;
       if (productId != null) {
         // Null kontrolü
         final cartItem = CartItem(
           id: productId,
-          name: product!.name,
-          mainImageUrl: product!.mainImageUrl,
-          price: product!.price,
+          name: _productView!.product.name,
+          mainImageUrl: _productView!.product.mainImageUrl,
+          price: _productView!.product.price,
         );
         cartService.addToCart(cartItem);
         notifyListeners();
@@ -94,39 +153,44 @@ class ProductViewModel extends AppBaseViewModel {
     }
   }
 
-  void sendMessage(BuildContext context, String productId) {
-    userService.getUserByProductId(productId).then((user) {
-      if (user != null) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => ChatView(receiverUser: user),
-          ),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Kullanıcı Bulunamadı")),
-        );
-      }
-    }).catchError((error) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Hata: $error")),
-      );
-    });
+  void sendMessage() {
+    navigationService.navigateTo(Routes.chatView,
+        arguments: ChatViewArguments(receiverUser: productView!.user));
   }
 
-  Future<void> archiveProduct(String? productId) async {
+  Future<void> archiveProduct(BuildContext context, String? productId) async {
     // product add archive, service call function
     if (productId == null || productId == "") {
       return;
     }
+    final scaffold = ScaffoldMessenger.of(context);
 
+    MyToast.showLoadingToast(scaffold, context, "");
     try {
-      await _productService.deleteProduct(productId);
-      print("Product deleted successfully.");
+      await _productService.archiveProduct(productId);
+      print("Product archive successfully.");
     } catch (e) {
       print("Error deleting product: $e");
     }
+    refreshProduct(scaffold);
+  }
+
+  Future<void> unarchiveProduct(BuildContext context, String? productId) async {
+    if (productId == null || productId == "") {
+      return;
+    }
+
+    final scaffold = ScaffoldMessenger.of(context);
+
+    MyToast.showLoadingToast(scaffold, context, "");
+
+    try {
+      await _productService.unarchiveProduct(productId);
+      print("Product unarchive successfully.");
+    } catch (e) {
+      print("Error deleting product: $e");
+    }
+    refreshProduct(scaffold);
   }
 
   Future<void> deleteProduct(String productId) async {

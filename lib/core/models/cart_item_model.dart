@@ -1,11 +1,10 @@
-// ignore_for_file: file_names
-
 class CartItem {
   final String id;
   final String name;
   final String mainImageUrl;
   final double price;
-  final int quantity; // Optional: To track the quantity of each item in the cart
+  final int
+      quantity; // Optional: To track the quantity of each item in the cart
 
   CartItem({
     required this.id,

@@ -81,4 +81,52 @@ class MyToast extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Scaffold();
   }
+
+  static void showInfoBox(
+    BuildContext context,
+    String message,
+  ) {
+    final overlay = Overlay.of(context);
+    final overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        top: MediaQuery.of(context).size.height / 2 -
+            50, // Center vertically (100 / 2 = 50)
+        left: MediaQuery.of(context).size.width / 2 -
+            100, // Center horizontally (200 / 2 = 100)
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            width: 200,
+            height: 75,
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  spreadRadius: 2,
+                  blurRadius: 5,
+                  offset: const Offset(0, 3),
+                ),
+              ],
+              color: Theme.of(context).colorScheme.secondary,
+              borderRadius: BorderRadius.circular(16.0),
+            ),
+            child: Center(
+              child: Text(
+                message,
+                style: TextStyle(color: Theme.of(context).colorScheme.primary),
+                textAlign: TextAlign.center,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    overlay.insert(overlayEntry);
+
+    Future.delayed(const Duration(seconds: 3), () {
+      overlayEntry.remove();
+    });
+  }
 }

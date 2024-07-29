@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:oua_flutter33/app/app.router.dart';
+import 'package:oua_flutter33/common/helpers/toast_functions.dart';
 import 'package:oua_flutter33/ui/cart/cart_list_view_model.dart';
 import 'package:stacked/stacked.dart';
 
@@ -12,33 +12,36 @@ class CartListView extends StatelessWidget {
       viewModelBuilder: () => CartListViewModel(),
       builder: (context, model, child) => Scaffold(
         appBar: AppBar(
-          leading: IconButton(
-            onPressed: (){
-                  model.navigationService.navigateTo(Routes.mainView);
-            },
-            icon:const SizedBox(
-              width: 40,
-              height: 40,
-
-              child: Icon( Icons.keyboard_arrow_left_rounded,)),
-            color:const Color(0xFF6EDB2A), 
-
-          ),
-           title: const Text('Sepetim',
-            style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-           ),
           
-          ),
+          automaticallyImplyLeading: false,
+           title: const Padding(
+             padding: EdgeInsets.all(12.0),
+             child: Text('Sepetim',
+              style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+             ),
+                       
+                       ),
+           ),
         ),
         body: model.cartItems.isEmpty
             ? const Center(
-                child: Text('Sepetiniz boş',
-                style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-           ),
+            
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.shopping_cart_outlined,
+                    size:40,
+                    ),
+                    SizedBox(height: 8,),
+                    Text('Sepetiniz boş',
+                    style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                               ),
+                    ),
+                  ],
                 ),
               )
             : ListView.builder(
@@ -88,7 +91,8 @@ class CartListView extends StatelessWidget {
                     backgroundColor:const Color(0xFFD3F4BF), 
                   ),
                   onPressed: () {
-                    
+                     model.cartItems.isEmpty?MyToast.showInfoBox(context, "Lütfen Sepetinize Bir Şeyler Ekleyiniz !"):
+                    MyToast.showInfoBox(context, "Satın Alınıyor....");
                   },
                   child: const Text('Satın Al',style: TextStyle(color:Colors.black,),),
                 ),

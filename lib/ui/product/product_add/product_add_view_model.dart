@@ -62,10 +62,10 @@ class ProductAddViewModel extends AppBaseViewModel {
     if (id.isNotEmpty) {
       _tobeEditedProduct = await _productService.getProductById(id);
       _isEditedPage = true;
+      await setDataForEdit();
     }
 
     _isLoading = false;
-    await setDataForEdit();
     notifyListeners();
   }
 

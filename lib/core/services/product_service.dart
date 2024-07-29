@@ -1,6 +1,7 @@
-// ignore_for_file: use_build_context_synchronously, avoid_print, no_leading_underscores_for_local_identifiers
+// ignore_for_file: use_build_context_synchronously, avoid_print, no_leading_underscores_for_local_identifiers, unnecessary_null_comparison
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
 import 'package:oua_flutter33/core/models/response_model.dart';
@@ -75,14 +76,58 @@ class ProductService {
     }
   }
 
-  Future<void> updateProduct(Product product) async {
+  Future<ResponseModel> updateProduct(
+    Product product,
+    String? productId,
+  ) async {
+    if (product == null || productId!.isEmpty || productId == "") {
+      return ResponseModel(
+        success: false,
+        message: "Lütfen, gerekli alanları gözden geçiriniz...",
+      );
+    }
+
     try {
+      // Eski ürün verilerini alın
+      DocumentSnapshot oldProductSnapshot =
+          await _firestore.collection(_collectionName).doc(productId).get();
+
+      if (!oldProductSnapshot.exists) {
+        return ResponseModel(
+          success: false,
+          message: "Ürün bulunamadı...",
+        );
+      }
+
+      // Eski medya URL'lerini alın
+      List<dynamic> oldMediaList = oldProductSnapshot.get('medias');
+      List<String> oldMediaUrls =
+          oldMediaList.map((media) => media['url'] as String).toList();
+
+      // Yeni medya URL'lerini alın
+      List<String> newMediaUrls =
+          product.medias.map((media) => media.url).toList();
+
+      // Silinmesi gereken eski medya URL'lerini belirleyin
+      List<String> mediaUrlsToDelete =
+          oldMediaUrls.where((url) => !newMediaUrls.contains(url)).toList();
+
+      for (String url in mediaUrlsToDelete) {
+        await _deleteFileFromUrl(url);
+      }
+
       await _firestore
           .collection(_collectionName)
-          .doc(product.id)
+          .doc(productId)
           .update(product.toMap());
+
+      return ResponseModel(success: true, message: "");
     } catch (e) {
       print("Error updating product: $e");
+      return ResponseModel(
+        success: false,
+        message: "Ürün bir hatadan dolayı güncellenemedi...",
+      );
     }
   }
 
@@ -239,5 +284,15 @@ class ProductService {
       transaction
           .update(productRef, {'count_of_favored': FieldValue.increment(-1)});
     });
+  }
+
+  //Private
+  Future<void> _deleteFileFromUrl(String url) async {
+    try {
+      Reference storageRef = FirebaseStorage.instance.refFromURL(url);
+      await storageRef.delete();
+    } catch (e) {
+      print("Error deleting file: $e");
+    }
   }
 }

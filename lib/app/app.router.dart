@@ -328,8 +328,12 @@ class StackedRouter extends _i1.RouterBase {
       );
     },
     _i18.ProductAddView: (data) {
+      final args = data.getArgs<ProductAddViewArguments>(
+        orElse: () => const ProductAddViewArguments(),
+      );
       return _i26.MaterialPageRoute<dynamic>(
-        builder: (context) => const _i18.ProductAddView(),
+        builder: (context) =>
+            _i18.ProductAddView(key: args.key, productId: args.productId),
         settings: data,
       );
     },
@@ -467,6 +471,33 @@ class ProductDetailViewArguments {
 
   @override
   bool operator ==(covariant ProductDetailViewArguments other) {
+    if (identical(this, other)) return true;
+    return other.key == key && other.productId == productId;
+  }
+
+  @override
+  int get hashCode {
+    return key.hashCode ^ productId.hashCode;
+  }
+}
+
+class ProductAddViewArguments {
+  const ProductAddViewArguments({
+    this.key,
+    this.productId,
+  });
+
+  final _i26.Key? key;
+
+  final String? productId;
+
+  @override
+  String toString() {
+    return '{"key": "$key", "productId": "$productId"}';
+  }
+
+  @override
+  bool operator ==(covariant ProductAddViewArguments other) {
     if (identical(this, other)) return true;
     return other.key == key && other.productId == productId;
   }
@@ -824,14 +855,17 @@ extension NavigatorStateExtension on _i30.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> navigateToProductAddView([
+  Future<dynamic> navigateToProductAddView({
+    _i26.Key? key,
+    String? productId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return navigateTo<dynamic>(Routes.productAddView,
+        arguments: ProductAddViewArguments(key: key, productId: productId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,
@@ -1192,14 +1226,17 @@ extension NavigatorStateExtension on _i30.NavigationService {
         transition: transition);
   }
 
-  Future<dynamic> replaceWithProductAddView([
+  Future<dynamic> replaceWithProductAddView({
+    _i26.Key? key,
+    String? productId,
     int? routerId,
     bool preventDuplicates = true,
     Map<String, String>? parameters,
     Widget Function(BuildContext, Animation<double>, Animation<double>, Widget)?
         transition,
-  ]) async {
+  }) async {
     return replaceWith<dynamic>(Routes.productAddView,
+        arguments: ProductAddViewArguments(key: key, productId: productId),
         id: routerId,
         preventDuplicates: preventDuplicates,
         parameters: parameters,

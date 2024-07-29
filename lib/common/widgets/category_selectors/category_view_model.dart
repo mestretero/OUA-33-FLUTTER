@@ -1,6 +1,9 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:oua_flutter33/core/models/category_model.dart';
 import 'package:oua_flutter33/core/services/category_service.dart';
+import 'package:oua_flutter33/ui/product/product_add/product_add_view_model.dart';
 
 class CategoryViewModel extends ChangeNotifier {
   final CategoryService _categoryService = CategoryService();
@@ -21,8 +24,19 @@ class CategoryViewModel extends ChangeNotifier {
   String? get selectedSubCategory => _selectedSubCategory;
   String? get selectedSubSubCategory => _selectedSubSubCategory;
 
-  Future<void> loadMainCategories() async {
-    _mainCategories = await _categoryService.getMainCategories();
+  Future<void> loadMainCategories(ProductAddViewModel? model) async {
+    if (model!.isEditedPage && model != null) {
+      _selectedMainCategory = model.getCategoryForEdit;
+      _selectedSubCategory = model.getSubCategoryForEdit;
+      _selectedSubSubCategory = model.getSubSubCategoryForEdit;
+
+      _mainCategories = await _categoryService.getMainCategories();
+      loadSubCategories(model.getSubCategoryForEdit);
+      loadSubSubCategories(
+          model.getCategoryForEdit, model.getSubCategoryForEdit);
+    } else {
+      _mainCategories = await _categoryService.getMainCategories();
+    }
     notifyListeners();
   }
 

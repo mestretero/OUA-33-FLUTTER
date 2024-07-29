@@ -6,13 +6,15 @@ import 'dart:io';
 import 'dart:async';
 
 import 'package:oua_flutter33/common/helpers/scaler.dart';
+import 'package:oua_flutter33/ui/product/product_add/product_add_view_model.dart';
 
 class PhotoPickerScreen extends StatefulWidget {
   final Function(List<File?> images) onChanged;
-
+  final ProductAddViewModel? model;
   const PhotoPickerScreen({
     super.key,
     required this.onChanged,
+    this.model,
   });
 
   @override
@@ -23,6 +25,19 @@ class _PhotoPickerScreenState extends State<PhotoPickerScreen> {
   final ImagePicker _picker = ImagePicker();
   final List<File?> _images = [null, null, null, null];
   int _imageCount = 0;
+  bool isEditedPage = false;
+
+  @override
+  void initState() {
+    super.initState();
+    isEditedPage = widget.model!.isEditedPage;
+    if (widget.model!.isEditedPage) {
+      for (var i = 0; i < widget.model!.imagesData.length; i++) {
+        _images[i] = widget.model!.imagesData[i];
+        _imageCount += 1;
+      }
+    }
+  }
 
   Future<void> _pickImage(ImageSource source) async {
     final XFile? pickedFile = await _picker.pickImage(source: source);
@@ -38,7 +53,7 @@ class _PhotoPickerScreenState extends State<PhotoPickerScreen> {
 
   void _removeImage(index) {
     setState(() {
-      if (index == _imageCount) {
+      if (index + 1 == _imageCount) {
         _images[index] = null;
         _imageCount--;
       } else {

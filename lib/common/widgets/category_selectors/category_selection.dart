@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:oua_flutter33/common/helpers/scaler.dart';
 import 'package:oua_flutter33/common/widgets/category_selectors/category_view_model.dart';
 import 'package:oua_flutter33/core/models/category_model.dart';
+import 'package:oua_flutter33/ui/product/product_add/product_add_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
@@ -9,7 +10,13 @@ class CategorySelectorBody extends StatelessWidget {
   final Function(String category, String subCategory, String subSubCategory)
       onChangedCategory;
 
-  const CategorySelectorBody({super.key, required this.onChangedCategory});
+  final ProductAddViewModel? model;
+
+  const CategorySelectorBody({
+    super.key,
+    required this.onChangedCategory,
+    this.model,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -145,7 +152,7 @@ class CategorySelectorBody extends StatelessWidget {
           carouselController: controller,
           options: CarouselOptions(
             height: Scaler.width(0.25, context),
-            initialPage: 1,
+            initialPage: 0,
             autoPlay: false,
             aspectRatio: 1.5,
             enlargeCenterPage: false,

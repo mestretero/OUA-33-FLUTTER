@@ -88,7 +88,8 @@ class _CarouselWithProductState extends State<CarouselWithProduct> {
                           borderRadius: BorderRadius.circular(999),
                         ),
                       ),
-                      onPressed: () => model.deleteProduct(product.id ?? ""),
+                      onPressed: () =>
+                          model.deleteProduct(context, product.id ?? ""),
                       icon: Image.asset(
                         "assets/icons/trash-icon.png",
                         width: 20,

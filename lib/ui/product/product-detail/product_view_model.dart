@@ -80,7 +80,10 @@ class ProductDetailViewModel extends AppBaseViewModel {
   }
 
   Future<void> editProduct(Product product) async {
-    print("editproduct ${product.id}");
+    navigationService.navigateTo(Routes.productAddView,
+        arguments: ProductAddViewArguments(
+          productId: product.id,
+        ));
   }
 
   Future<void> favored(Product product, BuildContext context) async {
@@ -193,12 +196,16 @@ class ProductDetailViewModel extends AppBaseViewModel {
     refreshProduct(scaffold);
   }
 
-  Future<void> deleteProduct(String productId) async {
+  Future<void> deleteProduct(BuildContext context, String productId) async {
+    final scaffold = ScaffoldMessenger.of(context);
+
+    MyToast.showLoadingToast(scaffold, context, "");
     try {
       await _productService.deleteProduct(productId);
       print("Product deleted successfully.");
     } catch (e) {
       print("Error deleting product: $e");
     }
+    refreshProduct(scaffold);
   }
 }

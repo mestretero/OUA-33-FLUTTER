@@ -18,10 +18,10 @@ class ProductAddView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProductAddViewModel>.reactive(
       viewModelBuilder: () => ProductAddViewModel(),
-      onModelReady: (model) => model.init(context),
+      onModelReady: (model) => model.init(context, productId),
       builder: (context, model, widget) => Scaffold(
         body: model.isLoading
-            ? const CircularProgressIndicator()
+            ? const Center(child: CircularProgressIndicator())
             : SafeArea(
                 child: SingleChildScrollView(
                   child: Padding(
@@ -40,6 +40,7 @@ class ProductAddView extends StatelessWidget {
                             children: [
                               // Çoklu Resim yükleme
                               PhotoPickerScreen(
+                                model: model,
                                 onChanged: (images) {
                                   model.setImageList(
                                       images.where((i) => i != null).toList());
@@ -78,6 +79,7 @@ class ProductAddView extends StatelessWidget {
 
                               //Kategori
                               CategorySelector(
+                                model: model,
                                 onChanged:
                                     (category, subCategory, subSubCategory) {
                                   model.setCategories(
@@ -102,11 +104,17 @@ class ProductAddView extends StatelessWidget {
 
                               //Ekleme Butonu
                               MyButton(
-                                text: "Ürünümü Ekle",
+                                text: model.isEditedPage
+                                    ? "Ürünümü Güncelle"
+                                    : "Ürünümü Ekle",
                                 buttonStyle: 1,
                                 isExpanded: true,
                                 onTap: () {
-                                  model.addProduct(context);
+                                  if (model.isEditedPage) {
+                                    model.editProduct(context);
+                                  } else {
+                                    model.addProduct(context);
+                                  }
                                 },
                               ),
                             ],

@@ -23,11 +23,13 @@ class ProductDetailView extends StatelessWidget {
             ? const Center(child: CircularProgressIndicator())
             : SafeArea(
                 child: SingleChildScrollView(
-                  padding: model.productView == null
+                  padding: model.productView == null ||
+                          !model.productView!.product.isActive
                       ? const EdgeInsets.all(24)
                       : const EdgeInsets.all(0),
                   // No Found Product And Product Detail
-                  child: model.productView == null
+                  child: model.productView == null ||
+                          !model.productView!.product.isActive
                       ? Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.center,

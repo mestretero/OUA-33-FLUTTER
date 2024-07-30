@@ -118,7 +118,7 @@ class ProfileViewModel extends AppBaseViewModel {
     );
   }
 
-  void logOut(BuildContext context) {
+  void logOut(BuildContext context) async {
     final scaffold = ScaffoldMessenger.of(context);
 
     MyToast.showLoadingToast(scaffold, context, "");

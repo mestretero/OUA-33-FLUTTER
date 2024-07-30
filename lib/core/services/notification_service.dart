@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:oua_flutter33/core/models/notification_model.dart';
@@ -11,6 +13,7 @@ class NotificationService {
     return _firestore
         .collection('notifications')
         .where('receiver_uid', isEqualTo: userId)
+        .where('sended_uid', isNotEqualTo: userId)
         .snapshots()
         .map((QuerySnapshot query) {
       List<NotificationModel> retVal = [];
@@ -33,5 +36,19 @@ class NotificationService {
   Future<void> denyFollowRequest(String notificationId) async {
     await _firestore.collection('notifications').doc(notificationId).delete();
     // Diğer işlemler
+  }
+
+  Future<void> readNotification(String notificationId) async {
+    await _firestore.collection('notifications').doc(notificationId).update({
+      'is_read': true,
+    });
+  }
+
+  Future<void> createNotification(NotificationModel notification) async {
+    try {
+      await _firestore.collection("notifications").add(notification.toMap());
+    } catch (e) {
+      print("Error: not created notification: $e");
+    }
   }
 }

@@ -47,7 +47,7 @@ class NotificationModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'type': type,
+      'type': type, // system - follow - comment - liked
       'create_date': createDate,
       'receiver_uid': receiverUid,
       'sended_uid': sendedUid,

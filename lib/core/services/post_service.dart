@@ -3,17 +3,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
 import 'package:oua_flutter33/core/models/comment_model.dart';
+import 'package:oua_flutter33/core/models/notification_model.dart';
 import 'package:oua_flutter33/core/models/post_model.dart';
 import 'package:oua_flutter33/core/models/response_model.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
 import 'package:oua_flutter33/core/models/view_model/comment_view.dart';
 import 'package:oua_flutter33/core/models/view_model/post_view_model.dart';
 import 'package:oua_flutter33/core/services/auth_service.dart';
+import 'package:oua_flutter33/core/services/notification_service.dart';
 import 'package:oua_flutter33/core/services/user_service.dart';
 
 class PostService {
   static final authService = getIt<AuthServices>();
   static final _userService = getIt<UserService>();
+  static final _notificationService = getIt<NotificationService>();
 
   static final _firestore = FirebaseFirestore.instance;
 
@@ -190,7 +193,6 @@ class PostService {
       transaction.update(postRef, {'count_of_likes': FieldValue.increment(1)});
 
       // Ürünü favori bilgisini ekler
-
       await postRef.collection("people_who_like").add(PepoleWhoLike(
             uid: post.uid,
             name: user.name,
@@ -198,6 +200,21 @@ class PostService {
             imageUrl: user.imageUrl,
             createDate: Timestamp.now(),
           ).toMap());
+
+      await _notificationService.createNotification(
+        NotificationModel(
+          type: "liked",
+          createDate: Timestamp.now(),
+          receiverUid: post.uid,
+          sendedUid: user.uid,
+          relatedId: postId ?? "",
+          relatedCollection: "post",
+          relatedImageUrl: post.medias[0].url,
+          commentText: "",
+          isRead: false,
+          isActive: true,
+        ),
+      );
     });
   }
 
@@ -263,8 +280,30 @@ class PostService {
           .add(comment.toMap());
 
       await _firestore.runTransaction((transaction) async {
+        DocumentSnapshot postSnapshot = await transaction.get(postRef);
+        if (!postSnapshot.exists) {
+          throw Exception("Product does not exist!");
+        }
+
+        Post post = Post.fromDocumentSnapshot(postSnapshot);
+
         transaction
             .update(postRef, {'count_of_comments': FieldValue.increment(-1)});
+
+        await _notificationService.createNotification(
+          NotificationModel(
+            type: "comment",
+            createDate: Timestamp.now(),
+            receiverUid: post.uid,
+            sendedUid: authService.user!.uid,
+            relatedId: postId,
+            relatedCollection: "post",
+            relatedImageUrl: post.medias[0].url,
+            commentText: comment.comment,
+            isRead: false,
+            isActive: true,
+          ),
+        );
       });
 
       return ResponseModel(success: true, message: "");

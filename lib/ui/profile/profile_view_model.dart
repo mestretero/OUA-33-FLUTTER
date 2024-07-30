@@ -125,8 +125,8 @@ class ProfileViewModel extends AppBaseViewModel {
 
     Future.delayed(
       const Duration(seconds: 2),
-      () async {
-        await authServices.logOut();
+      () {
+        authServices.logOut();
         MyToast.closeToast(scaffold);
       },
     );

@@ -3,16 +3,20 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:oua_flutter33/core/di/get_it.dart';
+import 'package:oua_flutter33/core/models/notification_model.dart';
 import 'package:oua_flutter33/core/models/product_model.dart';
 import 'package:oua_flutter33/core/models/response_model.dart';
 import 'package:oua_flutter33/core/models/user_model.dart';
 import 'package:oua_flutter33/core/models/view_model/product_view_model.dart';
 import 'package:oua_flutter33/core/services/auth_service.dart';
+import 'package:oua_flutter33/core/services/notification_service.dart';
 import 'package:oua_flutter33/core/services/user_service.dart';
 
 class ProductService {
   static final authService = getIt<AuthServices>();
   static final userService = getIt<UserService>();
+  static final _notificationService = getIt<NotificationService>();
+
   static final _firestore = FirebaseFirestore.instance;
   static const _collectionName = "products";
 
@@ -244,6 +248,21 @@ class ProductService {
       // Ürünün favori sayısını arttır
       transaction
           .update(productRef, {'count_of_favored': FieldValue.increment(1)});
+
+      await _notificationService.createNotification(
+        NotificationModel(
+          type: "liked",
+          createDate: Timestamp.now(),
+          receiverUid: product.uid,
+          sendedUid: currentUserId,
+          relatedId: product.id ?? "",
+          relatedCollection: "product",
+          relatedImageUrl: product.mainImageUrl,
+          commentText: "",
+          isRead: false,
+          isActive: true,
+        ),
+      );
     });
   }
 

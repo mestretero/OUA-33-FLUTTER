@@ -84,9 +84,10 @@ class HomeViewModel extends AppBaseViewModel {
           imageUrl: data.post.medias[0].url,
         ),
       );
+
+      refreshPosts();
     }
 
-    data.post.countOfLikes += 1;
     notifyListeners();
   }
 

@@ -6,19 +6,28 @@ import 'package:oua_flutter33/core/services/chat_service.dart';
 class ChatViewModel extends AppBaseViewModel {
   final ChatService chatService = getIt<ChatService>();
 
+  final ScrollController controller = ScrollController();
+
   init(BuildContext context) {}
-  navigatePage() {
-  }
+  navigatePage() {}
 
   void sendMessage(
       TextEditingController controller, String receireverId) async {
     if (controller.text.isNotEmpty) {
       await chatService.sendMessage(receireverId, controller.text);
       controller.clear();
+      scrollOnBottom();
     }
   }
 
-  void sendFileMessage(){
-
+  void scrollOnBottom() {
+    controller.animateTo(
+      controller.position.maxScrollExtent,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 500),
+    );
+    // notifyListeners();
   }
+
+  void sendFileMessage() {}
 }

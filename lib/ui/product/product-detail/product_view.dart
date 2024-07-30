@@ -17,7 +17,7 @@ class ProductDetailView extends StatelessWidget {
   Widget build(BuildContext context) {
     return ViewModelBuilder<ProductDetailViewModel>.reactive(
       viewModelBuilder: () => ProductDetailViewModel(),
-      onModelReady: (model) async => await model.fetchProductDetails(productId),
+      onModelReady: (model) => model.init(productId),
       builder: (context, model, widget) => Scaffold(
         body: model.isLoading
             ? const Center(child: CircularProgressIndicator())

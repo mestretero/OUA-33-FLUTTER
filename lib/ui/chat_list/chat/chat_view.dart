@@ -28,7 +28,14 @@ class _ChatViewState extends State<ChatView> {
 
     return ViewModelBuilder<ChatViewModel>.reactive(
       viewModelBuilder: () => ChatViewModel(),
-      onModelReady: (model) => model.init(context),
+      onModelReady: (model) {
+        model.init(context);
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (model.controller.hasClients) {
+            model.controller.jumpTo(model.controller.position.maxScrollExtent);
+          }
+        });
+      },
       builder: (context, model, viewwidget) => Scaffold(
         body: receiverUser.uid.isEmpty
             ? const Center(child: CircularProgressIndicator())
@@ -36,7 +43,12 @@ class _ChatViewState extends State<ChatView> {
                 child: Column(
                   children: [
                     Padding(
-                      padding: const EdgeInsets.all(24),
+                      padding: const EdgeInsets.only(
+                        top: 24,
+                        right: 24,
+                        left: 24,
+                        bottom: 12,
+                      ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisAlignment: MainAxisAlignment.start,
@@ -106,7 +118,6 @@ class _ChatViewState extends State<ChatView> {
                         ],
                       ),
                     ),
-                    const SizedBox(height: 24),
                     Expanded(
                       child: StreamBuilder<QuerySnapshot>(
                         stream: model.chatService.getMessages(
@@ -146,7 +157,15 @@ class _ChatViewState extends State<ChatView> {
                             );
                           }
 
+                          WidgetsBinding.instance.addPostFrameCallback((_) {
+                            if (model.controller.hasClients) {
+                              model.controller.jumpTo(
+                                  model.controller.position.maxScrollExtent);
+                            }
+                          });
+                          
                           return ListView.builder(
+                            controller: model.controller,
                             itemCount: snapshot.data!.docs.length,
                             itemBuilder: (context, index) {
                               var message = snapshot.data!.docs[index];
@@ -254,6 +273,7 @@ class _ChatViewState extends State<ChatView> {
           const SizedBox(width: 16.0),
           Expanded(
             child: TextField(
+              onTap: () => model.scrollOnBottom(),
               controller: _messageController,
               decoration: const InputDecoration(
                 hintText: 'Mesaj...',

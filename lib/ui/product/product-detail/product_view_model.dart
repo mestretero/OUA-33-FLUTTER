@@ -37,22 +37,25 @@ class ProductDetailViewModel extends AppBaseViewModel {
   ProductView? _productView;
   ProductView? get productView => _productView;
 
-  Future<void> fetchProductDetails(String productId) async {
+  void init(String productId) {
+    _fetchProductDetails(productId);
+  }
+
+  Future<void> _fetchProductDetails(String productId) async {
     _isLoading = true;
 
     try {
       _productView = await _productService.getProductById(productId);
       _user = await userService.getUserData();
       _isLoading = false;
+      changeSegment("description");
+      _isMine = productView!.user.uid == user!.uid ? true : false;
+      _isFavoride = user!.favoredProductIds
+          .any((element) => element.id == productView!.product.id);
     } catch (e) {
       _isLoading = false;
       print("Error fetching product details: $e");
     }
-
-    changeSegment("description");
-    _isMine = productView!.user.uid == user!.uid ? true : false;
-    _isFavoride = user!.favoredProductIds
-        .any((element) => element.id == productView!.product.id);
 
     notifyListeners();
   }

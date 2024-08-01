@@ -156,5 +156,58 @@ Alınan kararlar:
 ---
 
 # Sprint 3
+- **Sprint Notları**: User Story ve Görevler Trello üzerinden tanımlanmıştır. Gerekli olan bilgilendirmeler product backlog item'lara tıklandığında hikayelerin detayları okunabilir.
+
+- **Sprint içinde tamamlanması tahmin edilen puan**: 160 Puan
+
+- **Puan tamamlama mantığı**: Toplamda proje boyunca tamamlanması gereken 400 puanlık backlog bulunmaktadır. Burada ilk sprintte 80 puan, ikinci sprintte 160 puan topladık. Üçüncü ve son spritte hedefimiz 160 puan toplamak ve tamamen uygulamamızı tamamlamak. Burada ilk ve ikinci sprintten farklı olarak ürünü tamamlama ve uygulamada bulunan bugları çözmeye çalıştık. 
+  - Puanlama t-shirt skalasına göre planlamaktayız.
+  Bu skalada görevler, t-shirt bedenleri (XS, S, M, L, XL) gibi sınıflandırılır. Bu yöntem, görevlerin göreceli büyüklüğünü belirlemek için kullanılır.
+  - XS: Çok küçük, hemen tamamlanabilir 🟩 - 1 Puan
+  - S: Küçük, birkaç saat içinde tamamlanabilir 🟦 - 3 Puan
+  - M: Orta büyüklükte, birkaç gün içinde tamamlanabilir 🟨 - 7 Puan
+  - L: Büyük, bir hafta veya daha uzun sürede tamamlanabilir 🟧 - 13 Puan
+  - XL: Çok büyük, aylar veya çeyrekler gerektirebilir 🟥 - 21 Puan
+
+
+- **Backlog düzeni ve Story seçimleri**: Görev durumunda her bir sprint için ilerlemenin gözden geçirilip yeniden yapılması planlanıyor. Takımda bulunan kişilerin 3. Sprint için temel görevlendirilmeleri yapılmıştır. Takımda bulunan kişilerin özelliklerine göre Trello üzerinden yapılan işlemler seçilmektedir. 
+
+
+- **Daily Scrum**:Günlük Scrum toplantıları, ekiplerin farklı zamanlarda yoğunlukları bulunduğundan, Discord ve WhatsApp üzerinden iletişim sağlanır. Özellikle sesli olarak yapılması gereken toplantılar Discord üzerinden gerçekleştirilmiştir. Günlük olarak grupların bireyleri uyumluluklarını ve tamamladıkları hizmetleri WhatsApp üzerinden belirtmişlerdir. 
+Günlük Scrum toplantısı örneği JPEG veya Word formatında Readme'de paylaşılmaktadır: 
+  - [Sprint 3 Daily Scrum Messages](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_3/whatsapp)
+
+
+- **Sprint board update**: Sprint board screenshotları: 
+![Backlog 1](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_3/trello) 
+
+
+- **Ürün Durumu**: Ekran görüntüleri:
+  ![Screenshot Images](https://github.com/mestretero/OUA-33-FLUTTER/tree/main/bootcamp-files/sprint_3/screen_shoots)
+
+- **Sprint Review**: 
+Alınan kararlar: 
+  - Teslim tarihinden bir hafta öncesine kadar tüm sayfaların tamamlanması.
+  - Teslim tarihinden önceki son hafta uygulamada bulunan bugların çözülmesine odaklanılacak.
+  - Ugulamada eksik olan fonksiyonlar tamamlanacak.
+  - Uygulama için bir tanıtım videosu hazırlanacak.
+  - Uygulamanın .apk uzantılı dosyası oluşturulacak.
+  - Teslim kriterllerine uygun olarak düzenlemeler yapılacak.
+
+
+ - Sprint Review katılımcıları:
+    -	Zeynep İrem Adıgüzel
+    -	Zeynep Nefşioğulları
+    -	Yunus Emre Tanrıverdi
+    -	Abdullah Furkan Yeşil
+    -	Abbas Boran Aktaş
+
+- **Sprint Retrospective:**
+  - •	Takımdaki görev koşullarıyla ilgili düzenleme yapılması kararı alınmıştır.
+  - •	Tahmin puanları gözden geçirilmeli ve sprint planlama bölümlerinde gerekli düzenlemeler geliştiriciler tarafından verilmelidir.
+
+
+-**Diğer Notlar**:
+- N/A
 
 ---
